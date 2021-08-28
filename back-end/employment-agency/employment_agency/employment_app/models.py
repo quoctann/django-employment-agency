@@ -11,8 +11,7 @@ class User(AbstractUser):
     username, first_name, last_name, email, is_staff, is_active, date_joined
     """
     phone = models.CharField(max_length=15)
-    avatar = models.ImageField(upload_to='upload/%Y/%m')
-    about = models.TextField(blank=True)
+    avatar = models.ImageField(upload_to='static/upload/%Y/%m')
 
 
 # User với vai trò là Quản trị viên
@@ -36,6 +35,8 @@ class Hiring(models.Model):
     address = models.CharField(max_length=150, null=False)
     company_size = models.IntegerField()
     avg_rating = models.FloatField()
+    pending_approval = models.BooleanField(default=True)
+    about = RichTextField()
 
 
 # User với vai trò là Ứng viên
@@ -45,26 +46,28 @@ class Applicant(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
-
-    category = None
-    skill = None
-    exp = None
-
+    categories = models.ManyToManyField('Category')
+    skills = models.ManyToManyField('Skill')
+    experiences = models.ManyToManyField('Experience')
     title = models.CharField(max_length=50)
     birthday = models.DateField()
     address = models.CharField(max_length=150)
+    cv = models.FileField(upload_to='static/upload/%Y/%m')
+    about = RichTextField()
 
 
 # Thông tin các offer được gửi nhận trong hệ thống. Báo cáo thống kê
 class Tracking(models.Model):
-    # Trường const static để ghi nhận các trạng thái của công việc
-    OPENNING = 'O'
-    CLOSED = 'C'
-    VIOLATED = 'V'
+    # Trường static ghi nhận trạng thái của yêu cầu (offer) đang được phát sinh
+    PENDING = 'PEN'
+    ACCEPTED = 'ACC'
+    REJECTED = 'REJ'
+    REPORTED = 'REP'
     STATUS_CHOICES = [
-        (OPENNING, 'Openning'),
-        (CLOSED, 'Closed'),
-        (VIOLATED, 'Violated'),
+        (PENDING, 'Pending'),
+        (ACCEPTED, 'Accepted'),
+        (REJECTED, 'Rejected'),
+        (REPORTED, 'Reported'),
     ]
     # Trường static để ghi nhận loại offer đang được gửi trong hệ thống
     HIRING_TO_APPLICANT = 'H2A'
@@ -74,15 +77,14 @@ class Tracking(models.Model):
         (APPLICANT_TO_HIRING, 'Applicant to hiring'),
     ]
 
-    applicant = models.ForeignKey(Applicant, on_delete=models.SET_NULL)
-    job = models.ForeignKey('Job', on_delete=models.SET_NULL)
+    applicant = models.ForeignKey(Applicant, on_delete=models.SET_NULL, null=True)
+    job = models.ForeignKey('Job', on_delete=models.SET_NULL, null=True)
     status = models.CharField(
-        max_length=1,
+        max_length=3,
         choices=STATUS_CHOICES,
-        default=OPENNING,
+        default=PENDING,
     )
     issue_date = models.DateField()
-    end_date = models.DateField()
     sending_type = models.CharField(
         max_length=3,
         choices=SENDING_TYPE,
@@ -92,23 +94,25 @@ class Tracking(models.Model):
 # Thông tin các bảng tin tuyển dụng được tạo
 class Job(models.Model):
     hiring = models.ForeignKey(Hiring, on_delete=models.CASCADE)
-    offer = None
-    exp = None
-    skill = None
-    category = None
+    offer = models.ManyToManyField('Offer')
+    categories = models.ManyToManyField('Category')
+    skills = models.ManyToManyField('Skill')
+    experiences = models.ManyToManyField('Experience')
     created_at = models.DateField(auto_now_add=True)
-    closed_at = models.DateField()
-    ref_language = models.CharField()
+    expired_at = models.DateField()
     content = RichTextField()
+    title = models.CharField(max_length=60)
     active = models.BooleanField(default=True)
 
 
 # Thông tin các bài viết đánh giá
 class Review(models.Model):
-    hiring = models.ForeignKey(Hiring, on_delete=models.SET_NULL)
-    applicant = models.ForeignKey(Applicant, on_delete=models.SET_NULL)
+    hiring = models.ForeignKey(Hiring, on_delete=models.SET_NULL, null=True)
+    applicant = models.ForeignKey(Applicant, on_delete=models.SET_NULL, null=True)
     content = RichTextField()
     rate = models.FloatField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 # Thông tin các ngành nghề vd: xây dựng, làm đẹp,...
@@ -126,6 +130,6 @@ class Offer(models.Model):
     name = models.TextField(max_length=50)
 
 
-# Thông tin các mức độ kinh nghiệm (mới ra trường, thực tập sinh,...)
+# Thông tin các mức độ kinh nghiệm (thực tập sinh, quản lý cao cấp,...)
 class Experience(models.Model):
     name = models.TextField(max_length=80)

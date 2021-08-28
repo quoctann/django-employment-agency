@@ -113,7 +113,7 @@ DATABASES = {
 }
 
 # Khai báo lớp user được sử dụng để chứng thực
-# AUTH_USER_MODEL = 'employment_app.User'
+AUTH_USER_MODEL = 'employment_app.User'
 
 # Cấu hình chứng thực bằng mật khẩu
 
