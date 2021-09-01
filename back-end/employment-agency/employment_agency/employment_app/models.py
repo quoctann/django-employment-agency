@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from ckeditor.fields import RichTextField
 
+# Ghi chú: Các trường của model default null=False
+
 
 # Kế thừa lớp user của django để sử dụng các chức năng chứng thực của nó
 class User(AbstractUser):
@@ -10,8 +12,8 @@ class User(AbstractUser):
     Những trường có sẵn từ AbstractUser: id, password, last_login, is_superuser,
     username, first_name, last_name, email, is_staff, is_active, date_joined
     """
-    phone = models.CharField(max_length=15)
-    avatar = models.ImageField(upload_to='static/upload/%Y/%m')
+    phone = models.CharField(max_length=15, null=True)
+    avatar = models.ImageField(upload_to='static/upload/%Y/%m', null=True)
 
 
 # User với vai trò là Quản trị viên
@@ -21,7 +23,7 @@ class SysAdmin(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
-    log = models.TextField(blank=True)
+    log = models.TextField(null=True)
 
 
 # User với vai trò là Nhà tuyển dụng
@@ -31,12 +33,12 @@ class Hiring(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
-    company_name = models.CharField(max_length=100, null=False)
-    address = models.CharField(max_length=150, null=False)
+    company_name = models.CharField(max_length=100)
+    address = models.CharField(max_length=150)
     company_size = models.IntegerField()
-    avg_rating = models.FloatField()
+    avg_rating = models.FloatField(default=0.0)
     pending_approval = models.BooleanField(default=True)
-    about = RichTextField()
+    about = RichTextField(null=True)
 
 
 # User với vai trò là Ứng viên
@@ -49,11 +51,11 @@ class Applicant(models.Model):
     categories = models.ManyToManyField('Category')
     skills = models.ManyToManyField('Skill')
     experiences = models.ManyToManyField('Experience')
-    title = models.CharField(max_length=50)
-    birthday = models.DateField()
-    address = models.CharField(max_length=150)
-    cv = models.FileField(upload_to='static/upload/%Y/%m')
-    about = RichTextField()
+    title = models.CharField(max_length=50, null=True)
+    birthday = models.DateField(null=True)
+    address = models.CharField(max_length=150, null=True)
+    cv = models.FileField(upload_to='static/upload/%Y/%m', null=True)
+    about = RichTextField(null=True)
 
 
 # Thông tin các offer được gửi nhận trong hệ thống. Báo cáo thống kê
@@ -99,7 +101,7 @@ class Job(models.Model):
     skills = models.ManyToManyField('Skill')
     experiences = models.ManyToManyField('Experience')
     created_at = models.DateField(auto_now_add=True)
-    expired_at = models.DateField()
+    expired_at = models.DateField(null=True)
     content = RichTextField()
     title = models.CharField(max_length=60)
     active = models.BooleanField(default=True)

@@ -12,11 +12,11 @@ from drf_yasg import openapi
 # Bổ trợ sinh api document, thông tin này sẽ hiện lên ở swagger
 schema_view = get_schema_view(
     openapi.Info(
-        title="Course API",
+        title="Employment Agency API",
         default_version='v1',
-        description="APIs for CourseApp",
+        description="APIs for Employment Agenct app",
         contact=openapi.Contact(email="1851050127tan@ou.edu.vn"),
-        license=openapi.License(name="Trần Quốc Tấn@2021"),
+        license=openapi.License(name="Quốc Vin & Quốc Tấn @2021"),
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),

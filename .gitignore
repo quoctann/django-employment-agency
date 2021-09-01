@@ -1,6 +1,8 @@
-/back-end/employment-agency/venv/
-/back-end/employment-agency/.idea/
+venv/
+.idea/
+node_modules/
 /back-end/employment-agency/employment_agency/employment_app/migrations/**
 /back-end/employment-agency/employment_agency/employment_app/upload/**
+/back-end/employment-agency/employment_agency/employment_app/static/
 __pycache__
 *.pyc
