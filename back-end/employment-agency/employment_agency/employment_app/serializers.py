@@ -10,13 +10,13 @@ from .models import *
 
 # Tương tác với model User, sử dụng để bind dữ liệu json từ form nhằm ghi xuống
 # csdl, thực hiện chức năng đăng ký
-class UserSerializer(ModelSerializer):
+class NguoiDungSerializer(ModelSerializer):
     class Meta:
         # Model sẽ sử dụng để serialize
-        model = User
+        model = NguoiDung
         # Các trường sẽ được trả ra dạng json
         fields = ['id', 'first_name', 'last_name', 'email', 'username',
-                  'password', 'avatar']
+                  'password', 'anh_dai_dien']
         # Trường password ko nên trả ra trong api, chỉ sử dụng 1 lần khi ghi vào
         # csdl thôi
         extra_kwargs = {
@@ -28,7 +28,7 @@ class UserSerializer(ModelSerializer):
     def create(self, validated_data):
         # Sử dụng ** để nó tự động parse bộ dữ liệu như mặc định, sau đó cần ghi
         # đè trường nào thì khai báo thêm (tránh lặp code)
-        user = User(**validated_data)
+        user = NguoiDung(**validated_data)
         # Ghi đè lại trường password (có thể dùng thế này đế set từng trường)
         user.set_password(validated_data['password'])
         user.save()

@@ -22,7 +22,7 @@ Sau đó nó sẽ tự sinh (tùy thuộc cấu hình trong views) 2 enpoints v�
 /tên/{tên_id} - DELETE
 """
 router = DefaultRouter()
-router.register('users', views.UserViewSet, basename='users')
+router.register('users', views.NguoiDungViewSet)
 
 
 urlpatterns = [

@@ -12,8 +12,8 @@ export default function Login(props) {
 	const login = async (event) => {
 		event.preventDefault();
 		let res = await API.post(endpoints["login"], {
-			client_id: "uQjeut43JuxXNTr08VYk17Ew2aqvDVhqiyZ3eypp",
-			client_secret: "3lZk7qdB7b9iIdDEj3bnflLgsuSPslJvZTkOYwDD2rs0Ix6YJebsHqQuGwMVTAjcdoIB5GRyfNXKv2OKxA8lXRsvPc4l4872BGjQJGUzAD3tIEawvZt77UT81TluruHO",
+			client_id: "yTpw0WvqEupdDtSvfL8FYpqhGli00rvQUhdvXKis",
+			client_secret: "6PDLc1LJTUTj1zewi5cRRotemG0X4OUXhoq5WTMHyOkabthhVtaiXXWY5t28O5DbfGT8gxvany4vJoLVPqCXOK6vL6S1DAc6dT0RYSuNvYFQiU2mJerH6h17Qd9F9JDV",
 			username: username,
 			password: password,
 			grant_type: "password",
