@@ -106,8 +106,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'employment_agency',
-        'USER': 'dev',
-        'PASSWORD': 'P@ssw0rd',
+        'USER': 'root',
+        'PASSWORD': 'Abc1234%^&',
         'HOST': ''
     }
 }

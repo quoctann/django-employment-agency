@@ -4,6 +4,7 @@ from rest_framework import viewsets, generics, permissions, status
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 
 from .serializers import *
 
@@ -31,3 +32,57 @@ class NguoiDungViewSet(viewsets.ViewSet, generics.CreateAPIView):
     @action(methods=['get'], detail=False, url_path='current-user')
     def current_user(self, request):
         return Response(self.serializer_class(request.user).data)
+
+
+# xem viec lam
+class PhucLoiViewSet(viewsets.ViewSet, generics.ListAPIView):
+    queryset = PhucLoi.objects.all()
+    serializer_class = PhucLoiSerializer
+
+
+class KinhNghiemViewSet(viewsets.ViewSet, generics.ListAPIView):
+    queryset = KinhNghiem.objects.all()
+    serializer_class = KinhNghiemSerializer
+
+
+class NganhNgheViewSet(viewsets.ViewSet, generics.ListAPIView):
+    queryset = NganhNghe.objects.all()
+    serializer_class = NganhNgheSerializer
+
+
+class KyNangViewSet(viewsets.ViewSet, generics.ListAPIView):
+    queryset = KyNang.objects.all()
+    serializer_class = KyNangSerializer
+
+
+class BangCapViewSet(viewsets.ViewSet, generics.ListAPIView):
+    queryset = BangCap.objects.all()
+    serializer_class = BangCapSerializer
+
+
+# ------------------- change
+class ViecLamPagination(PageNumberPagination):
+    page_size = 3
+
+
+class ViecLamViewSet(viewsets.ViewSet,
+                     generics.ListAPIView,
+                     generics.RetrieveAPIView):
+    queryset = ViecLam.objects.all()
+    serializer_class = ViecLamSerializer
+    pagination_class = ViecLamPagination
+# ------------------------------------------------
+
+
+class NhaTuyenDungViewSet(viewsets.ViewSet,
+                          generics.ListAPIView,
+                          generics.RetrieveAPIView):
+    queryset = NhaTuyenDung.objects.all()
+    serializer_class = NhaTuyenDungSerializer
+
+
+class UngTuyenViewSet(viewsets.ViewSet,
+                          generics.ListAPIView,
+                          generics.CreateAPIView):
+    queryset = UngTuyen.objects.all()
+    serializer_class = UngTuyenSerializer
