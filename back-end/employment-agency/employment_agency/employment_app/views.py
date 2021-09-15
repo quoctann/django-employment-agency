@@ -15,7 +15,9 @@ from .serializers import *
 # Sử dụng generics.RetrieveAPIView để lấy thông tin 1 user thông qua id
 # Để ràng buộc chỉ user đã đăng nhập mới lấy được thông tin ta ghi đè lại phương
 # thức get_permission
-class NguoiDungViewSet(viewsets.ViewSet, generics.CreateAPIView):
+class NguoiDungViewSet(viewsets.ViewSet,
+                       generics.CreateAPIView,
+                       generics.ListAPIView):
     # Chỉ định câu truy vấn
     queryset = NguoiDung.objects.filter(is_active=True)
     # Chỉ định lớp serialize
