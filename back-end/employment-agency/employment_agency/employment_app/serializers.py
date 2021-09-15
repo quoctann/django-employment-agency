@@ -5,6 +5,7 @@ internet. Mỗi lớp model khi được sử dụng trong api sẽ có một l�
 tương ứng
 """
 from rest_framework.serializers import ModelSerializer
+# from rest_framework import serializers
 from .models import *
 
 
@@ -37,3 +38,56 @@ class NguoiDungSerializer(ModelSerializer):
         user.save()
         return user
 
+
+class PhucLoiSerializer(ModelSerializer):
+    class Meta:
+        model = PhucLoi
+        fields = ['ten']
+
+
+class KinhNghiemSerializer(ModelSerializer):
+    class Meta:
+        model = KinhNghiem
+        fields = ['ten']
+
+
+class NganhNgheSerializer(ModelSerializer):
+    class Meta:
+        model = NganhNghe
+        fields = ['ten']
+
+
+class KyNangSerializer(ModelSerializer):
+    class Meta:
+        model = KyNang
+        fields = ['ten']
+
+
+class BangCapSerializer(ModelSerializer):
+    class Meta:
+        model = BangCap
+        fields = ['ten']
+
+
+class NhaTuyenDungSerializer(ModelSerializer):
+    class Meta:
+        model = NhaTuyenDung
+        fields = "__all__"
+
+
+class ViecLamSerializer(ModelSerializer):
+    phuc_loi = PhucLoiSerializer(many=True)
+    kinh_nghiem = KinhNghiemSerializer(many=True)
+    nganh_nghe = NganhNgheSerializer(many=True)
+    ky_nang = KyNangSerializer(many=True)
+    bang_cap = BangCapSerializer(many=True)
+
+    class Meta:
+        model = ViecLam
+        fields = "__all__"
+
+
+class UngTuyenSerializer(ModelSerializer):
+    class Meta:
+        model = UngTuyen
+        fields = "__all__"

@@ -23,7 +23,14 @@ Sau đó nó sẽ tự sinh (tùy thuộc cấu hình trong views) 2 enpoints v�
 """
 router = DefaultRouter()
 router.register('users', views.NguoiDungViewSet)
-
+router.register('vieclams', views.ViecLamViewSet)
+router.register('phuclois', views.PhucLoiViewSet)
+router.register('kinhnghiems', views.KinhNghiemViewSet)
+router.register('nganhnghes', views.NganhNgheViewSet)
+router.register('kynangs', views.KyNangViewSet)
+router.register('bangcaps', views.BangCapViewSet)
+router.register('nhatuyendungs', views.NhaTuyenDungViewSet)
+router.register('ungtuyens', views.UngTuyenViewSet)
 
 urlpatterns = [
     # Sử dụng route của rest framework để tự sinh endpoint crud cơ bản
