@@ -114,6 +114,7 @@ class ViecLam(models.Model):
     VI_PHAM = 'VI PHAM'
     DA_DONG = 'DA DONG'
     DANG_MO = 'DANG MO'
+
     TRANG_THAI = [
         (VI_PHAM, 'Viec lam vi pham quy dinh'),
         (DA_DONG, 'Viec lam khong nhan ho so dang ky nua'),

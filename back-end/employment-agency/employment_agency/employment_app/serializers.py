@@ -16,7 +16,7 @@ class NguoiDungSerializer(ModelSerializer):
         model = NguoiDung
         # Các trường sẽ được trả ra dạng json
         fields = ['id', 'first_name', 'last_name', 'email', 'username',
-                  'password', 'anh_dai_dien']
+                  'password', 'anh_dai_dien', 'so_dien_thoai']
         # Trường password ko nên trả ra trong api, chỉ sử dụng 1 lần khi ghi vào
         # csdl thôi
         extra_kwargs = {
@@ -26,6 +26,9 @@ class NguoiDungSerializer(ModelSerializer):
     # Ghi đè lại bộ dữ liệu nhận từ người dùng, cụ thể ghi đè lại password sau
     # khi đã được mã hóa (tạo bộ dữ liệu mới)
     def create(self, validated_data):
+
+        print(validated_data)
+
         # Sử dụng ** để nó tự động parse bộ dữ liệu như mặc định, sau đó cần ghi
         # đè trường nào thì khai báo thêm (tránh lặp code)
         user = NguoiDung(**validated_data)
@@ -33,3 +36,4 @@ class NguoiDungSerializer(ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+
