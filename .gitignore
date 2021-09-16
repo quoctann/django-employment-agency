@@ -161,6 +161,11 @@ cython_debug/
 .idea/**/dictionaries
 .idea/**/shelf
 
+# For this project
+.idea/employment-agency.iml
+.idea/misc.xml
+
+
 # AWS User-specific
 .idea/**/aws.xml
 

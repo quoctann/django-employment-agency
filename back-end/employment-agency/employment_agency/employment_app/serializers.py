@@ -5,38 +5,36 @@ internet. Mỗi lớp model khi được sử dụng trong api sẽ có một l�
 tương ứng
 """
 from rest_framework.serializers import ModelSerializer
-# from rest_framework import serializers
 from .models import *
 
 
-# Tương tác với model User, sử dụng để bind dữ liệu json từ form nhằm ghi xuống
-# csdl, thực hiện chức năng đăng ký
+# Tạo người dùng cơ bản
 class NguoiDungSerializer(ModelSerializer):
     class Meta:
-        # Model sẽ sử dụng để serialize
         model = NguoiDung
-        # Các trường sẽ được trả ra dạng json
-        fields = ['id', 'first_name', 'last_name', 'email', 'username',
-                  'password', 'anh_dai_dien', 'so_dien_thoai']
-        # Trường password ko nên trả ra trong api, chỉ sử dụng 1 lần khi ghi vào
-        # csdl thôi
+        fields = ['username', 'password', 'email', 'first_name', 'last_name',
+                  'vai_tro', 'anh_dai_dien']
         extra_kwargs = {
-            'password': {'write_only': 'true'}
+            'password': {'write_only': 'true'},
         }
 
-    # Ghi đè lại bộ dữ liệu nhận từ người dùng, cụ thể ghi đè lại password sau
-    # khi đã được mã hóa (tạo bộ dữ liệu mới)
     def create(self, validated_data):
+        nguoidung = NguoiDung(**validated_data)
+        nguoidung.set_password(validated_data['password'])
+        nguoidung.save()
+        return nguoidung
 
-        print(validated_data)
 
-        # Sử dụng ** để nó tự động parse bộ dữ liệu như mặc định, sau đó cần ghi
-        # đè trường nào thì khai báo thêm (tránh lặp code)
-        user = NguoiDung(**validated_data)
-        # Ghi đè lại trường password (có thể dùng thế này đế set từng trường)
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
+class UngVienSerializer(ModelSerializer):
+    class Meta:
+        model = UngVien
+        fields = '__all__'
+
+
+class NhaTuyenDungSerializer(ModelSerializer):
+    class Meta:
+        model = NhaTuyenDung
+        fields = '__all__'
 
 
 class PhucLoiSerializer(ModelSerializer):
@@ -67,12 +65,6 @@ class BangCapSerializer(ModelSerializer):
     class Meta:
         model = BangCap
         fields = ['ten']
-
-
-class NhaTuyenDungSerializer(ModelSerializer):
-    class Meta:
-        model = NhaTuyenDung
-        fields = "__all__"
 
 
 class ViecLamSerializer(ModelSerializer):

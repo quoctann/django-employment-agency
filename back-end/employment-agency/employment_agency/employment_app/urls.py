@@ -22,19 +22,21 @@ Sau đó nó sẽ tự sinh (tùy thuộc cấu hình trong views) 2 enpoints v�
 /tên/{tên_id} - DELETE
 """
 router = DefaultRouter()
-router.register('users', views.NguoiDungViewSet)
-router.register('vieclams', views.ViecLamViewSet)
-router.register('phuclois', views.PhucLoiViewSet)
-router.register('kinhnghiems', views.KinhNghiemViewSet)
-router.register('nganhnghes', views.NganhNgheViewSet)
-router.register('kynangs', views.KyNangViewSet)
-router.register('bangcaps', views.BangCapViewSet)
-router.register('nhatuyendungs', views.NhaTuyenDungViewSet)
-router.register('ungtuyens', views.UngTuyenViewSet)
+router.register("nguoi-dung", views.NguoiDungViewSet)
+router.register('nha-tuyen-dung', views.NhaTuyenDungViewSet)
+router.register('viec-lam', views.ViecLamViewSet)
+router.register('phuc-loi', views.PhucLoiViewSet)
+router.register('kinh-nghiem', views.KinhNghiemViewSet)
+router.register('nganh-nghe', views.NganhNgheViewSet)
+router.register('ky-nang', views.KyNangViewSet)
+router.register('bang-cap', views.BangCapViewSet)
+router.register('ung-tuyen', views.UngTuyenViewSet)
 
 urlpatterns = [
     # Sử dụng route của rest framework để tự sinh endpoint crud cơ bản
     path('', include(router.urls)),
     # Trang admin mặc định
     path('admin/', admin.site.urls),
+    # Tự define url để lấy client_id/secret dùng chứng thực lấy token
+    path('oauth2-info/', views.AuthInfo.as_view()),
 ]
