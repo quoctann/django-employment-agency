@@ -1,11 +1,12 @@
 import axios from "axios";
 
 export let endpoints = {
-    'vieclams':         '/vieclams/',
-    'phuclois':         '/phuclois/',
-    'nhatuyendungs':    '/nhatuyendungs/',
-    'ungtuyens':        '/ungtuyens/',
-    'nguoidungs':       '/users/',
+    'vieclams':         '/viec-lam/',
+    'phuclois':         '/phuc-loi/',
+    'nhatuyendungs':    '/nha-tuyen-dung/',
+    'ungtuyens':        '/ung-tuyen/',
+    'nguoidungs':       '/nguoi-dung/',
+    'login': '/nguoi-dung/current-user/'
 }
 
 export default axios.create({

@@ -76,9 +76,9 @@ MIDDLEWARE = [
 ]
 
 # Cho phép những domain nào truy cập vào hệ thống
-# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = True
 # Cấu hình này giới hạn chỉ (vài) domain được truy cập
-CORS_ALLOWED_ORIGINS = ['http://localhost:3000/']
+# CORS_ALLOWED_ORIGINS = ['http://localhost:3000/']
 
 # Các địa chỉ IP cho phép server được liệt kê hiển thị debug toolbar
 INTERNAL_IPS = [

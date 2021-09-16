@@ -162,39 +162,39 @@
 
 
 
-<List className={classes.root}>
-        {loading ? <p>Loading ...</p> : (
-          job.map((j, idx) => {
-            return <ListItem className={classes.item} key={childViecLam.id}
-              button onClick={() => handleJob_click(j)} >
-              <ListItemText
-                primary={
-                  <React.Fragment>
-                    <Typography variant="h6" >
-                      {j.tieu_de}
-                    </Typography>
-                  </React.Fragment>
-                }
-                secondary={
-                  <React.Fragment>
-                    <Typography variant="body1" >
-                      {j.nha_tuyen_dung}
-                    </Typography>
+// <List className={classes.root}>
+//         {loading ? <p>Loading ...</p> : (
+//           job.map((j, idx) => {
+//             return <ListItem className={classes.item} key={childViecLam.id}
+//               button onClick={() => handleJob_click(j)} >
+//               <ListItemText
+//                 primary={
+//                   <React.Fragment>
+//                     <Typography variant="h6" >
+//                       {j.tieu_de}
+//                     </Typography>
+//                   </React.Fragment>
+//                 }
+//                 secondary={
+//                   <React.Fragment>
+//                     <Typography variant="body1" >
+//                       {j.nha_tuyen_dung}
+//                     </Typography>
 
-                    <Typography variant="subtitle1" >
-                      {j.noi_dung}
-                    </Typography>
-                    <Typography variant="caption" display="block" >
-                      Cập nhập: {j.ngay_tao} - Bạn còn 5 ngày để ứng tuyển
-                    </Typography>
-                    <Divider />
-                  </React.Fragment>
-                } />
-            </ListItem>
+//                     <Typography variant="subtitle1" >
+//                       {j.noi_dung}
+//                     </Typography>
+//                     <Typography variant="caption" display="block" >
+//                       Cập nhập: {j.ngay_tao} - Bạn còn 5 ngày để ứng tuyển
+//                     </Typography>
+//                     <Divider />
+//                   </React.Fragment>
+//                 } />
+//             </ListItem>
 
-          })
+//           })
 
 
-        )}
-      </List>
+//         )}
+//       </List>
     
