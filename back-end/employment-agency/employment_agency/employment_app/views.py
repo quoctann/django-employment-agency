@@ -3,6 +3,7 @@
 from django.views import View
 from rest_framework import viewsets, generics, permissions, status
 from rest_framework.decorators import action
+from rest_framework.generics import get_object_or_404
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
@@ -41,9 +42,9 @@ class NguoiDungViewSet(viewsets.ViewSet, generics.CreateAPIView):
         return [permissions.AllowAny()]
 
     # Tạo API get dữ liệu user sau khi đã chứng thực (đã đăng nhập)
-    @action(methods=['get'], detail=False, url_path='current-user')
+    @action(methods=['get'], detail=False, url_path='hien-tai')
     def get_current_user(self, request):
-        print(request)
+        # print(request)
         return Response(self.serializer_class(request.user).data,
                         status.HTTP_200_OK)
 
@@ -76,16 +77,21 @@ class BangCapViewSet(viewsets.ViewSet, generics.ListAPIView):
 
 # ------------------- change
 class ViecLamPagination(PageNumberPagination):
-    page_size = 3
+    page_size = 6
 
 
 class ViecLamViewSet(viewsets.ViewSet,
-                     generics.ListAPIView,
-                     generics.RetrieveAPIView):
-    queryset = ViecLam.objects.all()
+                     generics.ListAPIView):
+    queryset = ViecLam.objects.filter(trang_thai_viec_lam=ViecLam.DANG_MO)
     serializer_class = ViecLamSerializer
     pagination_class = ViecLamPagination
-# ------------------------------------------------
+
+    # Override generic để lấy chi tiết nha_tuyen_dung
+    def retrieve(self, request, pk=None):
+        queryset = ViecLam.objects.filter(trang_thai_viec_lam=ViecLam.DANG_MO).select_related("nha_tuyen_dung__nguoi_dung")
+        vieclam = get_object_or_404(queryset, pk=pk)
+        serializer = ViecLamSerializer(vieclam)
+        return Response(serializer.data)
 
 
 class NhaTuyenDungViewSet(viewsets.ViewSet,

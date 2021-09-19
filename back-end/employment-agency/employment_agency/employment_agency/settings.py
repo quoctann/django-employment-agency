@@ -10,8 +10,8 @@ SECRET_KEY = 'django-insecure-xm4a2&s8^s=z(%!%3(-xrjw4$xpllu*woj9zj(frm#vz3zjr0^
 
 # OAuth2 thông tin application (EmploymentAgency), gửi kèm rq để xin token
 OAUTH2_INFO = {
-    'client_id': 'i3nLqR4ONZsbqHWolmNQu0mSgjqZEhgUzTjHpqI5',
-    'client_secret': 'Nid6Kfxl8kll5QqSWZKamStNdOBpqGhedAvloLFCtyv6FOalgCRUVIvt7uKmq7B3gwaydNOfqI3MpAyfR6bny9iSvVFbs5PKcgWV7RuDk7TEQjZ3j6KCwClcSKx2URmo'
+    'client_id': 'NEST0N7JhUcv3ObQ5wXM6ZNKGywvPvOhSHgTStTB',
+    'client_secret': 'ug2vT3qEBUZDL8d5KzItc1cwVgYVUanZppVRWqJG74hIl3ww5Nm9tgNgIXoz9FfzYbdzYsVI5qJrm4LQkRMPQI7HSL0RIYjTFs63TQ8dC8oJ2L8aEkDf2Bmk5PCHCiXs'
 }
 
 # Tắt khi đang deploy lên production
@@ -51,7 +51,7 @@ REST_FRAMEWORK = {
     # Dùng rest framework để phân trang
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     # Mỗi respond trả về 2 trang
-    'PAGE_SIZE': '2',
+    'PAGE_SIZE': '6',
     # Cấu hình lớp sử dụng để chứng thực
     'DEFAULT_AUTHENTICATION_CLASSES': ('oauth2_provider.contrib.rest_framework.OAuth2Authentication', ),
 }

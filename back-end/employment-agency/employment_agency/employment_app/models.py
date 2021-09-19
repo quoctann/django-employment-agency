@@ -37,10 +37,15 @@ class NguoiDung(AbstractUser):
 
 
 # User với vai trò là Nhà tuyển dụng
-class NhaTuyenDung(NguoiDung):
+class NhaTuyenDung(models.Model):
     class Meta:
         db_table = 'nha_tuyen_dung'
 
+    nguoi_dung = models.OneToOneField(
+        NguoiDung,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
     ten_cong_ty = models.CharField(max_length=100)
     dia_chi = models.CharField(max_length=150)
     quy_mo = models.IntegerField()
@@ -50,15 +55,19 @@ class NhaTuyenDung(NguoiDung):
 
 
 # User với vai trò là Ứng viên
-class UngVien(NguoiDung):
+class UngVien(models.Model):
     class Meta:
         db_table = 'ung_vien'
 
+    nguoi_dung = models.OneToOneField(
+        NguoiDung,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
     ngay_sinh = models.DateField(null=True)
     dia_chi = models.CharField(max_length=150, null=True)
     cv = models.FileField(upload_to='static/upload/%Y/%m', null=True)
     gioi_thieu = RichTextField(null=True)
-    diem_danh_gia_tb = models.FloatField(default=0.0)
     chuc_danh = models.ManyToManyField('ChucDanh', blank=True, default=None)
 
 
@@ -112,11 +121,15 @@ class ViecLam(models.Model):
         (DANG_MO, 'Viec lam con nhan ho so'),
     ]
 
-    nha_tuyen_dung = models.ForeignKey(NhaTuyenDung, on_delete=models.CASCADE)
+    nha_tuyen_dung = models.ForeignKey(
+        NhaTuyenDung,
+        on_delete=models.CASCADE,
+    )
     ngay_tao = models.DateField(auto_now_add=True)
     ngay_het_han = models.DateField()
     noi_dung = RichTextField()
     tieu_de = models.CharField(max_length=80)
+    luong = models.IntegerField(default=0)
     trang_thai_viec_lam = models.CharField(
         choices=TRANG_THAI,
         max_length=10,

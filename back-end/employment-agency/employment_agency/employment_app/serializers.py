@@ -73,6 +73,7 @@ class ViecLamSerializer(ModelSerializer):
     nganh_nghe = NganhNgheSerializer(many=True)
     ky_nang = KyNangSerializer(many=True)
     bang_cap = BangCapSerializer(many=True)
+    nha_tuyen_dung = NhaTuyenDungSerializer()
 
     class Meta:
         model = ViecLam
