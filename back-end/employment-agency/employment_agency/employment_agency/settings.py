@@ -8,6 +8,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY: giữ key này bí mật trong môi trường production
 SECRET_KEY = 'django-insecure-xm4a2&s8^s=z(%!%3(-xrjw4$xpllu*woj9zj(frm#vz3zjr0^'
 
+# OAuth2 thông tin application (EmploymentAgency), gửi kèm rq để xin token
+OAUTH2_INFO = {
+    'client_id': 'i3nLqR4ONZsbqHWolmNQu0mSgjqZEhgUzTjHpqI5',
+    'client_secret': 'Nid6Kfxl8kll5QqSWZKamStNdOBpqGhedAvloLFCtyv6FOalgCRUVIvt7uKmq7B3gwaydNOfqI3MpAyfR6bny9iSvVFbs5PKcgWV7RuDk7TEQjZ3j6KCwClcSKx2URmo'
+}
+
 # Tắt khi đang deploy lên production
 DEBUG = True
 
@@ -106,8 +112,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'employment_agency',
-        'USER': 'dev',
-        'PASSWORD': 'P@ssw0rd',
+        'USER': 'root',
+        'PASSWORD': 'Abc1234%^&',
         'HOST': ''
     }
 }

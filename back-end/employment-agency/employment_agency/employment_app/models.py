@@ -26,7 +26,8 @@ class NguoiDung(AbstractUser):
         (QUAN_LY, 'Quan ly')
     ]
 
-    so_dien_thoai = models.CharField(max_length=15, null=True)
+    email = models.CharField(max_length=50, null=False, unique=True)
+    so_dien_thoai = models.CharField(max_length=15, null=True, unique=True)
     anh_dai_dien = models.ImageField(upload_to='static/upload/%Y/%m', null=True)
     vai_tro = models.CharField(
         max_length=10,
@@ -36,15 +37,10 @@ class NguoiDung(AbstractUser):
 
 
 # User với vai trò là Nhà tuyển dụng
-class NhaTuyenDung(models.Model):
+class NhaTuyenDung(NguoiDung):
     class Meta:
         db_table = 'nha_tuyen_dung'
 
-    nguoi_dung = models.OneToOneField(
-        NguoiDung,
-        on_delete=models.CASCADE,
-        primary_key=True,
-    )
     ten_cong_ty = models.CharField(max_length=100)
     dia_chi = models.CharField(max_length=150)
     quy_mo = models.IntegerField()
@@ -54,21 +50,16 @@ class NhaTuyenDung(models.Model):
 
 
 # User với vai trò là Ứng viên
-class UngVien(models.Model):
+class UngVien(NguoiDung):
     class Meta:
         db_table = 'ung_vien'
 
-    nguoi_dung = models.OneToOneField(
-        NguoiDung,
-        on_delete=models.CASCADE,
-        primary_key=True,
-    )
     ngay_sinh = models.DateField(null=True)
     dia_chi = models.CharField(max_length=150, null=True)
     cv = models.FileField(upload_to='static/upload/%Y/%m', null=True)
     gioi_thieu = RichTextField(null=True)
     diem_danh_gia_tb = models.FloatField(default=0.0)
-    chuc_danh = models.ManyToManyField('ChucDanh')
+    chuc_danh = models.ManyToManyField('ChucDanh', blank=True, default=None)
 
 
 # User với vai trò là Quản lý
@@ -114,6 +105,7 @@ class ViecLam(models.Model):
     VI_PHAM = 'VI PHAM'
     DA_DONG = 'DA DONG'
     DANG_MO = 'DANG MO'
+
     TRANG_THAI = [
         (VI_PHAM, 'Viec lam vi pham quy dinh'),
         (DA_DONG, 'Viec lam khong nhan ho so dang ky nua'),

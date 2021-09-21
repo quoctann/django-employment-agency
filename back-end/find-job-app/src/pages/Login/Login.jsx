@@ -19,8 +19,6 @@ import cookies from 'react-cookies';
 import { Redirect } from 'react-router';
 import { useDispatch } from 'react-redux';
 import useSubmitForm from "../../helpers/CustomHooks";
-import { connect } from "react-redux";
-import { login } from "../../redux/actions/actions";
 
 
 function Copyright() {
@@ -36,51 +34,46 @@ function Copyright() {
   );
 }
 
-const LoginPage = (props) => {
+export default function Login(props) {
   const classes = useStyles();
+  const [isLogged, setLogged] = useState(false);
+  const [username, setUsername] = useState(null);
+  const [password, setPassword] = useState(null);
+  const dispatch = useDispatch();
 
-  const login = async () => {
-    try {
-      const info = await API.get(endpoints["oauth2-info"]);
-      const res = await API.post(endpoints["login"], {
-        client_id: info.data.client_id,
-        client_secret: info.data.client_secret,
-        username: inputs.username,
-        password: inputs.password,
-        grant_type: "password",
-      });
+  const login = async (event) => {
+    event.preventDefault();
+    const info = await API.get(endpoints["oauth2-info"]);
+    const res = await API.post(endpoints["login"], {
+      client_id: info.data.client_id,
+      client_secret: info.data.client_secret,
+      username: username,
+      password: password,
+      grant_type: "password",
+    })
 
-      console.info('res.data: \n', res.data);
-      cookies.save("access_token", res.data.access_token);
+    // console.info('res.data', res.data)
+    cookies.save("access_token", res.data.access_token)
 
-      const user = await API.get(endpoints["current-user"], {
-        headers: {
-          Authorization: `Bearer ${cookies.load("access_token")}`,
-        },
-      });
+    let user = await API.get(endpoints['current-user'], {
+      headers: {
+        Authorization: `Bearer ${cookies.load("access_token")}`
+      }
+    })
+    console.info('user.data', user.data)
+    cookies.save("user", user.data);
+    dispatch({
+      "type": "login",
+      "payload": user.data
+    })
+    setLogged(true);
+  }
 
-      console.log("user data: \n", user.data)
-      cookies.save("user", user.data);
-
-      cookies.save("user", user.data);
-      // Dispatch lên store thông tin user (ko render trang này nữa)
-      props.signIn(cookies.load("user"));
-      console.log("FROM LOGIN\n", props.userData.userReducer);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const { inputs, handleInputChange, handleSubmit } = useSubmitForm(login);
-
-  // Nếu đã đăng nhập thì redirect về trang chủ
-  if (
-    cookies.load("user") ||
-    props.userInfo.userReducer.hasOwnProperty("username")
-  )
-    return <Redirect to="/" />;
+  if (isLogged)
+    return <Redirect to="/" />
   else
     return (
+
       <Container component="main" maxWidth="xs" >
         <CssBaseline />
         <div className={classes.paper}>
@@ -91,7 +84,7 @@ const LoginPage = (props) => {
             Sign in
           </Typography>
           {/* <form className={classes.form} noValidate method='POST' onSubmit={}> */}
-          <form className={classes.form} onSubmit={handleSubmit}>
+          <form className={classes.form} onSubmit={login}>
             <TextField
               variant="outlined"
               margin="normal"
@@ -102,9 +95,10 @@ const LoginPage = (props) => {
               name="username"
               autoComplete="current-username"
               autoFocus
-              value={inputs.username}
-              // onChange={() => handleInputChange()}
-              onChange={handleInputChange}
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+            // value={inputs.username}
+            // onChange={handleInputChange}
             />
             <TextField
               variant="outlined"
@@ -116,8 +110,10 @@ const LoginPage = (props) => {
               type="password"
               id="password"
               autoComplete="current-password"
-              onChange={handleInputChange}
-              value={inputs.password}
+              onChange={e => setPassword(e.target.value)}
+              value={password}
+            // onChange={handleInputChange}
+            // value={inputs.password}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -150,25 +146,7 @@ const LoginPage = (props) => {
           <Copyright />
         </Box>
       </Container>
+
+
     );
 }
-/*
-  Redux connect() ko truyền gì cả vẫn sử dụng được, thông thường nó nhận 2
-  tham số optional: state và dispatch để map tới props, dùng props để truy cập
-  những thằng này thay vì gọi dispatch trực tiếp trong component. Lưu ý nên
-  trả ra nguyên một state và khi sử dụng trong component cần gì thì trỏ đến
-  chi tiết, để khi state nào thay đổi nó sẽ render lại chỉ component dùng
-  state đó thôi
-*/
-export default connect(
-  (state) => {
-    return {
-      userInfo: state,
-    };
-  },
-  (dispatch) => {
-    return {
-      signIn: (user) => dispatch(login(user)),
-    };
-  }
-)(LoginPage);

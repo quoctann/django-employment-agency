@@ -20,7 +20,7 @@ export default function RecruiterInfo() {
 
     const fetchRelatedJobs = async () => {
         setTimeout(() => {
-            const _path = endpoints['related-job'].replace(":id", `${state?.recruiter?.nguoi_dung}`)
+            const _path = endpoints['related-job'].replace(":id", `${state?.recruiter?.id}`)
             API.get(_path).then(res => {
                 setRelatedJobs(res.data)
                 setLoading(false)
@@ -50,6 +50,7 @@ export default function RecruiterInfo() {
                     )}
                 </div>
             )}
+
         </div>
     );
 }

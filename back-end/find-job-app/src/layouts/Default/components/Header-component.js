@@ -13,26 +13,27 @@ import React, { useState } from "react";
 import { useHistory } from "react-router";
 import MenuIcon from "@material-ui/icons/Menu";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos"
-import { useDispatch, useStore } from "react-redux";
+import { useStore } from "react-redux";
 import { ProfileMenu } from "./Others-component";
 import EmailIcon from '@material-ui/icons/Email';
 import SearchIcon from '@material-ui/icons/Search';
-// import { useTranslation } from 'react-i18next';
-import cookies from 'react-cookies'
+import cookies from 'react-cookies';
 
 export default function ({ classes, open, setOpen, mainRef }) {
     const trigger = useScrollTrigger({ target: mainRef });
     const [anchorEl, setAnchorEl] = useState(null);
     const history = useHistory();
-    const dispath = useDispatch();
-    // const { t } = useTranslation('Profile_Dialog');
+    const store = useStore();
+    const auth = store.getState();
 
     const handleProfile_click = (e) => {
         setAnchorEl(e.currentTarget);
     };
     const handleLogout_click = () => {
-        setAnchorEl(null);
-        // dispath(userActions.signOut())
+        // setAnchorEl(null);
+        cookies.remove("user");
+        cookies.remove("access_token");
+        window.location.reload();
     };
     const handleMenu_close = (route) => {
         if (route) {
@@ -41,26 +42,22 @@ export default function ({ classes, open, setOpen, mainRef }) {
 
         setAnchorEl(null);
     };
-    // const handleChangeLanguage_callback = (lang) => {
-    //   i18n.changeLanguage(lang.value);
-    // };
 
-    // const store = useStore();
-    // const auth = store.getState();
-    // let user = auth;
-    // if (cookies.load("user") != null) {
-    //     user = cookies.load("user")
-    // };
-    // let userComponet = <>
-    //     <div>Đăng nhập</div>
-    //     <div>Đăng Ký</div>
-    // </>
-    // if (user != null) {
-    //     userComponet = <>
-    //         <div>{user.username}</div>
-    //         <div>Đăng xuất</div>
-    //     </>
-    // }
+    let user = auth;
+    if (cookies.load("user") != null) {
+        user = cookies.load("user")
+    };
+    let userComponet = <>
+        <Button > <Typography variant="subtitle1" style={{ textTransform: 'none' }}>Đăng nhập</Typography> </Button>
+        <Button > <Typography variant="subtitle1" style={{ textTransform: 'none' }}>Đăng Ký</Typography> </Button>
+    </>
+    if (user.username != null) {
+        userComponet = <>
+            <Button > <Typography variant="subtitle1" style={{ textTransform: 'none' }}>{user.username}</Typography> </Button>
+            <Button onClick={handleLogout_click}> <Typography variant="subtitle1" style={{ textTransform: 'none' }}>Đăng xuất</Typography> </Button>
+        </>
+    }
+
 
     return (
         <Slide appear={false} direction="down" in={!trigger}>
@@ -78,7 +75,7 @@ export default function ({ classes, open, setOpen, mainRef }) {
                             Something
                         </Typography>
                     </div>
-
+                    {userComponet}
 
                     <div className="block-right " >
                         {/* <MenuLanguage classes={classes} t={t} onChangeLanguage={handleChangeLanguage_callback} /> */}

@@ -1,14 +1,17 @@
-import { createStore, applyMiddleware } from 'redux';
-import thunkMiddleware from 'redux-thunk';
-import { createLogger } from 'redux-logger';
+import { createStore } from 'redux';
 import rootReducer from '../redux/reducers';
+import storage from 'redux-persist/lib/storage'
+import { persistStore, persistReducer } from "redux-persist";
 
-const loggerMiddleware = createLogger();
+// Sử dụng redux-persist để ngăng ko cho state reset khi refresh trang web
+const persistConfig = {
+  key: "root",
+  storage,
+};
 
-export const store = createStore(
-  rootReducer,
-  applyMiddleware(
-    thunkMiddleware,
-    // loggerMiddleware
-  )
-);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+const store = createStore(persistedReducer);
+let persistor = persistStore(store)
+
+export { store, persistor };

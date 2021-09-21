@@ -59,7 +59,7 @@ export default function JobDetail() {
   const fetchRecruiter = async () => {
     setTimeout(() => {
       API.get(`${endpoints['nhatuyendungs']}${state?.job?.nha_tuyen_dung}/`).then(res => {
-        console.info('recruiters_info_after_click: ', res.data)
+        // console.info('recruiters_info_after_click: ', res.data)
         setRecruiter(res.data)
         setLoading(false)
       })
@@ -91,8 +91,9 @@ export default function JobDetail() {
   };
 
   const handleRecruiter_click = (r) => {
-    console.info('handleRecruiter_click: ', r)
-    const _path = PublicRoutes.RecruiterInfo.path.replace(":id", r.nguoi_dung)
+    // console.info('handleRecruiter_click: ', r)
+    const _path = PublicRoutes.RecruiterInfo.path.replace(":id", r.id)
+    // console.info('_path', _path)
     history.push(_path, {
       recruiter: r,
     })

@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 
 import { layout } from './layout-reducer';
-import userReducer from "./userReducer";
+// import reducer from "./userReducer";
 
 const rootReducer = combineReducers({
   layout,
-  userReducer
+  // reducer
 });
 
 export default rootReducer;

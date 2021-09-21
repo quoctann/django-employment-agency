@@ -33,6 +33,7 @@ export default function Test() {
   const [job, setJob] = useState([]);
   const [count, setCount] = useState(0);
   const history = useHistory();
+  const [page, setPage] = React.useState(1);
 
   const [loading, setLoading] = useState(false)
 
@@ -58,24 +59,42 @@ export default function Test() {
         setJob(res.data.results)
         setCount(res.data.count)
         setLoading(false)
-        console.info('joblist: ',res.data.results)
+        // console.info('joblist: ', res.data.results)
+      })
+    }, 500);
+  }
+
+  const fetchJobsByPage = async (page) => {
+    setTimeout(() => {
+      const _path = `${endpoints['vieclams']}?page=${page}`
+      API.get(_path).then(res => {
+        setJob(res.data.results)
+        setCount(res.data.count)
+        setLoading(false)
+        // console.info('joblist: ', res.data.results)
       })
     }, 500);
   }
 
   const handleJob_click = (j) => {
-    console.info('jobDetail_click: ', j)
+    // console.info('jobDetail_click: ', j)
     const _path = PublicRoutes.JobDetail.path.replace(":id", j.id)
     history.push(_path, {
       job: j,
     })
   };
 
-  const [page, setPage] = React.useState(1);
+
   const handleChange = (event, value) => {
+    console.info('page truoc:', page)
     setPage(value);
-    setJob()
+    // console.info('page sau:', page)
+    // fetchJobsByPage(page);
   };
+
+  const handlePage_click = (page) => {
+    setPage(page);
+  }
 
 
   return (

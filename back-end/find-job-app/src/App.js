@@ -9,19 +9,13 @@ import {
 import Layout from "./layouts/Default";
 import { PublicRoutes, RoutePaths } from "./routes/public-route";
 // import "./App.css";
-import cookies from 'react-cookies';
 
-
-function App() {
+function App(props) {
   const loggedIn = false;
-  // const [user, setUser] = useState(null);
-  
-
-
 
   /**
-   * renders
-   */
+  * renders
+  */
   function BasicLayout(props) {
     return (
       <Layout {...props}>

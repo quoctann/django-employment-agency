@@ -1,14 +1,15 @@
 import axios from 'axios';
+// import cookies from 'react-cookies';
 
 export let endpoints = {
-    'vieclams':         '/vieclams/',
-    'related-job':      '/vieclams/:id/by-recruiter/',
-    'phuclois':         '/phuclois/',
-    'nhatuyendungs':    '/nhatuyendungs/',
-    'ungtuyens':        '/ungtuyens/',
-    'nguoidungs':       '/users/',
+    'vieclams':         '/viec-lam/',
+    'related-job':      '/viec-lam/:id/by-recruiter/',
+    'phuclois':         '/phuc-loi/',
+    'nhatuyendungs':    '/nha-tuyen-dung/',
+    'ungtuyens':        '/ung-tuyens/',
+    "nguoi-dung": "/nguoi-dung/",
     'login':            '/o/token/',
-    'current-user':     '/users/current-user/',
+    'current-user':     '/nguoi-dung/current-user/',
     "oauth2-info":      '/oauth2-info/',
 }
 
