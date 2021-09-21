@@ -1,6 +1,6 @@
 # Tập tin này để xử lý request và trả về các response (tương tự controller trong
 # MVC, là thành phần Views trong MVT)
-from django.views import View
+from django.db.models import Model
 from rest_framework import viewsets, generics, permissions, status
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -88,7 +88,8 @@ class ViecLamViewSet(viewsets.ViewSet,
 
     # Override generic để lấy chi tiết nha_tuyen_dung
     def retrieve(self, request, pk=None):
-        queryset = ViecLam.objects.filter(trang_thai_viec_lam=ViecLam.DANG_MO).select_related("nha_tuyen_dung__nguoi_dung")
+        queryset = ViecLam.objects.filter(trang_thai_viec_lam=ViecLam.DANG_MO).select_related(
+            "nha_tuyen_dung__nguoi_dung")
         vieclam = get_object_or_404(queryset, pk=pk)
         serializer = ViecLamSerializer(vieclam)
         return Response(serializer.data)
@@ -102,10 +103,29 @@ class NhaTuyenDungViewSet(viewsets.ViewSet,
 
 
 class UngTuyenViewSet(viewsets.ViewSet,
-                          generics.ListAPIView,
-                          generics.CreateAPIView):
+                      generics.ListAPIView,
+                      generics.CreateAPIView):
     queryset = UngTuyen.objects.all()
     serializer_class = UngTuyenSerializer
+
+    # API kiểm tra ứng viên đã ứng tuyển việc làm này chưa, nhận vào 2 req params
+    # /ung-tuyen/hop-le/?ung-vien-id=số&viec-lam-id=số
+    @action(methods=['get'], detail=False, url_path='hop-le')
+    def valid_request(self, request):
+        if request.query_params.__contains__('ung-vien-id') and request.query_params.__contains__('viec-lam-id'):
+            uv_id = request.query_params.__getitem__('ung-vien-id')
+            vl_id = request.query_params.__getitem__('viec-lam-id')
+            # Dữ liệu gửi lên: { 'viec_lam': 'số', 'ung_vien': 'số' }
+            query = UngTuyen.objects.filter(viec_lam_id=vl_id, ung_vien_id=uv_id)
+            print(query.__len__())
+            # Nếu đã ứng tuyển rồi thì ko ứng tuyển nữa
+            if query.__len__() == 0:
+                return Response({'valid': True}, status.HTTP_200_OK)
+            else:
+                return Response({'valid': False}, status.HTTP_200_OK)
+
+        else:
+            return Response({'invalid request': 'need ung-vien-id and viec-lam-id as request parameters'}, status.HTTP_400_BAD_REQUEST)
 
 
 # API để lấy thông tin client_id, client_secret xin token chứng thực (đăng nhập)

@@ -12,7 +12,7 @@ from .models import *
 class NguoiDungSerializer(ModelSerializer):
     class Meta:
         model = NguoiDung
-        fields = ['username', 'password', 'email', 'first_name', 'last_name',
+        fields = ['id', 'username', 'password', 'email', 'first_name', 'last_name',
                   'vai_tro', 'anh_dai_dien']
         extra_kwargs = {
             'password': {'write_only': 'true'},
@@ -65,6 +65,12 @@ class BangCapSerializer(ModelSerializer):
     class Meta:
         model = BangCap
         fields = ['ten']
+
+
+class DanhGiaNhaTuyenDungSerializer(ModelSerializer):
+    class Meta:
+        model = DanhGiaNhaTuyenDung
+        fields = "__all__"
 
 
 class ViecLamSerializer(ModelSerializer):
