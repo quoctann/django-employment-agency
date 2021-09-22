@@ -26,12 +26,16 @@ class NguoiDungSerializer(ModelSerializer):
 
 
 class UngVienSerializer(ModelSerializer):
+    nguoi_dung = NguoiDungSerializer()
+
     class Meta:
         model = UngVien
         fields = '__all__'
 
 
 class NhaTuyenDungSerializer(ModelSerializer):
+    nguoi_dung = NguoiDungSerializer()
+
     class Meta:
         model = NhaTuyenDung
         fields = '__all__'
@@ -67,12 +71,6 @@ class BangCapSerializer(ModelSerializer):
         fields = ['ten']
 
 
-class DanhGiaNhaTuyenDungSerializer(ModelSerializer):
-    class Meta:
-        model = DanhGiaNhaTuyenDung
-        fields = "__all__"
-
-
 class ViecLamSerializer(ModelSerializer):
     phuc_loi = PhucLoiSerializer(many=True)
     kinh_nghiem = KinhNghiemSerializer(many=True)
@@ -83,6 +81,16 @@ class ViecLamSerializer(ModelSerializer):
 
     class Meta:
         model = ViecLam
+        fields = "__all__"
+
+
+class DanhGiaNhaTuyenDungSerializer(ModelSerializer):
+    ung_vien = UngVienSerializer()
+    viec_lam = ViecLamSerializer()
+    nha_tuyen_dung = NhaTuyenDungSerializer()
+
+    class Meta:
+        model = DanhGiaNhaTuyenDung
         fields = "__all__"
 
 

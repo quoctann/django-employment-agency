@@ -159,6 +159,14 @@ class UngTuyen(models.Model):
         (CHO_XU_LY, 'Ho so van dang xu ly'),
     ]
 
+    # Trường cho biết là ứng viên nộp đơn ứng tuyển hay NTD gửi lời mời làm
+    NHA_TUYEN_DUNG = 'NTD'
+    UNG_VIEN = 'UV'
+    NGUOI_GUI = [
+        (NHA_TUYEN_DUNG, 'NTD gui loi moi lam viec cho UV'),
+        (UNG_VIEN, 'UV nop don ung tuyen')
+    ]
+
     viec_lam = models.ForeignKey(ViecLam, on_delete=models.SET_NULL, null=True)
     ung_vien = models.ForeignKey(UngVien, on_delete=models.SET_NULL, null=True)
     ngay_ung_tuyen = models.DateField(auto_now_add=True)
@@ -166,6 +174,11 @@ class UngTuyen(models.Model):
         choices=TRANG_THAI,
         max_length=10,
         default=CHO_XU_LY
+    )
+    nguoi_gui = models.CharField(
+        choices=NGUOI_GUI,
+        max_length=10,
+        default=UNG_VIEN
     )
 
 

@@ -1,6 +1,7 @@
 # Tập tin này để xử lý request và trả về các response (tương tự controller trong
 # MVC, là thành phần Views trong MVT)
 import json
+import math
 
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Model
@@ -80,7 +81,6 @@ class BangCapViewSet(viewsets.ViewSet, generics.ListAPIView):
     serializer_class = BangCapSerializer
 
 
-# ------------------- change
 class ViecLamPagination(PageNumberPagination):
     page_size = 6
 
@@ -107,16 +107,36 @@ class NhaTuyenDungViewSet(viewsets.ViewSet,
     serializer_class = NhaTuyenDungSerializer
 
     # API tìm kiếm gần đúng nhà tuyển dụng theo tên
-    # /nha-tuyen-dung/search/?name=tên-nhà-tuyển-dụng
+    # /nha-tuyen-dung/search/?name=tên-nhà-tuyển-dụng&page=số
     @action(methods=['get'], detail=False, url_path='tim-kiem-theo-ten')
     def search_by_name(self, request):
-        if request.query_params.__contains__('name'):
+        if request.query_params.__contains__('name') and request.query_params.__contains__('page'):
+            next = None
+            previous = None
+            result_per_page = settings.REST_FRAMEWORK['PAGE_SIZE']
+            total_pages = 1
+            current = request.query_params.__getitem__('page')
+
             query = NhaTuyenDung.objects.filter(
                 ten_cong_ty__icontains=request.query_params.__getitem__('name'),
                 doi_xet_duyet=False)
-            # Trả ra [ { dữ liệu QuerySet 1 }, { dữ liệu QuerySet n } ]
-            return JsonResponse(data=list(query.values()), safe=False)
-        return Response({"invalid request": "need 'name' as request parameter to search on database"},
+
+            if query.count() > int(result_per_page):
+                total_pages = math.ceil(query.count() / int(result_per_page))
+
+            if int(current) + 1 <= total_pages:
+                next = request.build_absolute_uri('/?page=' + str(int(current) + 1))
+
+            if int(current) - 1 > 0:
+                previous = request.build_absolute_uri('/?page=' + str(int(current) - 1))
+
+            return JsonResponse({
+                'count': query.count(),
+                'next': next,
+                'previous': previous,
+                'result': list(query.values())
+            })
+        return Response({"invalid request": "need valid 'name' and 'page' as request parameters to search on database"},
                         status.HTTP_400_BAD_REQUEST)
 
 
@@ -143,7 +163,44 @@ class UngTuyenViewSet(viewsets.ViewSet,
                 return Response({'valid': False}, status.HTTP_200_OK)
 
         else:
-            return Response({"invalid request": "need 'ung-vien-id' and 'viec-lam-id' as request parameters"}, status.HTTP_400_BAD_REQUEST)
+            return Response({"invalid request": "need 'ung-vien-id' and 'viec-lam-id' as request parameters"},
+                            status.HTTP_400_BAD_REQUEST)
+
+
+class DanhGiaNhaTuyenDungViewSet(viewsets.ViewSet):
+    queryset = DanhGiaNhaTuyenDung.objects.all()
+    serializer_class = DanhGiaNhaTuyenDungSerializer(many=True)
+
+    @action(methods=['get'], detail=False, url_path='chi-tiet')
+    def get_rating_by_hiring(self, request):
+        if request.query_params.__contains__('hiring-id') and request.query_params.__contains__('page'):
+            next = None
+            previous = None
+            result_per_page = settings.REST_FRAMEWORK['PAGE_SIZE']
+            total_pages = 1
+            current = request.query_params.__getitem__('page')
+
+            query = DanhGiaNhaTuyenDung.objects.filter(nha_tuyen_dung_id=request.query_params.__getitem__('hiring-id'))
+            serializer = DanhGiaNhaTuyenDungSerializer(query, many=True)
+            data = serializer.data
+
+            if query.count() > int(result_per_page):
+                total_pages = math.ceil(query.count() / int(result_per_page))
+
+            if int(current) + 1 <= total_pages:
+                next = request.build_absolute_uri('/?page=' + str(int(current) + 1))
+
+            if int(current) - 1 > 0:
+                previous = request.build_absolute_uri('/?page=' + str(int(current) - 1))
+
+            return JsonResponse({
+                'count': query.count(),
+                'next': next,
+                'previous': previous,
+                'result': data
+            })
+        return Response({"invalid request": "need valid 'hiring-id' and 'page' as request parameters to search on database"},
+                        status.HTTP_400_BAD_REQUEST)
 
 
 # API để lấy thông tin client_id, client_secret xin token chứng thực (đăng nhập)

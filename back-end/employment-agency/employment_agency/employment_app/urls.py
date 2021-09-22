@@ -31,6 +31,7 @@ router.register('nganh-nghe', views.NganhNgheViewSet)
 router.register('ky-nang', views.KyNangViewSet)
 router.register('bang-cap', views.BangCapViewSet)
 router.register('ung-tuyen', views.UngTuyenViewSet)
+router.register('danh-gia-nha-tuyen-dung', views.DanhGiaNhaTuyenDungViewSet)
 
 urlpatterns = [
     # Sử dụng route của rest framework để tự sinh endpoint crud cơ bản
