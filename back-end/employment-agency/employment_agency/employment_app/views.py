@@ -1,6 +1,10 @@
 # Tập tin này để xử lý request và trả về các response (tương tự controller trong
 # MVC, là thành phần Views trong MVT)
+import json
+
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Model
+from django.http import JsonResponse
 from rest_framework import viewsets, generics, permissions, status
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -11,6 +15,7 @@ from rest_framework.views import APIView
 from django.conf import settings
 
 from .serializers import *
+from django.core import serializers
 
 
 # Đăng ký user (tích hợp OAuth2)
@@ -98,8 +103,21 @@ class ViecLamViewSet(viewsets.ViewSet,
 class NhaTuyenDungViewSet(viewsets.ViewSet,
                           generics.ListAPIView,
                           generics.RetrieveAPIView):
-    queryset = NhaTuyenDung.objects.all()
+    queryset = NhaTuyenDung.objects.filter(doi_xet_duyet=False)
     serializer_class = NhaTuyenDungSerializer
+
+    # API tìm kiếm gần đúng nhà tuyển dụng theo tên
+    # /nha-tuyen-dung/search/?name=tên-nhà-tuyển-dụng
+    @action(methods=['get'], detail=False, url_path='tim-kiem-theo-ten')
+    def search_by_name(self, request):
+        if request.query_params.__contains__('name'):
+            query = NhaTuyenDung.objects.filter(
+                ten_cong_ty__icontains=request.query_params.__getitem__('name'),
+                doi_xet_duyet=False)
+            # Trả ra [ { dữ liệu QuerySet 1 }, { dữ liệu QuerySet n } ]
+            return JsonResponse(data=list(query.values()), safe=False)
+        return Response({"invalid request": "need 'name' as request parameter to search on database"},
+                        status.HTTP_400_BAD_REQUEST)
 
 
 class UngTuyenViewSet(viewsets.ViewSet,
@@ -125,7 +143,7 @@ class UngTuyenViewSet(viewsets.ViewSet,
                 return Response({'valid': False}, status.HTTP_200_OK)
 
         else:
-            return Response({'invalid request': 'need ung-vien-id and viec-lam-id as request parameters'}, status.HTTP_400_BAD_REQUEST)
+            return Response({"invalid request": "need 'ung-vien-id' and 'viec-lam-id' as request parameters"}, status.HTTP_400_BAD_REQUEST)
 
 
 # API để lấy thông tin client_id, client_secret xin token chứng thực (đăng nhập)
