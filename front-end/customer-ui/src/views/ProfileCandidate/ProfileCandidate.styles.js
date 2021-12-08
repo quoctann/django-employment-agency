@@ -1,12 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 
 export const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
@@ -17,6 +11,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+    fontSize: '22px',
   },
   root: {
     '& > *': {
@@ -26,8 +21,11 @@ export const useStyles = makeStyles((theme) => ({
   input: {
     display: 'none',
   },
-  container: {
-    maxHeight: 440,
+  titleInfo: {
+    padding: '15px',
+  },
+  loading: {
+    color: 'white',
   },
 }));
 

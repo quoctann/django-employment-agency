@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import DrawerComponent from "./components/Drawer-component";
 import MainComponent from "./components/Main-component";
 import HeaderComponent from "./components/Header-component";
 import { useStyles } from "./DefaultLayout-styles";
@@ -26,18 +25,6 @@ export default function ({ children, setToken, ...rest }) {
     }
   }, [trigger])
 
-  // xử lý ẩn hiện thanh drawer
-  const manageDrawer = (check) => {
-    if (check === rolePaths.EMPLOYEE || check === rolePaths.ADMIN) {
-      return (
-        <DrawerComponent classes={classes} open={openDrawer} />
-      );
-    } else
-      return (
-        <DrawerComponent classes={classes} open={false} />
-      );
-  }
-
   return (
     <Box className={classes.root}>
       <CssBaseline />
@@ -51,10 +38,6 @@ export default function ({ children, setToken, ...rest }) {
         {...rest}
         mainRef={mainRef}
       />
-
-      {/*  */}
-      {/* <DrawerComponent classes={classes} open={openDrawer} /> */}
-      {manageDrawer(check)}
 
       {/*  */}
       <MainComponent classes={classes} children={children} open={openDrawer} setRef={setMainRef} />

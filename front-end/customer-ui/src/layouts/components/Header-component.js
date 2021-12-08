@@ -30,38 +30,6 @@ export default function ({ classes, open, setOpen, mainRef }) {
     // const check = 'KHACH';
     const check = getAuthLS(LS_KEY.AUTH_TOKEN)
 
-    //   xử lý ẩn hiện btn drawer
-    const hiddenBtn = (check) => {
-        if (check === rolePaths.EMPLOYEE || check === rolePaths.ADMIN) {
-            return (
-                <div className="block-left">
-                    <IconButton
-                        size="small"
-                        className="menu-icon"
-                        onClick={() => setOpen((pre) => !pre)}
-                    >
-                        {open ? <ArrowBackIosIcon /> : <MenuIcon />}
-                    </IconButton>
-
-                    <Button>
-                        <Typography variant="h5" noWrap className="logo-text" onClick={() => handleLogin_click('/Admin/NewsTour')}>
-                            MANAGE TOUR
-                        </Typography>
-                    </Button>
-                </div>
-            );
-        } else
-            return (
-                <div className="block-left">
-                    <Button>
-                        <Typography variant="h5" noWrap className="logo-text" onClick={() => handleLogin_click('/')}>
-                            NHU TRANG TOUR
-                        </Typography>
-                    </Button>
-                </div >
-            );
-    }
-
     let user = auth;
     if (cookies.load("user") != null) {
         user = cookies.load("user")
@@ -105,7 +73,13 @@ export default function ({ classes, open, setOpen, mainRef }) {
         <Slide appear={false} direction="down" in={!trigger}>
             <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
-                    {hiddenBtn(check)}
+                    <div className="block-left">
+                        <Button>
+                            <Typography variant="h5" noWrap className="logo-text" onClick={() => handleLogin_click('/')}>
+                                JIND JOB APP
+                            </Typography>
+                        </Button>
+                    </div >
 
                     <div className="block-right " >
                         {userComponet}

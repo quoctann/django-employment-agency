@@ -6,7 +6,15 @@ export let endpoints = {
     'oauth2-info':                  '/oauth2-info/',
     'dang-nhap':                    '/o/token/',
 
-    'ung-vien':             '/ung-vien/',
+    'ung-vien':                     '/ung-vien/',
+    "ung-vien-cap-nhat":            "/ung-vien/",
+
+
+    "bang-cap": "/bang-cap/",
+    "ky-nang": "/ky-nang/",
+    "kinh-nghiem": "/kinh-nghiem/",
+    "nganh-nghe": "/nganh-nghe/",
+    "phuc-loi": "/phuc-loi/",
 }
 
 export default axios.create({
