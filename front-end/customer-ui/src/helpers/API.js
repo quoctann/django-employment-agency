@@ -9,6 +9,7 @@ export let endpoints = {
     'ung-vien':                     '/ung-vien/',
     "ung-vien-cap-nhat":            "/ung-vien/",
 
+    "nha-tuyen-dung":               "/nha-tuyen-dung/",
 
     "bang-cap": "/bang-cap/",
     "ky-nang": "/ky-nang/",

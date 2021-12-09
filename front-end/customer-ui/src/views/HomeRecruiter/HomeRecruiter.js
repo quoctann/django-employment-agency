@@ -10,10 +10,11 @@ import {
     MuiPickersUtilsProvider,
     KeyboardDatePicker,
 } from '@material-ui/pickers';
+import Rating from '@material-ui/lab/Rating';
 import DateFnsUtils from '@date-io/date-fns';
 import API, { endpoints } from '../../helpers/API';
-import { ACCOUNT, INFO, TAG } from './ProfileCandidate.const';
-import { useStyles } from './ProfileCandidate.styles';
+import { ACCOUNT, INFO, TAG } from './HomeRecruiter.const';
+import { useStyles } from './HomeRecruiter.styles';
 import cookies from 'react-cookies';
 import { useHistory } from 'react-router';
 import { PublicRoutes } from '../../routes/public-route';
@@ -67,21 +68,14 @@ export default function Profile() {
 
     const [booking, setBooking] = useState([]);
 
-    const userCookies = cookies.load("user");
     const [userData, setUserData] = useState({
         ...cookies.load("user"),
-        nganh_nghe: userCookies.nganh_nghe.map(item => ({ value: item.id, label: item.ten })),
-        bang_cap: userCookies.bang_cap.map(item => ({ value: item.id, label: item.ten })),
-        ky_nang: userCookies.ky_nang.map(item => ({ value: item.id, label: item.ten })),
-        kinh_nghiem: userCookies.kinh_nghiem.map(item => ({ value: item.id, label: item.ten })),
     });
 
-    const [ngaySinh, setNgaySinh] = useState(new Date(userData.ngay_sinh));
     const avatar = React.createRef();
-    const cv = React.createRef();
 
     // Onchange thông tin thuộc bảng ứng viên
-    const thongTinUngVien = (event) => {
+    const thongTinNhaTuyenDung = (event) => {
         event.persist();
         setUserData({
             ...userData,
@@ -101,32 +95,6 @@ export default function Profile() {
         })
     }
 
-    // Get thông tin có sẵn trên server các danh mục để lọc
-    const [degrees, setDegrees] = useState([]);
-    const [skills, setSkills] = useState([]);
-    const [experiences, setExperiences] = useState([]);
-    const [careers, setCareers] = useState([]);
-
-    // Gửi request để lấy dữ liệu
-    const getFilterCategory = async () => {
-        const degreesRes = await API.get(endpoints["bang-cap"]);
-        const skillsRes = await API.get(endpoints["ky-nang"]);
-        const expRes = await API.get(endpoints["kinh-nghiem"]);
-        const careersRes = await API.get(endpoints["nganh-nghe"]);
-        // console.info('degreesRes1', degreesRes.data);
-        // console.info('skillsRes1', skillsRes.data);
-        // console.info('expRes1', expRes.data);
-        // console.info('careersRes1', careersRes.data);
-        setDegrees(careersRes.data.map(item => ({ value: item.id, label: item.ten })));
-        setSkills(skillsRes.data.map(item => ({ value: item.id, label: item.ten })));
-        setExperiences(expRes.data.map(item => ({ value: item.id, label: item.ten })));
-        setCareers(degreesRes.data.map(item => ({ value: item.id, label: item.ten })));
-        // console.info('degreesRes2', degrees);
-        // console.info('skillsRes2', skills);
-        // console.info('expRes2', experiences);
-        // console.info('careersRes2', careers);
-    };
-
     const capNhatThongTin = async () => {
         // console.log(user)
         const formData = new FormData()
@@ -138,25 +106,18 @@ export default function Profile() {
                         formData.append(i, userData.nguoi_dung[i]);
                 }
             }
-            else if (u === "nganh_nghe" || u === "bang_cap" || u === "ky_nang" || u === "kinh_nghiem") {
-                formData.append(u, JSON.stringify(userData[u]));
-                // formData.append(u, JSON.stringify(userData[u].map(item => ({ id: item.value, ten: item.label }))));
-            }
-            else if (u !== "cv")
+            else
                 formData.append(u, userData[u]);
         }
 
         // if (avatar.current.files[0])
         //     formData.append("anh_dai_dien", avatar.current.files[0]);
 
-        // if (cv.current.files[0])
-        //     formData.append("cv", cv.current.files[0]);
+        for (var key of formData.keys()) {
+            console.log(key, formData.get(key));
+        }
 
-        // for (var key of formData.keys()) {
-        //     console.log(key, formData.get(key));
-        // }
-
-        const capNhat = await API.put(endpoints["ung-vien-cap-nhat"], formData, {
+        const capNhat = await API.put(endpoints["nha-tuyen-dung"], formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
             }
@@ -184,11 +145,10 @@ export default function Profile() {
 
     //  hiểu đơn giản là load trang
     useEffect(() => {
-        async function init() {
-            await getFilterCategory()
+        // async function init() {
 
-        }
-        init()
+        // }
+        // init()
         console.info('user', userData)
     }, [])
 
@@ -213,7 +173,6 @@ export default function Profile() {
             history.push(_path);
             window.location.reload();
         }
-
     };
 
     const handleClose = (event, reason) => {
@@ -226,45 +185,28 @@ export default function Profile() {
         <>
             <Grid container spacing={5} xs={12}>
                 <Grid item xs={8}>
-                    <Typography variant="h3" className={classes.titleInfo}>Thông tin người dùng</Typography>
+                    <Typography variant="h3" className={classes.titleInfo}>Thông tin nhà tuyển dụng</Typography>
                     <form className={classes.form}>
-                        <Grid container spacing={5} xs={12}>
+                        <Grid container spacing={4} xs={12}>
                             {/* thông tin người dùng */}
                             <Grid item xs={6}>
                                 <Grid container spacing={2}>
                                     {/* Thông tin người dùng */}
-                                    <Grid item xs={ACCOUNT.last_name.xs}>
+                                    <Grid item xs={INFO.ten_cong_ty.xs}>
                                         <TextField
                                             autoComplete="off"
                                             variant="outlined"
                                             // required
                                             fullWidth
-                                            id={ACCOUNT.last_name.id}
-                                            name={ACCOUNT.last_name.id}
-                                            label={ACCOUNT.last_name.label}
+                                            id={INFO.ten_cong_ty.id}
+                                            name={INFO.ten_cong_ty.id}
+                                            label={INFO.ten_cong_ty.label}
                                             InputLabelProps={{
                                                 shrink: true,
                                             }}
-                                            value={userData.nguoi_dung.last_name}
-                                            onChange={thongTinNguoiDung}
+                                            value={userData.ten_cong_ty}
+                                            onChange={thongTinNhaTuyenDung}
                                         // defaultValue={userData.nguoi_dung.last_name}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={ACCOUNT.first_name.xs}>
-                                        <TextField
-                                            autoComplete="off"
-                                            variant="outlined"
-                                            // required
-                                            fullWidth
-                                            id={ACCOUNT.first_name.id}
-                                            name={ACCOUNT.first_name.id}
-                                            label={ACCOUNT.first_name.label}
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            value={userData.nguoi_dung.first_name}
-                                            onChange={thongTinNguoiDung}
-                                        // defaultValue={user.nguoi_dung.first_name}
                                         />
                                     </Grid>
                                     <Grid item xs={ACCOUNT.email.xs}>
@@ -314,28 +256,31 @@ export default function Profile() {
                                                 shrink: true,
                                             }}
                                             value={userData.dia_chi}
-                                            onChange={thongTinUngVien}
+                                            onChange={thongTinNhaTuyenDung}
                                         // defaultValue={user.nguoi_dung.so_dien_thoai}
                                         />
                                     </Grid>
-                                    <Grid item xs={INFO.gioi_thieu.xs}>
+                                    <Grid item xs={INFO.quy_mo.xs}>
                                         <TextField
                                             autoComplete="off"
                                             variant="outlined"
-                                            required
+                                            // required
                                             fullWidth
-                                            multiline
-                                            rows={15}
-                                            id={INFO.gioi_thieu.id}
-                                            name={INFO.gioi_thieu.id}
-                                            label={INFO.gioi_thieu.label}
+                                            id={INFO.quy_mo.id}
+                                            name={INFO.quy_mo.id}
+                                            label={INFO.quy_mo.label}
+                                            type={INFO.quy_mo.type}
                                             InputLabelProps={{
                                                 shrink: true,
                                             }}
-                                            value={userData.gioi_thieu}
-                                            onChange={thongTinUngVien}
-                                        // defaultValue={userData.nguoi_dung.gioi_thieu}
+                                            value={userData.quy_mo}
+                                            onChange={thongTinNhaTuyenDung}
+                                        // defaultValue={user.nguoi_dung.so_dien_thoai}
                                         />
+                                    </Grid>
+                                    <Grid item xs={INFO.diem_danh_gia_tb.xs}>
+                                        <Typography component="legend">{INFO.diem_danh_gia_tb.label}</Typography>
+                                        <Rating value={4.5} precision={0.5} readOnly name={INFO.diem_danh_gia_tb.label} size="large" />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Button
@@ -349,60 +294,28 @@ export default function Profile() {
                                             : 'Cập nhập'
                                             }</Button>
                                     </Grid>
-
                                 </Grid>
                             </Grid>
 
                             <Grid item xs={6}>
                                 <Grid container spacing={2}>
-                                    <Grid item xs={INFO.ngay_sinh.xs}>
-                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                            <KeyboardDatePicker
-                                                disableToolbar
-                                                format="dd/MM/yyyy"
-                                                id="ngay_sinh"
-                                                label="Ngày sinh"
-                                                value={ngaySinh}
-                                                onChange={(date) => {
-                                                    setNgaySinh(date)
-                                                    setUserData({ ...userData, ngay_sinh: moment(date).format("YYYY-MM-DD").toString() })
-                                                }}
-                                                KeyboardButtonProps={{
-                                                    'aria-label': 'change date',
-                                                }}
-                                            // defaultValue={user.nguoi_dung.so_dien_thoai}
-                                            />
-                                        </MuiPickersUtilsProvider>
-                                    </Grid>
-                                    <Grid item xs={TAG.nganh_nghe.xs}>
-                                        <AppSelect
-                                            classes={classes}
-                                            tag_type={TAG.nganh_nghe.id} label={TAG.nganh_nghe.label}
-                                            tags={degrees} userTag={userData.nganh_nghe}
-                                            onChange={(e) => setUserData({ ...userData, nganh_nghe: e })}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={TAG.kinh_nghiem.xs}>
-                                        <AppSelect
-                                            classes={classes}
-                                            tag_type={TAG.kinh_nghiem.id} label={TAG.kinh_nghiem.label}
-                                            tags={experiences} userTag={userData.kinh_nghiem}
-                                            onChange={(e) => setUserData({ ...userData, kinh_nghiem: e })}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={TAG.ky_nang.xs}>
-                                        <AppSelect
-                                            classes={classes}
-                                            tag_type={TAG.ky_nang.id} label={TAG.ky_nang.label}
-                                            tags={skills} userTag={userData.ky_nang}
-                                            onChange={(e) => setUserData({ ...userData, ky_nang: e })}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={TAG.bang_cap.xs}>
-                                        <AppSelect
-                                            tag_type={TAG.bang_cap.id} label={TAG.bang_cap.label}
-                                            tags={careers} userTag={userData.bang_cap}
-                                            onChange={(e) => setUserData({ ...userData, bang_cap: e })}
+                                    <Grid item xs={INFO.gioi_thieu.xs}>
+                                        <TextField
+                                            autoComplete="off"
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            multiline
+                                            rows={INFO.gioi_thieu.rows}
+                                            id={INFO.gioi_thieu.id}
+                                            name={INFO.gioi_thieu.id}
+                                            label={INFO.gioi_thieu.label}
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            value={userData.gioi_thieu}
+                                            onChange={thongTinNhaTuyenDung}
+                                        // defaultValue={userData.nguoi_dung.gioi_thieu}
                                         />
                                     </Grid>
                                 </Grid>

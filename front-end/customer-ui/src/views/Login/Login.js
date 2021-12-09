@@ -15,7 +15,7 @@ import cookies from 'react-cookies';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useStyles } from "./Login.styles";
-import { setAuthLS, LS_KEY } from "../../helpers/localStorage";
+import { setAuthLS, clearAuthLS, LS_KEY } from "../../helpers/localStorage";
 import { AlertSuccess, AlertWarning } from '../../components/AppAlert';
 import { ACCOUNT } from './Login.const';
 import { PublicRoutes } from '../../routes/public-route';
@@ -30,12 +30,13 @@ export default function Login() {
     const [messSuc, setMessSuc] = useState('');
     const [messErr, setMessErr] = useState('');
 
-    // const signInSucess = (role) => {
-    //     setAuthLS(LS_KEY.AUTH_TOKEN, role);
-    // }
+    const signInSucess = (role) => {
+        setAuthLS(LS_KEY.AUTH_TOKEN, role);
+    }
 
     const Login = async () => {
         try {
+            clearAuthLS();
             const info = await API.get(endpoints['oauth2-info']);
             const res = await API.post(endpoints['dang-nhap'], {
                 client_id: info.data.client_id,
@@ -56,17 +57,18 @@ export default function Login() {
                 setOpenSuccess(true);
                 setMessSuc('Đăng nhập thành công');
                 setOpenError(false);
+                cookies.save("user", user.data);
+                signInSucess(user.data.nguoi_dung.vai_tro);
+                dispatch({
+                    "type": "login",
+                    "payload": user.data
+                })
             } else {
                 setOpenError(true);
                 setMessErr('Sai tài khoản hoặc mật khẩu');
             }
 
-            cookies.save("user", user.data);
-            // signInSucess(user.data.role);
-            dispatch({
-                "type": "login",
-                "payload": user.data
-            })
+
         } catch (err) {
             setOpenError(true);
             setMessErr('Đã xảy ra lỗi');
@@ -143,18 +145,18 @@ export default function Login() {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                        >
-                            {loading ?
-                                <CircularProgress className={classes.loading} />
-                                : 'Đăng nhập'
-                            }
-                        </Button>
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={classes.submit}
+                            >
+                                {loading ?
+                                    <CircularProgress className={classes.loading} />
+                                    : 'Đăng nhập'
+                                }
+                            </Button>
                         </Grid>
                         <Grid item>
                             <Link href="/Register" variant="body2">

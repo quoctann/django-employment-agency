@@ -18,8 +18,8 @@ import { clearAuthLS } from '../../helpers/localStorage'
 import { getAuthLS, LS_KEY } from '../../helpers/localStorage';
 
 const rolePaths = {
-    EMPLOYEE: 'NHAN VIEN',
-    ADMIN: 'QUAN LY',
+    UNG_VIEN: 'UNG VIEN',
+    TUYEN_DUNG: 'TUYEN DUNG',
 }
 export default function ({ classes, open, setOpen, mainRef }) {
     const trigger = useScrollTrigger({ target: mainRef });
@@ -27,7 +27,6 @@ export default function ({ classes, open, setOpen, mainRef }) {
     const store = useStore();
     const auth = store.getState();
 
-    // const check = 'KHACH';
     const check = getAuthLS(LS_KEY.AUTH_TOKEN)
 
     let user = auth;
@@ -59,12 +58,22 @@ export default function ({ classes, open, setOpen, mainRef }) {
         <Button onClick={() => handleLogin_click('/Register')} > <Typography variant="subtitle1" style={{ textTransform: 'none' }}>Đăng Ký</Typography> </Button>
     </>
     if (user != null) {
-        if (user.username != null)
+        if (user.nguoi_dung.username != null)
             userComponet = <>
-                <Button>
-                    <Avatar onClick={() => handleLogin_click('/Profile')} alt={user.username}
-                        src={user.avatar.includes('http://127.0.0.1:8000') ? user.avatar : `http://127.0.0.1:8000${user.avatar}`} />
-                </Button>
+                {check === rolePaths.UNG_VIEN ?
+                    (
+                        <Button onClick={() => handleLogin_click('/ProfileCan')}>
+                            {/* <Avatar onClick={() => handleLogin_click('/ProfileCan')} alt={user.username}
+                                src={user.avatar.includes('http://127.0.0.1:8000') ? user.avatar : `http://127.0.0.1:8000${user.avatar}`} /> */}
+                            {user.nguoi_dung.username}
+                        </Button>
+                    ) : (
+                        <Button onClick={() => handleLogin_click('/HomeRecruiter')}>
+                            {/* <Avatar onClick={() => handleLogin_click('/ProfileCan')} alt={user.username}
+                                src={user.avatar.includes('http://127.0.0.1:8000') ? user.avatar : `http://127.0.0.1:8000${user.avatar}`} /> */}
+                            {user.nguoi_dung.username}
+                        </Button>
+                    )}
                 <Button onClick={handleLogout_click}> <Typography variant="subtitle1" style={{ textTransform: 'none' }}>Đăng xuất</Typography> </Button>
             </>
     }

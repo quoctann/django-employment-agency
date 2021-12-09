@@ -6,6 +6,7 @@ import LoginIcon from '@material-ui/icons/PeopleAltOutlined';
 
 import RegisterPage from '../views/Register';
 import ProfileCanPage from '../views/ProfileCandidate';
+import HomeRecruPage from '../views/HomeRecruiter';
 
 const NEDRoutes = {
     New: "new",
@@ -17,6 +18,7 @@ export const PublicRouteNames = {
     Login: 'Login',
     Register: 'Register',
     ProfileCan: 'ProfileCan',
+    HomeRecruiter: 'HomeRecruiter',
    
 }
 
@@ -29,6 +31,7 @@ export const RoutePaths = {
     Login: ['', PublicRouteNames.Login].join('/'),
     Register: ['', PublicRouteNames.Register].join('/'),
     ProfileCan: ['', PublicRouteNames.ProfileCan].join('/'),
+    HomeRecruiter: ['', PublicRouteNames.HomeRecruiter].join('/'),
 }
 
 export const PublicRoutes = {
@@ -50,10 +53,18 @@ export const PublicRoutes = {
     },
     ProfileCanPage: {
         exact: true,
-        id: PublicRouteNames.Profile,
-        label: "Profile label",
+        id: PublicRouteNames.ProfileCan,
+        label: "Profile can label",
         path: RoutePaths.Profile,
         component: ProfileCanPage,
+        icon: LoginIcon
+    },
+    HomeRecruiter: {
+        exact: true,
+        id: PublicRouteNames.HomeRecruiter,
+        label: "Home recruiter label",
+        path: RoutePaths.HomeRecruiter,
+        component: HomeRecruPage,
         icon: LoginIcon
     },
     Register: {
