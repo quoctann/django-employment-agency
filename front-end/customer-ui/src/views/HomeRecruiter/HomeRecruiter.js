@@ -5,55 +5,25 @@ import {
     Button,
     TextField,
     CircularProgress,
+    Card,
+    CardActionArea,
+    CardContent,
+    CardActions,
 } from '@material-ui/core';
-import {
-    MuiPickersUtilsProvider,
-    KeyboardDatePicker,
-} from '@material-ui/pickers';
 import Rating from '@material-ui/lab/Rating';
-import DateFnsUtils from '@date-io/date-fns';
 import API, { endpoints } from '../../helpers/API';
-import { ACCOUNT, INFO, TAG } from './HomeRecruiter.const';
+import { ACCOUNT, INFO, JOB_TABLE, TAG } from './HomeRecruiter.const';
 import { useStyles } from './HomeRecruiter.styles';
 import cookies from 'react-cookies';
 import { useHistory } from 'react-router';
 import { PublicRoutes } from '../../routes/public-route';
 import AppTable from '../../components/AppTable';
-import { AlertSuccess, AlertWarning } from '../../components/AppAlert';
-import AppSelect from '../../components/AppSelect';
+import AppSelectSingle from '../../components/AppSelectSingle';
 import moment from "moment";
+import { filter } from 'lodash';
 
-const columns = [
-    { id: 'stt', label: 'STT', maxWidth: 20, align: 'center', },
-    {
-        id: 'static1',
-        label: 'Trạng thái',
-        minWidth: 100,
-        align: 'center',
-    },
-    {
-        id: 'people1',
-        label: 'Người lớn',
-        minWidth: 100,
-        align: 'right',
-    },
-    {
-        id: 'people2',
-        label: 'Trẻ em',
-        minWidth: 100,
-        align: 'right',
-    },
-    {
-        id: 'total',
-        label: 'Tổng tiền',
-        minWidth: 150,
-        align: 'right',
-        format: (value) => value.toFixed(2),
-    },
-];
-
-function createData(stt, static1, people1, people2, total, tourId, employeeId) {
-    return { stt, static1, people1, people2, total, tourId, employeeId };
+function createData(stt, tieu_de, noi_dung, luong, ngay_tao, ngay_het_han, trang_thai_viec_lam) {
+    return { stt, tieu_de, noi_dung, luong, ngay_tao, ngay_het_han, trang_thai_viec_lam };
 }
 
 export default function Profile() {
@@ -66,7 +36,13 @@ export default function Profile() {
     const [messSuc, setMessSuc] = useState('');
     const [messErr, setMessErr] = useState('');
 
-    const [booking, setBooking] = useState([]);
+    const [danhSachViecLam, setDanhSachViecLam] = useState([]);
+    const [ketQua, setKetQua] = useState({
+        count: 0,
+        next: null,
+        previous: null,
+        results: []
+    })
 
     const [userData, setUserData] = useState({
         ...cookies.load("user"),
@@ -145,16 +121,25 @@ export default function Profile() {
 
     //  hiểu đơn giản là load trang
     useEffect(() => {
-        // async function init() {
-
-        // }
-        // init()
-        console.info('user', userData)
+        async function init() {
+            await fetchViecLam()
+            await getFilterCategory()
+        }
+        init()
+        // console.info('user', userData)
+        // console.info('filterData[]', filterData['career'])
+        // console.info('filterData{}', filterData.career)
     }, [])
 
+    const fetchViecLam = async () => {
+        const res = await API.get(endpoints["nha-tuyen-dung-viec-lam"](userData.nguoi_dung.id))
+        setDanhSachViecLam(res.data.map((b, idx) =>
+            createData(idx + 1, b.tieu_de, b.noi_dung, b.luong !== 0 ? b.luong : 'thỏa thuận', moment(b.ngay_tao).format("DD-MM-YYYY").toString(), moment(b.ngay_het_han).format("DD-MM-YYYY").toString(), b.trang_thai_viec_lam),
+        ))
+    }
 
     // chuyển về trang đăng tin tức tour đã booking
-    const handleChooseBooking = (tourId, employeeId) => {
+    const handleChoose = (tourId, employeeId) => {
         const _pathAPI = endpoints['news-tour'] + endpoints['have-tour'] + `?tour=${tourId}&employee=${employeeId}`;
         API.get(_pathAPI).then(res => {
             const _pathPage = PublicRoutes.NewsTourDetail.path.replace(":id", res.data[0].id)
@@ -165,25 +150,52 @@ export default function Profile() {
         })
     }
 
-    // tắt thông báo và cập nhập lại thông tin người dùng sau khi thay đổi
-    const handleCloseSuc = (event, reason) => {
-        if (reason === 'clickaway') {
-            setMessSuc(false);
-            const _path = PublicRoutes.Login.path;
-            history.push(_path);
-            window.location.reload();
-        }
+
+    // Get thông tin có sẵn trên server các danh mục để lọc (nên gom lại 1 object cho gọn)
+    const [degrees, setDegrees] = useState([]);
+    const [skills, setSkills] = useState([]);
+    const [experiences, setExperiences] = useState([]);
+    const [careers, setCareers] = useState([]);
+    const [benefits, setBenefits] = useState([])
+
+    // Gửi request để lấy dữ liệu danh mục
+    const getFilterCategory = async () => {
+        const degreesRes = await API.get(endpoints["bang-cap"]);
+        const skillsRes = await API.get(endpoints["ky-nang"]);
+        const expRes = await API.get(endpoints["kinh-nghiem"]);
+        const careersRes = await API.get(endpoints["nganh-nghe"]);
+        const benefitsRes = await API.get(endpoints["phuc-loi"])
+        setDegrees(degreesRes.data);
+        setSkills(skillsRes.data);
+        setExperiences(expRes.data);
+        setCareers(careersRes.data);
+        setBenefits(benefitsRes.data);
     };
 
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-    };
+    const [filterData, setFilterData] = useState({
+        "career": "1",
+        "degree": "1",
+        "experience": "1",
+        "skill": "1",
+    })
+
+    const locUngVien = async (page = 1) => {
+        const res = await API.get(endpoints["ung-vien"](filterData.career, filterData.degree, filterData.experience, filterData.skill))
+        setKetQua(res.data)
+        console.log('res.data', ketQua)
+    }
+
+    const handleSelectChange = (event) => {
+        setFilterData({
+            ...filterData,
+            [event.target.name]: event.target.value
+        })
+        console.info(filterData)
+    }
 
     return (
         <>
-            <Grid container spacing={5} xs={12}>
+            <Grid container spacing={2} xs={12}>
                 <Grid item xs={8}>
                     <Typography variant="h3" className={classes.titleInfo}>Thông tin nhà tuyển dụng</Typography>
                     <form className={classes.form}>
@@ -322,22 +334,70 @@ export default function Profile() {
                             </Grid>
                         </Grid>
                     </form>
+
+                    {/* lịch sử ứng tuyển */}
+                    <Typography variant="h3" className={classes.titleInfo}>Bài viết đã đăng</Typography>
+                    {loading ? <p>Loading ...</p> :
+                        <AppTable columns={JOB_TABLE} data={danhSachViecLam} handleChoose={handleChoose} />
+                    }
                 </Grid>
 
                 <Grid item xs={4}>
-                    {/* lịch sử ứng tuyển */}
-                    {/* <Grid item xs={7}>
-                <Typography variant="h3">Lịch sử giao dịch</Typography>
-                {loading ? <p>Loading ...</p> :
-                    <AppTable columns={columns} data={booking} handleChooseBooking={handleChooseBooking} />
-                }
-            </Grid> */}
+                    <Typography variant="h4" className={classes.titleInfo}>Tìm kiếm ứng viên</Typography>
+                    <Grid container spacing={1} xs={12}>
+                        <Grid item xs={6}>
+                            <AppSelectSingle tags={degrees} field={TAG.bang_cap} onChange={(e) => handleSelectChange(e)} />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <AppSelectSingle tags={experiences} field={TAG.kinh_nghiem} onChange={(e) => handleSelectChange(e)} />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <AppSelectSingle tags={skills} field={TAG.ky_nang} onChange={(e) => handleSelectChange(e)} />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <AppSelectSingle tags={careers} field={TAG.nganh_nghe} onChange={(e) => handleSelectChange(e)} />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button
+                                onClick={locUngVien}
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={classes.search}
+                            >Tìm kiếm</Button>
+                        </Grid>
+
+                    </Grid>
+                    <Grid container spacing={3} xs={12}>
+                        {ketQua.results.length > 0 ? ketQua.results.map((uv, idx) => (
+                            <Grid item xs={12}>
+                                <Card className={classes.card}>
+                                    <CardActionArea>
+                                        <CardContent>
+                                            <Typography gutterBottom variant="h5" component="h2">
+                                                {uv.nguoi_dung.last_name} {uv.nguoi_dung.first_name}
+                                            </Typography>
+                                            <Typography variant="body2" color="textSecondary" component="p">
+                                                {(uv.gioi_thieu).substr(0, 50)}...
+                                            </Typography>
+                                        </CardContent>
+                                    </CardActionArea>
+                                    <CardActions>
+                                        <Button size="medium" color="primary">Xem hồ sơ</Button>
+                                    </CardActions>
+                                </Card>
+                                {/* <Button
+                                        variant="outline-primary"
+                                    // onClick={() => {
+                                    //     props.xemChiTietUngVien(uv.nguoi_dung.id, 0, "");
+                                    //     props.history.push(Routes.UngVienChiTietPage.path);
+                                    // }}
+                                    >Xem hồ sơ</Button> */}
+                            </Grid>
+                        )) : (<></>)}
+                    </Grid>
                 </Grid>
             </Grid>
-
-            {/* xử lý thông báo khi cập nhập thông tin người dùng */}
-            <AlertSuccess content={messSuc} open={openSuccess} handleClose={handleCloseSuc} />
-            <AlertWarning content={messErr} open={openError} handleClose={handleClose} />
         </>
     )
 }

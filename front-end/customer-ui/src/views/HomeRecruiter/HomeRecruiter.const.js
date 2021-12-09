@@ -76,23 +76,63 @@ export const INFO = {
 
 export const TAG = {
     nganh_nghe: {
-        id: 'nganh_nghe',
+        id: 'career',
         label: 'Ngành nghề',
         xs: 12,
     },
     ky_nang: {
-        id: 'ky_nang',
+        id: 'skill',
         label: 'Kỹ năng',
         xs: 12,
     },
     kinh_nghiem: {
-        id: 'kinh_nghiem',
+        id: 'experience',
         label: 'Kinh nghiệm',
         xs: 12,
     },
     bang_cap: {
-        id: 'bang_cap',
+        id: 'degree',
         label: 'Bằng cấp',
         xs: 12,
     },
 }
+
+export const JOB_TABLE = [
+    { id: 'stt', label: 'STT', maxWidth: 20, align: 'center', },
+    {
+        id: 'tieu_de',
+        label: 'Tiêu đề',
+        minWidth: 100,
+        // align: 'center',
+    },
+    {
+        id: 'noi_dung',
+        label: 'Nội dung',
+        minWidth: 100,
+        // align: 'right',
+    },
+    {
+        id: 'luong',
+        label: 'Mức lương',
+        minWidth: 100,
+        align: 'right',
+    },
+    {
+        id: 'ngay_tao',
+        label: 'Ngày đăng',
+        minWidth: 100,
+        align: 'right',
+    },
+    {
+        id: 'ngay_het_han',
+        label: 'Đén ngày',
+        minWidth: 100,
+        align: 'right',
+    },
+    {
+        id: 'trang_thai_viec_lam',
+        label: 'Trạng thái',
+        minWidth: 100,
+        align: 'center',
+    },
+]

@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import { useStyles } from './AppTable.styles';
 
-export default function AppTable({ columns, data, handleChoose, handleChooseBooking }) {
+export default function AppTable({ columns, data, handleChoose, handleChooseApply }) {
     const classes = useStyles();
 
     // chuyển trang
@@ -53,7 +53,7 @@ export default function AppTable({ columns, data, handleChoose, handleChooseBook
                                         return (
                                             // <TableCell key={column.id} align={column.align} >
                                             // <TableCell key={column.id} align={column.align} onClick={() => handleChoose(row.userId)}>
-                                            <TableCell key={column.id} align={column.align} onClick={handleChoose ? () => handleChoose(row.userId) : () => handleChooseBooking(row.tourId, row.employeeId)}>
+                                            <TableCell key={column.id} align={column.align} onClick={handleChoose ? () => handleChoose(row.userId) : () => handleChooseApply(row.jobId, row.userId)}>
                                                 {column.format && typeof value === 'number' ? column.format(value) : value}
                                             </TableCell>
                                         );

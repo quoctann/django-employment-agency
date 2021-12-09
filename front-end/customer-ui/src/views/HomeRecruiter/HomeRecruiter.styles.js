@@ -1,9 +1,7 @@
 import { makeStyles } from "@material-ui/core/styles";
 
 export const useStyles = makeStyles((theme) => ({
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+  root: {
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -12,6 +10,16 @@ export const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
     fontSize: '22px',
+    marginBottom: '50px',
+  },
+  search: {
+    fontSize: '22px',
+    marginLeft: '8px',
+    marginBottom: '20px',
+  },
+  card: {
+    marginLeft: '13px',
+    width: '100%',
   },
   root: {
     '& > *': {
