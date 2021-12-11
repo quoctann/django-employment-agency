@@ -85,7 +85,7 @@ export default function ({ classes, open, setOpen, mainRef }) {
                     <div className="block-left">
                         <Button>
                             <Typography variant="h5" noWrap className="logo-text" onClick={() => handleLogin_click('/')}>
-                                JIND JOB APP
+                                FIND JOB APP
                             </Typography>
                         </Button>
                     </div >

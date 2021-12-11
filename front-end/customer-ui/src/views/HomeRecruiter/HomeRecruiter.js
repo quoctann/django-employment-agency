@@ -9,6 +9,7 @@ import {
     CardActionArea,
     CardContent,
     CardActions,
+    Container,
 } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
 import API, { endpoints } from '../../helpers/API';
@@ -16,11 +17,10 @@ import { ACCOUNT, INFO, JOB_TABLE, TAG } from './HomeRecruiter.const';
 import { useStyles } from './HomeRecruiter.styles';
 import cookies from 'react-cookies';
 import { useHistory } from 'react-router';
-import { PublicRoutes } from '../../routes/public-route';
+import { PublicRoutes, RoutePaths } from '../../routes/public-route';
 import AppTable from '../../components/AppTable';
 import AppSelectSingle from '../../components/AppSelectSingle';
 import moment from "moment";
-import { filter } from 'lodash';
 
 function createData(stt, tieu_de, noi_dung, luong, ngay_tao, ngay_het_han, trang_thai_viec_lam) {
     return { stt, tieu_de, noi_dung, luong, ngay_tao, ngay_het_han, trang_thai_viec_lam };
@@ -30,11 +30,6 @@ export default function Profile() {
     const classes = useStyles();
     const history = useHistory();
     const [loading, setLoading] = useState(false);
-
-    const [openError, setOpenError] = useState(false);
-    const [openSuccess, setOpenSuccess] = useState(false);
-    const [messSuc, setMessSuc] = useState('');
-    const [messErr, setMessErr] = useState('');
 
     const [danhSachViecLam, setDanhSachViecLam] = useState([]);
     const [ketQua, setKetQua] = useState({
@@ -126,9 +121,6 @@ export default function Profile() {
             await getFilterCategory()
         }
         init()
-        // console.info('user', userData)
-        // console.info('filterData[]', filterData['career'])
-        // console.info('filterData{}', filterData.career)
     }, [])
 
     const fetchViecLam = async () => {
@@ -190,11 +182,18 @@ export default function Profile() {
             ...filterData,
             [event.target.name]: event.target.value
         })
-        console.info(filterData)
+    }
+
+    const handleCandidae = (uv) => {
+        const _path = RoutePaths.CanInfo.replace(':id', uv.nguoi_dung.first_name)
+        history.push(_path, {
+            ungvien: uv,
+            nguoidungId: userData.nguoi_dung.id
+        });
     }
 
     return (
-        <>
+        <Container maxWidth="lg">
             <Grid container spacing={2} xs={12}>
                 <Grid item xs={8}>
                     <Typography variant="h3" className={classes.titleInfo}>Thông tin nhà tuyển dụng</Typography>
@@ -335,7 +334,7 @@ export default function Profile() {
                         </Grid>
                     </form>
 
-                    {/* lịch sử ứng tuyển */}
+                    {/* Các bài viết đã đăng */}
                     <Typography variant="h3" className={classes.titleInfo}>Bài viết đã đăng</Typography>
                     {loading ? <p>Loading ...</p> :
                         <AppTable columns={JOB_TABLE} data={danhSachViecLam} handleChoose={handleChoose} />
@@ -383,7 +382,7 @@ export default function Profile() {
                                         </CardContent>
                                     </CardActionArea>
                                     <CardActions>
-                                        <Button size="medium" color="primary">Xem hồ sơ</Button>
+                                        <Button onClick={() => handleCandidae(uv)} size="medium" color="primary">Xem hồ sơ</Button>
                                     </CardActions>
                                 </Card>
                                 {/* <Button
@@ -398,6 +397,6 @@ export default function Profile() {
                     </Grid>
                 </Grid>
             </Grid>
-        </>
+        </Container>
     )
 }

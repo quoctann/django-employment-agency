@@ -19,6 +19,11 @@ export let endpoints = {
             url += `ky-nang=${kyNang}&`;
         return url;
     },
+    "ung-vien-chi-tiet": (ungvienId) => `/ung-vien/${ungvienId}/`,
+
+    "ung-tuyen":                    "/ung-tuyen/",
+
+
 
     "nha-tuyen-dung":               "/nha-tuyen-dung/",
     "nha-tuyen-dung-viec-lam":      (nhatuyendungId) => `/nha-tuyen-dung/${nhatuyendungId}/viec-lam/`,

@@ -7,6 +7,7 @@ import LoginIcon from '@material-ui/icons/PeopleAltOutlined';
 import RegisterPage from '../views/Register';
 import ProfileCanPage from '../views/ProfileCandidate';
 import HomeRecruPage from '../views/HomeRecruiter';
+import CanInfoPage from '../views/CanInfo';
 
 const NEDRoutes = {
     New: "new",
@@ -19,7 +20,7 @@ export const PublicRouteNames = {
     Register: 'Register',
     ProfileCan: 'ProfileCan',
     HomeRecruiter: 'HomeRecruiter',
-   
+    CanInfo: 'CanInfo',
 }
 
 export const AllRouteNames = {
@@ -32,6 +33,7 @@ export const RoutePaths = {
     Register: ['', PublicRouteNames.Register].join('/'),
     ProfileCan: ['', PublicRouteNames.ProfileCan].join('/'),
     HomeRecruiter: ['', PublicRouteNames.HomeRecruiter].join('/'),
+    CanInfo: ['', PublicRouteNames.CanInfo, NEDRoutes.Detail].join('/'),
 }
 
 export const PublicRoutes = {
@@ -73,6 +75,92 @@ export const PublicRoutes = {
         label: "Register label",
         path: RoutePaths.Register,
         component: RegisterPage,
+        icon: LoginIcon
+    },
+    CanInfo: {
+        exact: true,
+        id: PublicRouteNames.CanInfo,
+        label: "Info Candidate page",
+        path: RoutePaths.CanInfo,
+        component: CanInfoPage,
+        icon: LoginIcon
+    },
+}
+
+export const CandidateRoutes = {
+    Home: {
+        exact: true,
+        id: PublicRouteNames.Home,
+        label: "Home",
+        path: RoutePaths.Home,
+        component: HomePage,
+        icon: HomeIcon
+    },
+    Login: {
+        exact: true,
+        id: PublicRouteNames.Login,
+        label: "Login label",
+        path: RoutePaths.Login,
+        component: LoginPage,
+        icon: LoginIcon
+    },
+    Register: {
+        exact: true,
+        id: PublicRouteNames.Register,
+        label: "Register label",
+        path: RoutePaths.Register,
+        component: RegisterPage,
+        icon: LoginIcon
+    },
+    ProfileCanPage: {
+        exact: true,
+        id: PublicRouteNames.ProfileCan,
+        label: "Profile can label",
+        path: RoutePaths.Profile,
+        component: ProfileCanPage,
+        icon: LoginIcon
+    },
+}
+
+export const RecruiterRoutes = {
+    Home: {
+        exact: true,
+        id: PublicRouteNames.Home,
+        label: "Home",
+        path: RoutePaths.Home,
+        component: HomePage,
+        icon: HomeIcon
+    },
+    Login: {
+        exact: true,
+        id: PublicRouteNames.Login,
+        label: "Login label",
+        path: RoutePaths.Login,
+        component: LoginPage,
+        icon: LoginIcon
+    },
+    Register: {
+        exact: true,
+        id: PublicRouteNames.Register,
+        label: "Register label",
+        path: RoutePaths.Register,
+        component: RegisterPage,
+        icon: LoginIcon
+    },
+    HomeRecruiter: {
+        exact: true,
+        id: PublicRouteNames.HomeRecruiter,
+        label: "Home recruiter label",
+        path: RoutePaths.HomeRecruiter,
+        component: HomeRecruPage,
+        icon: LoginIcon
+    },
+    CanInfo: {
+        exact: true,
+        id: PublicRouteNames.CanInfo,
+        label: "Info Candidate page",
+        path: RoutePaths.CanInfo,
+        component: CanInfoPage,
         icon: LoginIcon
     },
 }
