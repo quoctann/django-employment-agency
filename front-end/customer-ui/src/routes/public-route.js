@@ -8,6 +8,7 @@ import RegisterPage from '../views/Register';
 import ProfileCanPage from '../views/ProfileCandidate';
 import HomeRecruPage from '../views/HomeRecruiter';
 import CanInfoPage from '../views/CanInfo';
+import NewPostPage from '../views/NewPost';
 
 const NEDRoutes = {
     New: "new",
@@ -21,6 +22,7 @@ export const PublicRouteNames = {
     ProfileCan: 'ProfileCan',
     HomeRecruiter: 'HomeRecruiter',
     CanInfo: 'CanInfo',
+    NewPost: 'Bai_viet_moi',
 }
 
 export const AllRouteNames = {
@@ -34,6 +36,8 @@ export const RoutePaths = {
     ProfileCan: ['', PublicRouteNames.ProfileCan].join('/'),
     HomeRecruiter: ['', PublicRouteNames.HomeRecruiter].join('/'),
     CanInfo: ['', PublicRouteNames.CanInfo, NEDRoutes.Detail].join('/'),
+    NewPost: ['', PublicRouteNames.NewPost, NEDRoutes.New].join('/'),
+
 }
 
 export const PublicRoutes = {
@@ -85,6 +89,14 @@ export const PublicRoutes = {
         component: CanInfoPage,
         icon: LoginIcon
     },
+    NewPost: {
+        exact: true,
+        id: PublicRouteNames.NewPost,
+        label: "Info Candidate page",
+        path: RoutePaths.NewPost,
+        component: NewPostPage,
+        icon: LoginIcon
+    }
 }
 
 export const CandidateRoutes = {
@@ -163,4 +175,12 @@ export const RecruiterRoutes = {
         component: CanInfoPage,
         icon: LoginIcon
     },
+    // NewPost: {
+    //     exact: true,
+    //     id: PublicRouteNames.NewPost,
+    //     label: "Info Candidate page",
+    //     path: RoutePaths.NewPost,
+    //     component: NewPostPage,
+    //     icon: LoginIcon
+    // }
 }

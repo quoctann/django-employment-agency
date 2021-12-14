@@ -113,18 +113,10 @@ export default function Profile() {
         const skillsRes = await API.get(endpoints["ky-nang"]);
         const expRes = await API.get(endpoints["kinh-nghiem"]);
         const careersRes = await API.get(endpoints["nganh-nghe"]);
-        // console.info('degreesRes1', degreesRes.data);
-        // console.info('skillsRes1', skillsRes.data);
-        // console.info('expRes1', expRes.data);
-        // console.info('careersRes1', careersRes.data);
         setDegrees(careersRes.data.map(item => ({ value: item.id, label: item.ten })));
         setSkills(skillsRes.data.map(item => ({ value: item.id, label: item.ten })));
         setExperiences(expRes.data.map(item => ({ value: item.id, label: item.ten })));
         setCareers(degreesRes.data.map(item => ({ value: item.id, label: item.ten })));
-        // console.info('degreesRes2', degrees);
-        // console.info('skillsRes2', skills);
-        // console.info('expRes2', experiences);
-        // console.info('careersRes2', careers);
     };
 
     const capNhatThongTin = async () => {
@@ -189,7 +181,7 @@ export default function Profile() {
 
         }
         init()
-        console.info('user', userData)
+        // console.info('user', userData)
     }, [])
 
 

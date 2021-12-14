@@ -192,6 +192,12 @@ export default function Profile() {
         });
     }
 
+    const taoBaiViet = () => {
+        history.push(RoutePaths.NewPost, {
+            nguoidungId: userData.nguoi_dung.id
+        })
+    }
+
     return (
         <Container maxWidth="lg">
             <Grid container spacing={2} xs={12}>
@@ -339,6 +345,12 @@ export default function Profile() {
                     {loading ? <p>Loading ...</p> :
                         <AppTable columns={JOB_TABLE} data={danhSachViecLam} handleChoose={handleChoose} />
                     }
+                    <Button
+                        onClick={taoBaiViet}
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                    >Thêm mới</Button>
                 </Grid>
 
                 <Grid item xs={4}>
@@ -385,13 +397,6 @@ export default function Profile() {
                                         <Button onClick={() => handleCandidae(uv)} size="medium" color="primary">Xem hồ sơ</Button>
                                     </CardActions>
                                 </Card>
-                                {/* <Button
-                                        variant="outline-primary"
-                                    // onClick={() => {
-                                    //     props.xemChiTietUngVien(uv.nguoi_dung.id, 0, "");
-                                    //     props.history.push(Routes.UngVienChiTietPage.path);
-                                    // }}
-                                    >Xem hồ sơ</Button> */}
                             </Grid>
                         )) : (<></>)}
                     </Grid>

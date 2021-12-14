@@ -1,5 +1,4 @@
 import { TEXTFIELD_TYPE } from "../../consts/type-text";
-import { FIELD_COMPONENT } from '../../consts/field';
 
 export const ACCOUNT = {
     // username: {
