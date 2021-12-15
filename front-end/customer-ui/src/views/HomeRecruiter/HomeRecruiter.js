@@ -17,13 +17,13 @@ import { ACCOUNT, INFO, JOB_TABLE, TAG } from './HomeRecruiter.const';
 import { useStyles } from './HomeRecruiter.styles';
 import cookies from 'react-cookies';
 import { useHistory } from 'react-router';
-import { PublicRoutes, RoutePaths } from '../../routes/public-route';
+import { RoutePaths } from '../../routes/public-route';
 import AppTable from '../../components/AppTable';
 import AppSelectSingle from '../../components/AppSelectSingle';
 import moment from "moment";
 
-function createData(stt, tieu_de, noi_dung, luong, ngay_tao, ngay_het_han, trang_thai_viec_lam) {
-    return { stt, tieu_de, noi_dung, luong, ngay_tao, ngay_het_han, trang_thai_viec_lam };
+function createData(stt, tieu_de, noi_dung, luong, ngay_tao, ngay_het_han, trang_thai_viec_lam, itemId) {
+    return { stt, tieu_de, noi_dung, luong, ngay_tao, ngay_het_han, trang_thai_viec_lam, itemId };
 }
 
 export default function Profile() {
@@ -126,19 +126,18 @@ export default function Profile() {
     const fetchViecLam = async () => {
         const res = await API.get(endpoints["nha-tuyen-dung-viec-lam"](userData.nguoi_dung.id))
         setDanhSachViecLam(res.data.map((b, idx) =>
-            createData(idx + 1, b.tieu_de, b.noi_dung, b.luong !== 0 ? b.luong : 'thỏa thuận', moment(b.ngay_tao).format("DD-MM-YYYY").toString(), moment(b.ngay_het_han).format("DD-MM-YYYY").toString(), b.trang_thai_viec_lam),
+            createData(idx + 1, b.tieu_de.length > 30 ? `${b.tieu_de.substr(0, 30)}. . .` : b.tieu_de, 
+                b.noi_dung.length > 50 ? `${b.noi_dung.substr(0, 50)}. . .` : b.noi_dung,
+                b.luong !== 0 ? b.luong : 'thỏa thuận', moment(b.ngay_tao).format("DD-MM-YYYY").toString(), moment(b.ngay_het_han).format("DD-MM-YYYY").toString(), b.trang_thai_viec_lam, b.id),
         ))
     }
 
-    // chuyển về trang đăng tin tức tour đã booking
-    const handleChoose = (tourId, employeeId) => {
-        const _pathAPI = endpoints['news-tour'] + endpoints['have-tour'] + `?tour=${tourId}&employee=${employeeId}`;
-        API.get(_pathAPI).then(res => {
-            const _pathPage = PublicRoutes.NewsTourDetail.path.replace(":id", res.data[0].id)
-            history.push(_pathPage, {
-                newstour: res.data[0],
-            })
-            // console.info('res', res.data[0]);
+    // chuyển về trang bài viết đã đăng
+    const handleChoose = (postId) => {
+        const _pathPage = RoutePaths.PostDetail.replace(':id', postId)
+        history.push(_pathPage, {
+            baivietId: postId,
+            nguoidungId: userData.nguoi_dung.id
         })
     }
 
@@ -194,7 +193,7 @@ export default function Profile() {
 
     const taoBaiViet = () => {
         history.push(RoutePaths.NewPost, {
-            nguoidungId: userData.nguoi_dung.id
+            nguoidungId: userData.nguoi_dung.id,
         })
     }
 
@@ -340,17 +339,7 @@ export default function Profile() {
                         </Grid>
                     </form>
 
-                    {/* Các bài viết đã đăng */}
-                    <Typography variant="h3" className={classes.titleInfo}>Bài viết đã đăng</Typography>
-                    {loading ? <p>Loading ...</p> :
-                        <AppTable columns={JOB_TABLE} data={danhSachViecLam} handleChoose={handleChoose} />
-                    }
-                    <Button
-                        onClick={taoBaiViet}
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                    >Thêm mới</Button>
+
                 </Grid>
 
                 <Grid item xs={4}>
@@ -400,6 +389,20 @@ export default function Profile() {
                             </Grid>
                         )) : (<></>)}
                     </Grid>
+                </Grid>
+
+                <Grid item xs={12}>
+                    {/* Các bài viết đã đăng */}
+                    <Typography variant="h3" className={classes.titleInfo}>Bài viết đã đăng</Typography>
+                    {loading ? <p>Loading ...</p> :
+                        <AppTable columns={JOB_TABLE} data={danhSachViecLam} handleChoose={handleChoose} />
+                    }
+                    <Button
+                        onClick={taoBaiViet}
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                    >Thêm mới</Button>
                 </Grid>
             </Grid>
         </Container>

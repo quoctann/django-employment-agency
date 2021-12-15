@@ -22,6 +22,7 @@ import AppSelect from '../../components/AppSelect';
 import AppTextField from '../../components/AppTextField';
 import AppDatePicker from '../../components/AppDatePicker';
 import moment from "moment";
+import _ from "lodash";
 
 export default function Profile() {
     const classes = useStyles();
@@ -43,9 +44,35 @@ export default function Profile() {
         phuc_loi: [],
     })
 
+    const [check, setCheck] = useState(false);
+    const getThongTinBaiViet = async () => {
+        if (_.get(state, ['baivietId'], false)) {
+            setCheck(true)
+            const res = await API.get(endpoints["viec-lam-chi-tiet"](state.baivietId))
+
+            const tagkinh_nghiem = res.data.kinh_nghiem.map(item => ({ value: item.id, label: item.ten }))
+            const tagky_nang = res.data.ky_nang.map(item => ({ value: item.id, label: item.ten }))
+            const tagnganh_nghe = res.data.nganh_nghe.map(item => ({ value: item.id, label: item.ten }))
+            const tagphuc_loi = res.data.phuc_loi.map(item => ({ value: item.id, label: item.ten }))
+            const tagbang_cap = res.data.bang_cap.map(item => ({ value: item.id, label: item.ten }))
+            console.info('ret id', res)
+            setTinTuyenDung({
+                tieu_de: res.data.tieu_de,
+                luong: res.data.luong,
+                noi_dung: res.data.noi_dung,
+                ngay_het_han: res.data.ngay_het_han,
+                bang_cap: tagbang_cap,
+                ky_nang: tagky_nang,
+                kinh_nghiem: tagkinh_nghiem,
+                nganh_nghe: tagnganh_nghe,
+                phuc_loi: tagphuc_loi,
+            })
+
+        }
+    }
+
     // Phương thức gửi dữ liệu lên server để tạo bản ghi
     const dangTinTuyenDung = async (event) => {
-        console.log(tinTuyenDung)
         const res = await API.post(endpoints["viec-lam"], tinTuyenDung)
         // console.log(res.data)
         if (res.data === 201) {
@@ -64,27 +91,58 @@ export default function Profile() {
         }, 1000);
     }
 
+    const capNhapBaiViet = async () => {
+        // const dataForm = {
+        //     ...tinTuyenDung,
+        //     bang_cap: tinTuyenDung.bang_cap.map(item => ({ id: item.value, ten: item.label })),
+        //     ky_nang: tinTuyenDung.ky_nang.map(item => ({ id: item.value, ten: item.label })),
+        //     kinh_nghiem: tinTuyenDung.kinh_nghiem.map(item => ({ id: item.value, ten: item.label })),
+        //     nganh_nghe: tinTuyenDung.nganh_nghe.map(item => ({ id: item.value, ten: item.label })),
+        //     phuc_loi: tinTuyenDung.phuc_loi.map(item => ({ id: item.value, ten: item.label })),
+        // }
+
+        // const res = await API.patch(endpoints["viec-lam-chi-tiet"](state.baivietId), tinTuyenDung)
+        // if (res.data === 201) {
+        //     alert("Cập nhập thành công!")
+        //     history.push(RoutePaths.HomeRecruiter);
+        // } else if (res.data === 400) {
+        //     alert("Hệ thống đang lỗi vui lòng thử lại sau!")
+        // }
+        alert("Đang xây dựng api!")
+    }
+
+    const onSubmit2 = async () => {
+        setLoading(true);
+        setTimeout(() => {
+            capNhapBaiViet();
+            setLoading(false);
+        }, 1000);
+    }
+
 
     const [degrees, setDegrees] = useState([]);
     const [skills, setSkills] = useState([]);
     const [experiences, setExperiences] = useState([]);
     const [careers, setCareers] = useState([]);
+    const [benefits, setBenefits] = useState([])
 
     const getFilterCategory = async () => {
         const degreesRes = await API.get(endpoints["bang-cap"]);
         const skillsRes = await API.get(endpoints["ky-nang"]);
         const expRes = await API.get(endpoints["kinh-nghiem"]);
         const careersRes = await API.get(endpoints["nganh-nghe"]);
+        const benefitsRes = await API.get(endpoints["phuc-loi"])
         setDegrees(careersRes.data.map(item => ({ value: item.id, label: item.ten })));
         setSkills(skillsRes.data.map(item => ({ value: item.id, label: item.ten })));
         setExperiences(expRes.data.map(item => ({ value: item.id, label: item.ten })));
         setCareers(degreesRes.data.map(item => ({ value: item.id, label: item.ten })));
+        setBenefits(benefitsRes.data.map(item => ({ value: item.id, label: item.ten })));
     };
 
     useEffect(() => {
         async function init() {
             await getFilterCategory()
-
+            await getThongTinBaiViet()
         }
         init()
     }, [])
@@ -95,7 +153,7 @@ export default function Profile() {
 
     return (
         <Container maxWidth="lg">
-            <Grid container spacing={2} xs={12}>
+            <Grid container spacing={2} xs={12} justifyContent="center">
                 <Grid item xs={10}>
                     <Typography variant="h3" className={classes.title}>Thông tin bài viết</Typography>
                     <form className={classes.form} >
@@ -155,7 +213,13 @@ export default function Profile() {
                                             onChange={(e) => setTinTuyenDung({ ...tinTuyenDung, bang_cap: e })}
                                         />
                                     </Grid>
-
+                                    <Grid item xs={TAG.phuc_loi.xs}>
+                                        <AppSelect
+                                            tag_type={TAG.phuc_loi.id} label={TAG.phuc_loi.label}
+                                            tags={benefits} userTag={tinTuyenDung.phuc_loi}
+                                            onChange={(e) => setTinTuyenDung({ ...tinTuyenDung, phuc_loi: e })}
+                                        />
+                                    </Grid>
                                 </Grid>
                             </Grid>
                             <Grid item xs={7}>
@@ -176,16 +240,29 @@ export default function Profile() {
                                 >Quay về</Button>
                             </Grid>
                             <Grid item xs={8}>
-                                <Button
-                                    onClick={onSubmit}
-                                    fullWidth
-                                    variant="contained"
-                                    color="primary"
-                                    className={classes.submit}
-                                >{loading ?
-                                    <CircularProgress className={classes.loading} />
-                                    : 'Cập nhập'
-                                    }</Button>
+                                {check ? (
+                                    <Button
+                                        onClick={onSubmit2}
+                                        fullWidth
+                                        variant="contained"
+                                        color="primary"
+                                        className={classes.submit}
+                                    >{loading ?
+                                        <CircularProgress className={classes.loading} />
+                                        : 'Cập nhập'
+                                        }</Button>
+                                ) : (
+                                    <Button
+                                        onClick={onSubmit}
+                                        fullWidth
+                                        variant="contained"
+                                        color="primary"
+                                        className={classes.submit}
+                                    >{loading ?
+                                        <CircularProgress className={classes.loading} />
+                                        : 'Tạo mới'
+                                        }</Button>
+                                )}
                             </Grid>
                         </Grid>
                     </form>

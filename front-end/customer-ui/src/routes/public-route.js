@@ -9,6 +9,7 @@ import ProfileCanPage from '../views/ProfileCandidate';
 import HomeRecruPage from '../views/HomeRecruiter';
 import CanInfoPage from '../views/CanInfo';
 import NewPostPage from '../views/NewPost';
+// import PostDetailPage from '../views/PostDetail';
 
 const NEDRoutes = {
     New: "new",
@@ -22,7 +23,8 @@ export const PublicRouteNames = {
     ProfileCan: 'ProfileCan',
     HomeRecruiter: 'HomeRecruiter',
     CanInfo: 'CanInfo',
-    NewPost: 'Bai_viet_moi',
+    NewPost: 'NewPost',
+    PostDetail: 'PostDetail',
 }
 
 export const AllRouteNames = {
@@ -37,6 +39,7 @@ export const RoutePaths = {
     HomeRecruiter: ['', PublicRouteNames.HomeRecruiter].join('/'),
     CanInfo: ['', PublicRouteNames.CanInfo, NEDRoutes.Detail].join('/'),
     NewPost: ['', PublicRouteNames.NewPost, NEDRoutes.New].join('/'),
+    PostDetail: ['', PublicRouteNames.PostDetail, NEDRoutes.Detail].join('/'),
 
 }
 
@@ -65,14 +68,7 @@ export const PublicRoutes = {
         component: ProfileCanPage,
         icon: LoginIcon
     },
-    HomeRecruiter: {
-        exact: true,
-        id: PublicRouteNames.HomeRecruiter,
-        label: "Home recruiter label",
-        path: RoutePaths.HomeRecruiter,
-        component: HomeRecruPage,
-        icon: LoginIcon
-    },
+   
     Register: {
         exact: true,
         id: PublicRouteNames.Register,
@@ -81,6 +77,7 @@ export const PublicRoutes = {
         component: RegisterPage,
         icon: LoginIcon
     },
+
     CanInfo: {
         exact: true,
         id: PublicRouteNames.CanInfo,
@@ -89,11 +86,28 @@ export const PublicRoutes = {
         component: CanInfoPage,
         icon: LoginIcon
     },
+
+    HomeRecruiter: {
+        exact: true,
+        id: PublicRouteNames.HomeRecruiter,
+        label: "Home recruiter label",
+        path: RoutePaths.HomeRecruiter,
+        component: HomeRecruPage,
+        icon: LoginIcon
+    },
     NewPost: {
         exact: true,
         id: PublicRouteNames.NewPost,
         label: "Info Candidate page",
         path: RoutePaths.NewPost,
+        component: NewPostPage,
+        icon: LoginIcon
+    },
+    PostDetail: {
+        exact: true,
+        id: PublicRouteNames.PostDetail,
+        label: "Info Candidate page",
+        path: RoutePaths.PostDetail,
         component: NewPostPage,
         icon: LoginIcon
     }

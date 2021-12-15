@@ -35,6 +35,8 @@ export let endpoints = {
     "phuc-loi": "/phuc-loi/",
 
     "viec-lam":                     "/viec-lam/",
+    "viec-lam-chi-tiet": (postId) => `/viec-lam/${postId}/`,
+
 }
 
 export default axios.create({

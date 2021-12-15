@@ -60,4 +60,9 @@ export const TAG = {
         label: 'Bằng cấp',
         xs: 12,
     },
+    phuc_loi: {
+        id: 'benefit',
+        label: 'Phúc lợi',
+        xs: 12,
+    },
 }

@@ -53,7 +53,7 @@ export default function AppTable({ columns, data, handleChoose, handleChooseAppl
                                         return (
                                             // <TableCell key={column.id} align={column.align} >
                                             // <TableCell key={column.id} align={column.align} onClick={() => handleChoose(row.userId)}>
-                                            <TableCell key={column.id} align={column.align} onClick={handleChoose ? () => handleChoose(row.userId) : () => handleChooseApply(row.jobId, row.userId)}>
+                                            <TableCell key={column.id} align={column.align} onClick={handleChoose ? () => handleChoose(row.itemId) : () => handleChooseApply(row.jobId, row.userId)}>
                                                 {column.format && typeof value === 'number' ? column.format(value) : value}
                                             </TableCell>
                                         );
