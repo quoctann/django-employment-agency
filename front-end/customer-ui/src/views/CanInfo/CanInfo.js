@@ -20,7 +20,6 @@ import { useHistory, useLocation } from 'react-router';
 import { RoutePaths } from '../../routes/public-route';
 import AppSelectSingle from '../../components/AppSelectSingle';
 import moment from "moment";
-import { filter } from 'lodash';
 
 const CONG_VIEC = {
     id: 'job',

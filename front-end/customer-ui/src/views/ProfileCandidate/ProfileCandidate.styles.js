@@ -24,8 +24,18 @@ export const useStyles = makeStyles((theme) => ({
   titleInfo: {
     padding: '15px',
   },
+  titleInfo2: {
+    textAlign: 'center',
+    padding: '15px',
+
+  },
   loading: {
     color: 'white',
+  },
+  card: {
+    marginLeft: '13px',
+    width: '100%',
+    marginBottom: '5px'
   },
 }));
 

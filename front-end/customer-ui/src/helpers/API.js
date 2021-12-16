@@ -36,6 +36,8 @@ export let endpoints = {
 
     "viec-lam":                     "/viec-lam/",
     "viec-lam-chi-tiet": (postId) => `/viec-lam/${postId}/`,
+    "viec-lam-goi-y": (nguoidungId) => `/viec-lam/${nguoidungId}/goi-y/`,
+    "de-xuat-viec-lam": (ungvienId) => `/ung-tuyen/${ungvienId}/de-xuat-viec-lam/`,
 
 }
 

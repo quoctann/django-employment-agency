@@ -9,7 +9,7 @@ import ProfileCanPage from '../views/ProfileCandidate';
 import HomeRecruPage from '../views/HomeRecruiter';
 import CanInfoPage from '../views/CanInfo';
 import NewPostPage from '../views/NewPost';
-// import PostDetailPage from '../views/PostDetail';
+import InfoPostPage from '../views/InfoPost';
 
 const NEDRoutes = {
     New: "new",
@@ -24,7 +24,7 @@ export const PublicRouteNames = {
     HomeRecruiter: 'HomeRecruiter',
     CanInfo: 'CanInfo',
     NewPost: 'NewPost',
-    PostDetail: 'PostDetail',
+    InfoPost: 'InfoPost',
 }
 
 export const AllRouteNames = {
@@ -39,7 +39,7 @@ export const RoutePaths = {
     HomeRecruiter: ['', PublicRouteNames.HomeRecruiter].join('/'),
     CanInfo: ['', PublicRouteNames.CanInfo, NEDRoutes.Detail].join('/'),
     NewPost: ['', PublicRouteNames.NewPost, NEDRoutes.New].join('/'),
-    PostDetail: ['', PublicRouteNames.PostDetail, NEDRoutes.Detail].join('/'),
+    InfoPost: ['', PublicRouteNames.InfoPost, NEDRoutes.Detail].join('/'),
 
 }
 
@@ -60,15 +60,6 @@ export const PublicRoutes = {
         component: LoginPage,
         icon: LoginIcon
     },
-    ProfileCanPage: {
-        exact: true,
-        id: PublicRouteNames.ProfileCan,
-        label: "Profile can label",
-        path: RoutePaths.Profile,
-        component: ProfileCanPage,
-        icon: LoginIcon
-    },
-   
     Register: {
         exact: true,
         id: PublicRouteNames.Register,
@@ -77,40 +68,6 @@ export const PublicRoutes = {
         component: RegisterPage,
         icon: LoginIcon
     },
-
-    CanInfo: {
-        exact: true,
-        id: PublicRouteNames.CanInfo,
-        label: "Info Candidate page",
-        path: RoutePaths.CanInfo,
-        component: CanInfoPage,
-        icon: LoginIcon
-    },
-
-    HomeRecruiter: {
-        exact: true,
-        id: PublicRouteNames.HomeRecruiter,
-        label: "Home recruiter label",
-        path: RoutePaths.HomeRecruiter,
-        component: HomeRecruPage,
-        icon: LoginIcon
-    },
-    NewPost: {
-        exact: true,
-        id: PublicRouteNames.NewPost,
-        label: "Info Candidate page",
-        path: RoutePaths.NewPost,
-        component: NewPostPage,
-        icon: LoginIcon
-    },
-    PostDetail: {
-        exact: true,
-        id: PublicRouteNames.PostDetail,
-        label: "Info Candidate page",
-        path: RoutePaths.PostDetail,
-        component: NewPostPage,
-        icon: LoginIcon
-    }
 }
 
 export const CandidateRoutes = {
@@ -142,8 +99,16 @@ export const CandidateRoutes = {
         exact: true,
         id: PublicRouteNames.ProfileCan,
         label: "Profile can label",
-        path: RoutePaths.Profile,
+        path: RoutePaths.ProfileCan,
         component: ProfileCanPage,
+        icon: LoginIcon
+    },
+    InfoPost: {
+        exact: true,
+        id: PublicRouteNames.InfoPost,
+        label: "Profile can label",
+        path: RoutePaths.InfoPost,
+        component: InfoPostPage,
         icon: LoginIcon
     },
 }

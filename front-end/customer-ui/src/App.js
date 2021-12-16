@@ -6,7 +6,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import Layout from "./layouts";
-import { PublicRoutes, RoutePaths, PublicRouteNames } from "./routes/public-route";
+import { PublicRoutes, RoutePaths, PublicRouteNames, CandidateRoutes, RecruiterRoutes } from "./routes/public-route";
 import { getAuthLS, LS_KEY } from '../src/helpers/localStorage';
 
 function App() {
@@ -40,17 +40,15 @@ function App() {
     return (
       <Layout {...props}>
         <Switch>
-          {Object.values(PublicRoutes).map((route, idx) => {
-            if (route.id !== PublicRouteNames.HomeRecruiter) {
-              return (
-                <Route
-                  key={idx}
-                  path={route.path}
-                  exact={route.exact}
-                  render={(props) => <route.component {...props} />}
-                />
-              );
-            }
+          {Object.values(CandidateRoutes).map((route, idx) => {
+            return (
+              <Route
+                key={idx + route.id}
+                path={route.path}
+                exact={route.exact}
+                render={(props) => <route.component {...props} />}
+              />
+            );
           })}
           <Redirect to={RoutePaths.Home} />
         </Switch>
@@ -62,17 +60,15 @@ function App() {
     return (
       <Layout {...props}>
         <Switch>
-          {Object.values(PublicRoutes).map((route, idx) => {
-            if (route.id !== PublicRouteNames.ProfileCan) {
-              return (
-                <Route
-                  key={idx}
-                  path={route.path}
-                  exact={route.exact}
-                  render={(props) => <route.component {...props} />}
-                />
-              );
-            }
+          {Object.values(RecruiterRoutes).map((route, idx) => {
+            return (
+              <Route
+                key={idx + route.id}
+                path={route.path}
+                exact={route.exact}
+                render={(props) => <route.component {...props} />}
+              />
+            );
           })}
           <Redirect to={RoutePaths.Home} />
         </Switch>
@@ -109,10 +105,6 @@ function App() {
           <Route key={0} path="/" render={(props) => <GuestLayout {...props} />} />
         </Switch>
       )}
-      {/* <Switch>
-        <Route key={0} path="/" render={(props) => <BasicLayout {...props} />} />
-      </Switch> */}
-
     </Router>
   );
 }

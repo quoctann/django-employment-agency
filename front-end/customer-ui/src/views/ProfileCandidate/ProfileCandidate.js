@@ -5,7 +5,14 @@ import {
     Button,
     TextField,
     CircularProgress,
+    Container,
+    Card,
+    CardActionArea,
+    CardContent,
+    CardActions,
+    Divider,
 } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import {
     MuiPickersUtilsProvider,
     KeyboardDatePicker,
@@ -16,9 +23,8 @@ import { ACCOUNT, INFO, TAG } from './ProfileCandidate.const';
 import { useStyles } from './ProfileCandidate.styles';
 import cookies from 'react-cookies';
 import { useHistory } from 'react-router';
-import { PublicRoutes } from '../../routes/public-route';
+import { RoutePaths } from '../../routes/public-route';
 import AppTable from '../../components/AppTable';
-import { AlertSuccess, AlertWarning } from '../../components/AppAlert';
 import AppSelect from '../../components/AppSelect';
 import moment from "moment";
 
@@ -59,11 +65,6 @@ export default function Profile() {
     const classes = useStyles();
     const history = useHistory();
     const [loading, setLoading] = useState(false);
-
-    const [openError, setOpenError] = useState(false);
-    const [openSuccess, setOpenSuccess] = useState(false);
-    const [messSuc, setMessSuc] = useState('');
-    const [messErr, setMessErr] = useState('');
 
     const [booking, setBooking] = useState([]);
 
@@ -178,51 +179,60 @@ export default function Profile() {
     useEffect(() => {
         async function init() {
             await getFilterCategory()
-
+            await getSuggestion();
+            await getOffer();
         }
         init()
-        // console.info('user', userData)
     }, [])
 
+    // Lấy các gợi ý việc làm dựa trên ngành nghề
+    const [suggestion, setSuggestion] = useState([])
+    const getSuggestion = async () => {
+        const res = await API.get(endpoints["viec-lam-goi-y"](userData.nguoi_dung.id));
+        setSuggestion(res.data)
+    }
+
+    // Lấy các việc làm được nhà tuyển dụng gửi đến
+    const [offer, setOffer] = useState([])
+    const getOffer = async () => {
+        const res = await API.get(endpoints["de-xuat-viec-lam"](userData.nguoi_dung.id))
+        setOffer(res.data)
+    }
+
+    // Bấm nút xem chi tiết công việc để đến trang chi tiết việc làm
+    const denTrangChiTietViecLam = (post) => {
+        const _path = RoutePaths.InfoPost.replace(':id', post.id)
+        history.push(_path, {
+            post: post
+        });
+    };
+
+    // Format tiền lương ra định dạng VNĐ đẹp hơn
+    const currency = (number) => {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number)
+    }
 
     // chuyển về trang đăng tin tức tour đã booking
     const handleChooseBooking = (tourId, employeeId) => {
-        const _pathAPI = endpoints['news-tour'] + endpoints['have-tour'] + `?tour=${tourId}&employee=${employeeId}`;
-        API.get(_pathAPI).then(res => {
-            const _pathPage = PublicRoutes.NewsTourDetail.path.replace(":id", res.data[0].id)
-            history.push(_pathPage, {
-                newstour: res.data[0],
-            })
-            // console.info('res', res.data[0]);
-        })
+        // const _pathAPI = endpoints['news-tour'] + endpoints['have-tour'] + `?tour=${tourId}&employee=${employeeId}`;
+        // API.get(_pathAPI).then(res => {
+        //     const _pathPage = PublicRoutes.NewsTourDetail.path.replace(":id", res.data[0].id)
+        //     history.push(_pathPage, {
+        //         newstour: res.data[0],
+        //     })
+        //     // console.info('res', res.data[0]);
+        // })
     }
 
-    // tắt thông báo và cập nhập lại thông tin người dùng sau khi thay đổi
-    const handleCloseSuc = (event, reason) => {
-        if (reason === 'clickaway') {
-            setMessSuc(false);
-            const _path = PublicRoutes.Login.path;
-            history.push(_path);
-            window.location.reload();
-        }
-
-    };
-
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-    };
-
     return (
-        <>
+        <Container maxWidth="lg">
             <Grid container spacing={5} xs={12}>
                 <Grid item xs={8}>
                     <Typography variant="h3" className={classes.titleInfo}>Thông tin người dùng</Typography>
                     <form className={classes.form}>
                         <Grid container spacing={5} xs={12}>
                             {/* thông tin người dùng */}
-                            <Grid item xs={6}>
+                            <Grid item xs={7}>
                                 <Grid container spacing={2}>
                                     {/* Thông tin người dùng */}
                                     <Grid item xs={ACCOUNT.last_name.xs}>
@@ -345,7 +355,7 @@ export default function Profile() {
                                 </Grid>
                             </Grid>
 
-                            <Grid item xs={6}>
+                            <Grid item xs={5}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={INFO.ngay_sinh.xs}>
                                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -404,6 +414,28 @@ export default function Profile() {
                 </Grid>
 
                 <Grid item xs={4}>
+                    <Typography variant="h4" className={classes.titleInfo2}>Gợi ý công việc</Typography>
+                    {suggestion.length > 0 ? suggestion.map((item, index) => (
+                        <Grid item xs={12}>
+                            <Card className={classes.card} onClick={() => denTrangChiTietViecLam(suggestion[index])}>
+                                <CardActionArea>
+                                    <CardContent>
+                                        <Typography gutterBottom variant="h5" component="h2">{suggestion[index].tieu_de}</Typography>
+                                        <Typography variant="body1">{suggestion[index].nha_tuyen_dung.ten_cong_ty}</Typography>
+                                        <Typography variant="body1">     Lương:{" "}
+                                            {suggestion[index].luong === 0 ? "Thương lượng" : currency(suggestion[index].luong)}
+                                        </Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                                {/* <CardActions>
+                                    <Button onClick={() => denTrangChiTietViecLam(suggestion[index].id)} size="medium" color="primary">Xem chi tiết</Button>
+                                </CardActions> */}
+                            </Card>
+                        </Grid>
+                    )) : <Alert variant="secondary">Không có gợi ý phù hợp</Alert>}
+                </Grid>
+
+                <Grid item xs={12}>
                     {/* lịch sử ứng tuyển */}
                     {/* <Grid item xs={7}>
                 <Typography variant="h3">Lịch sử giao dịch</Typography>
@@ -413,10 +445,6 @@ export default function Profile() {
             </Grid> */}
                 </Grid>
             </Grid>
-
-            {/* xử lý thông báo khi cập nhập thông tin người dùng */}
-            <AlertSuccess content={messSuc} open={openSuccess} handleClose={handleCloseSuc} />
-            <AlertWarning content={messErr} open={openError} handleClose={handleClose} />
-        </>
+        </Container>
     )
 }
