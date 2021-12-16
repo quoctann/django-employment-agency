@@ -33,6 +33,12 @@ export const useStyles = makeStyles((theme) => ({
   loading: {
     color: 'white',
   },
+  note: {
+    padding: '10px',
+    fontSize: '20px',
+    marginLeft: '30px',
+    backgroundColor: '#f5f5df'
+  },
 }));
 
 

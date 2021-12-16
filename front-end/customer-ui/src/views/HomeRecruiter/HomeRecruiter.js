@@ -119,6 +119,7 @@ export default function Profile() {
         async function init() {
             await fetchViecLam()
             await getFilterCategory()
+            await getPendingApply()
         }
         init()
     }, [])
@@ -126,7 +127,7 @@ export default function Profile() {
     const fetchViecLam = async () => {
         const res = await API.get(endpoints["nha-tuyen-dung-viec-lam"](userData.nguoi_dung.id))
         setDanhSachViecLam(res.data.map((b, idx) =>
-            createData(idx + 1, b.tieu_de.length > 30 ? `${b.tieu_de.substr(0, 30)}. . .` : b.tieu_de, 
+            createData(idx + 1, b.tieu_de.length > 30 ? `${b.tieu_de.substr(0, 30)}. . .` : b.tieu_de,
                 b.noi_dung.length > 50 ? `${b.noi_dung.substr(0, 50)}. . .` : b.noi_dung,
                 b.luong !== 0 ? b.luong : 'thỏa thuận', moment(b.ngay_tao).format("DD-MM-YYYY").toString(), moment(b.ngay_het_han).format("DD-MM-YYYY").toString(), b.trang_thai_viec_lam, b.id),
         ))
@@ -139,6 +140,7 @@ export default function Profile() {
             baivietId: postId,
             nguoidungId: userData.nguoi_dung.id
         })
+        // console.info(_pathPage)
     }
 
 
@@ -195,6 +197,27 @@ export default function Profile() {
         history.push(RoutePaths.NewPost, {
             nguoidungId: userData.nguoi_dung.id,
         })
+    }
+
+    // Thông tin các ứng viên đang đợi duyệt nhận đơn ứng tuyển (lưu trữ)
+    const [applyInfo, setApplyInfo] = useState([])
+
+    // Lấy danh sách các ứng viên đợi được chấp nhận đơn ứng tuyển
+    const getPendingApply = async (hiringId = userData.nguoi_dung.id) => {
+        const res = await API.get(endpoints["ung-vien-doi-duyet"](hiringId));
+        // console.log(res.data)
+        setApplyInfo(res.data);
+        console.log('applyInfo', res.data)
+    }
+
+    const handleApply = (info) => {
+        const _path = RoutePaths.CanInfo.replace(':id', info.ung_vien.nguoi_dung.first_name)
+        history.push(_path, {
+            ungvien: info.ung_vien,
+            nguoidungId: userData.nguoi_dung.id,
+            vieclamId: info.viec_lam.id,
+            tenViecLam: info.viec_lam.tieu_de,
+        });
     }
 
     return (
@@ -391,12 +414,49 @@ export default function Profile() {
                     </Grid>
                 </Grid>
 
+                {/* Thông báo tuyển dụng */}
+                <Grid item xs={12}>
+                    <Typography variant="h3" className={classes.titleInfo}>Thông báo tuyển dụng</Typography>
+                    <Grid container spacing={3} xs={6}>
+                        {applyInfo.length > 0 ? applyInfo.map((info, index) => (
+                            <Card className={classes.card}
+                                onClick={() => handleApply(info)}>
+                                <CardActionArea>
+                                    <CardContent>
+                                        <Typography gutterBottom variant="h6">
+                                            {applyInfo[index].ung_vien.nguoi_dung.last_name} {applyInfo[index].ung_vien.nguoi_dung.first_name}
+                                            {" "}đã nộp đơn ứng tuyển vào vị trí{" "}
+                                        </Typography>
+                                        <Typography variant="h5">{applyInfo[index].viec_lam.tieu_de}</Typography>
+                                        <Typography gutterBottom variant="body1" color="textSecondary">Ngày nộp đơn: {applyInfo[index].ngay_ung_tuyen}</Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                            </Card>
+
+
+
+                            // <Button
+                            //     variant="outline-primary me-2"
+                            //         onClick = {() => {
+                            //     props.xemChiTietUngVien(applyInfo[index].ung_vien.nguoi_dung.id,
+                            //         applyInfo[index].viec_lam.id, applyInfo[index].viec_lam.tieu_de);
+                            // props.history.push(Routes.UngVienChiTietPage.path);
+                            //         }}
+                            // >
+                            //     Xem hồ sơ chi tiết
+                            // </Button>
+
+                        )) : (
+                            <Typography variant="body1" className={classes.note}>Không có hồ sơ chờ duyệt</Typography>
+                        )}
+                    </Grid>
+                </Grid>
+
+                {/* Bài viết đã đăng */}
                 <Grid item xs={12}>
                     {/* Các bài viết đã đăng */}
                     <Typography variant="h3" className={classes.titleInfo}>Bài viết đã đăng</Typography>
-                    {loading ? <p>Loading ...</p> :
-                        <AppTable columns={JOB_TABLE} data={danhSachViecLam} handleChoose={handleChoose} />
-                    }
+                    <AppTable columns={JOB_TABLE} data={danhSachViecLam} handleChoose={handleChoose} />
                     <Button
                         onClick={taoBaiViet}
                         fullWidth
@@ -405,6 +465,6 @@ export default function Profile() {
                     >Thêm mới</Button>
                 </Grid>
             </Grid>
-        </Container>
+        </Container >
     )
 }

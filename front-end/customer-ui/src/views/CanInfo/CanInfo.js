@@ -42,8 +42,8 @@ export default function CanInfoPage() {
     const history = useHistory();
 
     const { state } = useLocation();
-    const vieclamId = 0;
-    const tenViecLam = '';
+    const vieclamId = state.vieclamId;
+    const tenViecLam = state.tenViecLam;
 
     // Lấy thông tin việc làm của nhà tuyển dụng hiện tại (gửi yêu cầu công việc cho ứng viên)
     const [danhSachViecLam, setDanhSachViecLam] = useState([])
@@ -193,13 +193,19 @@ export default function CanInfoPage() {
                         <>
                             {/* <p>Bạn có chấp nhận ứng viên này vào vị trí <span className="text-primary fw-bold">{tenViecLam}</span> không?</p> */}
                             <Button
-                                variant="success mb-3"
+                                fullWidth
+                                className={classes.submit}
+                                color='primary'
+                                variant="contained"
                                 onClick={() => ungTuyen()}
-                            >Chấp nhận hồ sơ ứng viên này</Button>
+                            >Chấp nhận hồ sơ</Button>
                             <Button
-                                variant="danger"
+                                fullWidth
+                                className={classes.submit}
+                                color='primary'
+                                variant="contained"
                                 onClick={() => ungTuyen(TRANG_THAI_UNG_TUYEN.BI_TU_CHOI)}
-                            >Từ chối hồ sơ này</Button>
+                            >Từ chối hồ sơ</Button>
                         </>
                     )}
                 </Grid>

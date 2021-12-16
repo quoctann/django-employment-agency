@@ -20,6 +20,7 @@ export let endpoints = {
         return url;
     },
     "ung-vien-chi-tiet": (ungvienId) => `/ung-vien/${ungvienId}/`,
+    "ung-vien-doi-duyet": (nhatuyendungId) => `/ung-tuyen/${nhatuyendungId}/ung-vien-doi-duyet/`,
 
     "ung-tuyen":                    "/ung-tuyen/",
 
