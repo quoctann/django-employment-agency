@@ -74,7 +74,6 @@ export default function Profile() {
     // Phương thức gửi dữ liệu lên server để tạo bản ghi
     const dangTinTuyenDung = async (event) => {
         const res = await API.post(endpoints["viec-lam"], tinTuyenDung)
-        // console.log(res.data)
         if (res.data === 201) {
             alert("Tạo việc làm thành công!")
             history.push(RoutePaths.HomeRecruiter);
@@ -162,14 +161,7 @@ export default function Profile() {
                                 <Grid container spacing={2}>
                                     <Grid item xs={INFO_POST.tieu_de.xs}>
                                         <AppTextField field={INFO_POST.tieu_de} value={tinTuyenDung.tieu_de}
-                                            // onChange={(e) => setTinTuyenDung({
-                                            //     ...tinTuyenDung,
-                                            //     tieu_de: e.target.value,
-                                            //     nha_tuyen_dung_id: state.nguoidungId,
-                                            //     // nha_tuyen_dung_id: 'id = 10',
-                                            // })} 
                                             onChange={(e) => setTinTuyenDung({ ...tinTuyenDung, tieu_de: e.target.value })} />
-                                        {/* /> */}
                                     </Grid>
                                     <Grid item xs={INFO_POST.ngay_het_han.xs}>
                                         <AppDatePicker field={INFO_POST.ngay_het_han} value={ngayHetHan}

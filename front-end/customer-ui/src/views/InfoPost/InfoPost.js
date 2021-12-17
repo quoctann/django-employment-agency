@@ -1,12 +1,9 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
     Grid,
     Typography,
     Button,
-    FormControl,
-    CircularProgress,
-    Select,
-    InputLabel,
+    Link,
     Container,
     Chip,
     Divider,
@@ -111,6 +108,13 @@ export default function InfoPostPage() {
         history.push(RoutePaths.ProfileCan);
     }
 
+    const hanleNameCompany = () => {
+        const _path = RoutePaths.RecruInfo.replace(':id', state.post.nha_tuyen_dung.nguoi_dung.id)
+        history.push(_path, {
+            tuyendungId: state.post.nha_tuyen_dung.id
+        });
+    }
+
     return (
         <Container maxWidth="lg">
             <Grid container spacing={10} xs={12}>
@@ -142,9 +146,10 @@ export default function InfoPostPage() {
 
                 <Grid item xs={4}>
                     <Typography className={classes.text} variant="body1" > Đăng ngày: {moment(state.post.ngay_tao).format("DD-MM-YYYY").toString()}</Typography>
-                    <Typography className={classes.text} variant="h5" >{state.post.nha_tuyen_dung.ten_cong_ty}</Typography>
+                    <Typography className={classes.text} variant="h5" onClick={() => hanleNameCompany()}><Link>{state.post.nha_tuyen_dung.ten_cong_ty}</Link></Typography>
                     <Typography className={classes.text} variant="body1" >Email: {state.post.nha_tuyen_dung.nguoi_dung.email}</Typography>
                     <Typography className={classes.text} variant="body1" >Số điện thoại: {state.post.nha_tuyen_dung.nguoi_dung.so_dien_thoai}</Typography>
+                    <Typography className={classes.text} variant="body1" >Địa chỉ: {state.post.nha_tuyen_dung.dia_chi}</Typography>
                     <Typography className={classes.text} variant="body1" >Đánh giá: {'   '}
                         <Rating value={state.post.nha_tuyen_dung.diem_danh_gia_tb} precision={0.5} readOnly size="large" />
                     </Typography>
