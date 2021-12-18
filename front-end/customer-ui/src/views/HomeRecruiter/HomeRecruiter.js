@@ -10,7 +10,9 @@ import {
     CardContent,
     CardActions,
     Container,
+    Box,
 } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 import Rating from '@material-ui/lab/Rating';
 import API, { endpoints } from '../../helpers/API';
 import { ACCOUNT, INFO, JOB_TABLE, TAG } from './HomeRecruiter.const';
@@ -120,6 +122,7 @@ export default function Profile() {
             await fetchViecLam()
             await getFilterCategory()
             await getPendingApply()
+            await getUngVienDanhGia()
         }
         init()
     }, [])
@@ -140,7 +143,6 @@ export default function Profile() {
             baivietId: postId,
             nguoidungId: userData.nguoi_dung.id
         })
-        // console.info(_pathPage)
     }
 
 
@@ -205,9 +207,7 @@ export default function Profile() {
     // Lấy danh sách các ứng viên đợi được chấp nhận đơn ứng tuyển
     const getPendingApply = async (hiringId = userData.nguoi_dung.id) => {
         const res = await API.get(endpoints["ung-vien-doi-duyet"](hiringId));
-        // console.log(res.data)
         setApplyInfo(res.data);
-        console.log('applyInfo', res.data)
     }
 
     const handleApply = (info) => {
@@ -219,6 +219,23 @@ export default function Profile() {
             tenViecLam: info.viec_lam.tieu_de,
         });
     }
+
+    const [hidden, setHidden] = useState(false);
+    const handleHidden = () => {
+        // if (hidden) {
+        //     setHidden(false)
+        // } else {
+        //     setHidden(true)
+        // }
+        setHidden(hidden ? false : true);
+    }
+
+    // Lấy bài đánh giá của ứng viên
+    const [danhGiaCuaUngVien, setDanhGiaCuaUngVien] = useState({});
+    const getUngVienDanhGia = async () => {
+        const res = await API.get(endpoints['tuyen-dung-xem-danh-gia'](userData.nguoi_dung.id));
+        setDanhGiaCuaUngVien(res.data);
+    };
 
     return (
         <Container maxWidth="lg">
@@ -318,8 +335,24 @@ export default function Profile() {
                                         />
                                     </Grid>
                                     <Grid item xs={INFO.diem_danh_gia_tb.xs}>
-                                        <Typography component="legend">{INFO.diem_danh_gia_tb.label}</Typography>
-                                        <Rating value={4.5} precision={0.5} readOnly name={INFO.diem_danh_gia_tb.label} size="large" />
+                                        <Grid container spacing={1}>
+                                            <Grid item xs={8}>
+                                                <Typography component="legend">{INFO.diem_danh_gia_tb.label}</Typography>
+                                                <Rating value={userData.diem_danh_gia_tb} precision={0.5} readOnly name={INFO.diem_danh_gia_tb.label} size="large" />
+                                            </Grid>
+                                            <Grid item xs={4}>
+                                                {hidden ? (
+                                                    <Button fullWidth variant="contained" color="primary" className={classes.submit} onClick={() => handleHidden()}>
+                                                        Ẩn
+                                                    </Button>
+                                                ) : (
+                                                    <Button fullWidth variant="contained" color="primary" className={classes.submit} onClick={() => handleHidden()}>
+                                                        Xem
+                                                    </Button>
+                                                )}
+                                            </Grid>
+                                        </Grid>
+
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Button
@@ -362,7 +395,22 @@ export default function Profile() {
                         </Grid>
                     </form>
 
-
+                    {hidden ? (
+                        <Box>
+                            <Typography variant="h5" className={classes.title2}>Đánh giá của ứng viên</Typography>
+                            {danhGiaCuaUngVien.length > 0 ? danhGiaCuaUngVien.map((item, index) => (
+                                <Card className={classes.cardRate}>
+                                    <Rating value={item.diem_danh_gia} precision={0.5} readOnly size="large" />
+                                    <Typography variant="body2" className={classes.text}>Đã ứng tuyển cho vị trí: {item.viec_lam.tieu_de}</Typography>
+                                    <Typography variant="body1" className={classes.text}>{item.noi_dung}</Typography>
+                                </Card>
+                            )) : (
+                                <Alert severity="info">Bạn chưa viết nhận được đánh giá nào</Alert>
+                            )}
+                        </Box>
+                    ) : (
+                        <></>
+                    )}
                 </Grid>
 
                 <Grid item xs={4}>

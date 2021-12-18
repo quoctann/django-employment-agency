@@ -47,6 +47,7 @@ export let endpoints = {
     },
     "ung-vien-cap-nhat": "/ung-vien/",
     "ung-vien-danh-gia": (ungvienId, nhatuyendungId) => `/danh-gia-nha-tuyen-dung/ung-vien-danh-gia/?ungvien-id=${ungvienId}&nhatuyendung-id=${nhatuyendungId}`,
+    "tuyen-dung-xem-danh-gia": (nhatuyendungId) => `/danh-gia-nha-tuyen-dung/tuyen-dung-xem-danh-gia/?nhatuyendung-id=${nhatuyendungId}`,
     "danh-gia-nha-tuyen-dung": "/danh-gia-nha-tuyen-dung/",
     "bang-cap": "/bang-cap/",
     "ky-nang": "/ky-nang/",

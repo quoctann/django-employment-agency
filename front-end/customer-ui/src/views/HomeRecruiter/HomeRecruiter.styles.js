@@ -39,6 +39,13 @@ export const useStyles = makeStyles((theme) => ({
     marginLeft: '30px',
     backgroundColor: '#f5f5df'
   },
+  cardRate: {
+    width: '100%',
+    padding: '15px'
+  },
+  text: {
+    marginTop: '10px'
+  },
 }));
 
 

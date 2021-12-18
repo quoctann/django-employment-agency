@@ -22,6 +22,7 @@ import { useHistory, useLocation } from 'react-router';
 import { RoutePaths } from '../../routes/public-route';
 import AppSelectSingle from '../../components/AppSelectSingle';
 import AppTextField from '../../components/AppTextField';
+import { toInteger } from 'lodash';
 
 export default function RecruInfoPage() {
     const classes = useStyles();
@@ -144,8 +145,8 @@ export default function RecruInfoPage() {
                             {danhGiaCuaUngVien.length > 0 ? danhGiaCuaUngVien.map((item, index) => (
                                 <Card className={classes.cardRate}>
                                     <Rating value={item.diem_danh_gia} precision={0.5} readOnly size="large" />
-                                    <Typography variant="body1" className={classes.text}>Đã ứng tuyển cho vị trí: {item.viec_lam.tieu_de}</Typography>
-                                    <Typography variant="body2" className={classes.text}>{item.noi_dung}</Typography>
+                                    <Typography variant="body2" className={classes.text}>Đã ứng tuyển cho vị trí: {item.viec_lam.tieu_de}</Typography>
+                                    <Typography variant="body1" className={classes.text}>{item.noi_dung}</Typography>
                                 </Card>
                             )) : (
                                 <Alert severity="info">Bạn chưa viết bài đánh giá nào</Alert>
@@ -204,8 +205,8 @@ export default function RecruInfoPage() {
                     <Box className={classes.boxRight}>
                         <Typography className={classes.text} variant="body1" >Địa chỉ: {detail.dia_chi}</Typography>
                         <Typography className={classes.text2} variant="body1" >Quy mô: {detail.quy_mo} nhân viên</Typography>
-                        <Typography className={classes.text} variant="body1" >Đánh giá:</Typography>
-                        <Rating value={detail.diem_danh_gia_tb} precision={0.5} readOnly size="large" />
+                        <Typography className={classes.text} variant="body1" component='span'>Đánh giá:</Typography>
+                        <Rating value={toInteger(detail.diem_danh_gia_tb)} precision={0.5} readOnly size="large" />
                     </Box>
 
                     <Box className={classes.boxRight}>
