@@ -42,7 +42,7 @@ export default function CanInfoPage() {
     const history = useHistory();
 
     const { state } = useLocation();
-    const vieclamId = state.vieclamId;
+    const vieclamId = state.vieclamId ? state.vieclamId : 0;
     const tenViecLam = state.tenViecLam;
 
     // Lấy thông tin việc làm của nhà tuyển dụng hiện tại (gửi yêu cầu công việc cho ứng viên)
@@ -50,9 +50,6 @@ export default function CanInfoPage() {
     const getViecLam = async () => {
         const res = await API.get(endpoints["nha-tuyen-dung-viec-lam"](state.nguoidungId))
         setDanhSachViecLam(res.data)
-        console.log('getvieclam', res.data)
-        console.log('getvieclam []', res.data[0])
-
     }
 
     const [selectGuiViecLam, setSelectGuiViecLam] = useState(0);
@@ -191,7 +188,7 @@ export default function CanInfoPage() {
                         </>
                     ) : (
                         <>
-                            {/* <p>Bạn có chấp nhận ứng viên này vào vị trí <span className="text-primary fw-bold">{tenViecLam}</span> không?</p> */}
+                            <Typography className={classes.toolText} variant="h6">Ứng viên đã ứng tuyển: {tenViecLam}</Typography>
                             <Button
                                 fullWidth
                                 className={classes.submit}

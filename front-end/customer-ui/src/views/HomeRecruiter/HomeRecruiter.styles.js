@@ -29,6 +29,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   titleInfo: {
     padding: '15px',
+    marginTop: '15px'
   },
   loading: {
     color: 'white',

@@ -20,7 +20,7 @@ import { AlertSuccess, AlertWarning } from '../../components/AppAlert';
 
 export default function Register() {
     const classes = useStyles();
-    // const avatar = createRef();
+    const avatar = createRef();
     const history = useHistory()
     const [openError, setOpenError] = useState(false);
     const [openSuccess, setOpenSuccess] = useState(false);
@@ -32,12 +32,20 @@ export default function Register() {
 
     const register = async () => {
         const form = new FormData();
-
+        console.info('ava', avatar)
         if (inputs.password === inputs.confirm_password) {
             for (let k in inputs) {
                 if (k !== "confirm_password") form.append(k, inputs[k]);
             }
+            if (avatar.current.files.length !== 0) {
+                form.append("anh_dai_dien", avatar.current.files[0]);
+            }
             form.append(nguoi_dung.vai_tro, roleName);
+
+            // for (var key of form.keys()) {
+            //     console.log(key, form.get(key));
+            // }
+
             try {
                 let res = await API.post(endpoints["nguoi-dung"], form, {
                     headers: {
@@ -64,11 +72,13 @@ export default function Register() {
     }
 
     const onSubmit = async () => {
-        setLoading(true);
-        setTimeout(() => {
-            register();
-            setLoading(false);
-        }, 1000);
+        // setLoading(true);
+        // setTimeout(() => {
+        //     register();
+        //     setLoading(false);
+        // }, 1000);
+        register();
+
     }
 
     const { inputs, handleInputChange, handleSubmit } = useSubmitForm(onSubmit);
@@ -240,7 +250,23 @@ export default function Register() {
                                     value={inputs.confirm_password}
                                 />
                             </Grid>
-
+                            {/* ảnh */}
+                            <Grid item xs={12} >
+                                <input
+                                    accept="image/*"
+                                    className={classes.input}
+                                    id="avatar"
+                                    multiple
+                                    type="file"
+                                    ref={avatar}
+                                />
+                                <label htmlFor="avatar">
+                                    <Button variant="contained" color="primary"
+                                        maxWidth component="span">
+                                        Chọn ảnh
+                                    </Button>
+                                </label>
+                            </Grid>
                             <Grid item xs={12}>
                                 <Button
                                     fullWidth

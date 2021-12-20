@@ -168,10 +168,10 @@ export default function Profile() {
     };
 
     const [filterData, setFilterData] = useState({
-        "career": "1",
-        "degree": "1",
-        "experience": "1",
-        "skill": "1",
+        "career": "",
+        "degree": "",
+        "experience": "",
+        "skill": "",
     })
 
     const locUngVien = async (page = 1) => {
@@ -397,7 +397,7 @@ export default function Profile() {
 
                     {hidden ? (
                         <Box>
-                            <Typography variant="h5" className={classes.title2}>Đánh giá của ứng viên</Typography>
+                            <Typography variant="h3" className={classes.titleInfo}>Đánh giá của ứng viên</Typography>
                             {danhGiaCuaUngVien.length > 0 ? danhGiaCuaUngVien.map((item, index) => (
                                 <Card className={classes.cardRate}>
                                     <Rating value={item.diem_danh_gia} precision={0.5} readOnly size="large" />
@@ -442,7 +442,7 @@ export default function Profile() {
                     <Grid container spacing={3} xs={12}>
                         {ketQua.results.length > 0 ? ketQua.results.map((uv, idx) => (
                             <Grid item xs={12}>
-                                <Card className={classes.card}>
+                                <Card className={classes.card} onClick={() => handleCandidae(uv)}>
                                     <CardActionArea>
                                         <CardContent>
                                             <Typography gutterBottom variant="h5" component="h2">
@@ -453,9 +453,9 @@ export default function Profile() {
                                             </Typography>
                                         </CardContent>
                                     </CardActionArea>
-                                    <CardActions>
+                                    {/* <CardActions>
                                         <Button onClick={() => handleCandidae(uv)} size="medium" color="primary">Xem hồ sơ</Button>
-                                    </CardActions>
+                                    </CardActions> */}
                                 </Card>
                             </Grid>
                         )) : (<></>)}
@@ -480,20 +480,6 @@ export default function Profile() {
                                     </CardContent>
                                 </CardActionArea>
                             </Card>
-
-
-
-                            // <Button
-                            //     variant="outline-primary me-2"
-                            //         onClick = {() => {
-                            //     props.xemChiTietUngVien(applyInfo[index].ung_vien.nguoi_dung.id,
-                            //         applyInfo[index].viec_lam.id, applyInfo[index].viec_lam.tieu_de);
-                            // props.history.push(Routes.UngVienChiTietPage.path);
-                            //         }}
-                            // >
-                            //     Xem hồ sơ chi tiết
-                            // </Button>
-
                         )) : (
                             <Typography variant="body1" className={classes.note}>Không có hồ sơ chờ duyệt</Typography>
                         )}

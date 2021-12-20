@@ -28,39 +28,6 @@ import AppTable from '../../components/AppTable';
 import AppSelect from '../../components/AppSelect';
 import moment from "moment";
 
-const columns = [
-    { id: 'stt', label: 'STT', maxWidth: 20, align: 'center', },
-    {
-        id: 'static1',
-        label: 'Trạng thái',
-        minWidth: 100,
-        align: 'center',
-    },
-    {
-        id: 'people1',
-        label: 'Người lớn',
-        minWidth: 100,
-        align: 'right',
-    },
-    {
-        id: 'people2',
-        label: 'Trẻ em',
-        minWidth: 100,
-        align: 'right',
-    },
-    {
-        id: 'total',
-        label: 'Tổng tiền',
-        minWidth: 150,
-        align: 'right',
-        format: (value) => value.toFixed(2),
-    },
-];
-
-function createData(stt, static1, people1, people2, total, tourId, employeeId) {
-    return { stt, static1, people1, people2, total, tourId, employeeId };
-}
-
 export default function Profile() {
     const classes = useStyles();
     const history = useHistory();
@@ -197,6 +164,7 @@ export default function Profile() {
     const getOffer = async () => {
         const res = await API.get(endpoints["de-xuat-viec-lam"](userData.nguoi_dung.id))
         setOffer(res.data)
+        console.info('off', res.data)
     }
 
     // Bấm nút xem chi tiết công việc để đến trang chi tiết việc làm
@@ -427,22 +395,33 @@ export default function Profile() {
                                         </Typography>
                                     </CardContent>
                                 </CardActionArea>
-                                {/* <CardActions>
-                                    <Button onClick={() => denTrangChiTietViecLam(suggestion[index].id)} size="medium" color="primary">Xem chi tiết</Button>
-                                </CardActions> */}
                             </Card>
                         </Grid>
                     )) : <Alert variant="secondary">Không có gợi ý phù hợp</Alert>}
                 </Grid>
 
-                <Grid item xs={12}>
-                    {/* lịch sử ứng tuyển */}
-                    {/* <Grid item xs={7}>
-                <Typography variant="h3">Lịch sử giao dịch</Typography>
-                {loading ? <p>Loading ...</p> :
-                    <AppTable columns={columns} data={booking} handleChooseBooking={handleChooseBooking} />
-                }
-            </Grid> */}
+                {/* gợi ý việc làm */}
+                <Grid item xs={8}>
+                    <Typography variant="h4" className={classes.titleInfo}>Việc làm đề xuất</Typography>
+                    {offer.length > 0 ? offer.map((item, index) => (
+                        <>
+                            <Grid item xs={12}>
+                                <Card className={classes.card} onClick={() => denTrangChiTietViecLam(item.viec_lam.id)}>
+                                    <CardActionArea>
+                                        <CardContent>
+                                            <Typography gutterBottom variant="h5" component="h2">{item.viec_lam.tieu_de}</Typography>
+                                            <Typography variant="body1">{item.viec_lam.nha_tuyen_dung.ten_cong_ty} {" "}vừa gửi cho bạn một đề nghị việc làm ở vị trí{" "}</Typography>
+                                            <Typography variant="body1">{" "}với mức lương{" "}
+                                                {item.viec_lam.luong === 0 ? "Thương lượng" : currency(item.viec_lam.luong)}
+                                            </Typography>
+                                        </CardContent>
+                                    </CardActionArea>
+                                </Card>
+                            </Grid>
+                        </>
+                    )) : (
+                        <Alert severity="info">Chưa có yêu cầu việc làm gửi cho bạn</Alert>
+                    )}
                 </Grid>
             </Grid>
         </Container>

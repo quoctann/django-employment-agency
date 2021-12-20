@@ -64,7 +64,7 @@ export default function ({ classes, open, setOpen, mainRef }) {
                     (
                         <Button onClick={() => handleLogin_click('/ProfileCan')}>
                             {/* <Avatar onClick={() => handleLogin_click('/ProfileCan')} alt={user.username}
-                                src={user.avatar.includes('http://127.0.0.1:8000') ? user.avatar : `http://127.0.0.1:8000${user.avatar}`} /> */}
+                                src={user.nguoi_dung.anh_dai_dien.includes('http://127.0.0.1:8000') ? user.nguoi_dung.anh_dai_dien : `http://127.0.0.1:8000${user.nguoi_dung.anh_dai_dien}`} /> */}
                             {user.nguoi_dung.username}
                         </Button>
                     ) : (

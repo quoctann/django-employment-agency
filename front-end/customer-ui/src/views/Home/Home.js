@@ -25,6 +25,7 @@ export default function HomePage() {
     const classes = useStyles();
 
     const check = getAuthLS(LS_KEY.AUTH_TOKEN);
+    const user = cookies.load("user");
 
     const checkDataCookies = () => {
         if ((check !== '' && !cookies.load("user")) || (!check && cookies.load("user"))) {
@@ -40,8 +41,8 @@ export default function HomePage() {
         // console.info('ca 2', ![PublicRouteNames.ProfileCan, PublicRouteNames.HomeRecruiter].includes('HomeRecruiter'))
         // console.info('RecruiterLayout', ![PublicRouteNames.ProfileCan].includes('ProfileCan'))
         // console.info('CandidateLayout', ![PublicRouteNames.HomeRecruiter].includes('HomeRecruiter'))
-        console.info('cookies', !cookies.load("user"))
-        console.info('check', !check)
+        console.info('cookies', user)
+        // console.info('check', !check)
 
 
     // searchTag();
