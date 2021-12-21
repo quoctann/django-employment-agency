@@ -20,7 +20,6 @@ import { useStyles } from './RecruInfo.styles';
 import cookies from 'react-cookies';
 import { useHistory, useLocation } from 'react-router';
 import { RoutePaths } from '../../routes/public-route';
-import AppSelectSingle from '../../components/AppSelectSingle';
 import AppTextField from '../../components/AppTextField';
 import { toInteger } from 'lodash';
 
@@ -37,8 +36,10 @@ export default function RecruInfoPage() {
     // Các bài đánh giá của nhà tuyển dụng
     const [ratings, setRatings] = useState([]);
     // Id của trang nhà tuyển dụng đang xem
+    const hiringid = state.tuyendungId;
+    // const hiringid = state.tuyendungId.id ? state.tuyendungId.id : state.RecruInfo.id;
     // const hiringid = state.RecruInfo.id;
-    const hiringid = 17;
+    // const hiringid = 17;
 
     // Phương thức lấy dữ liệu các bài đánh giá theo id nhà tuyển dụng
     const getRating = async (hiringId = hiringid, page = 1) => {
@@ -116,6 +117,7 @@ export default function RecruInfoPage() {
             await getCongViecChapNhan()
         }
         init()
+        console.info(state)
     }, []);
 
     const denTrangChiTietViecLam = (post) => {

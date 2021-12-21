@@ -19,16 +19,14 @@ function App() {
       <Layout {...props}>
         <Switch>
           {Object.values(PublicRoutes).map((route, idx) => {
-            if (![PublicRouteNames.ProfileCan, PublicRouteNames.HomeRecruiter].includes(route.id)) {
-              return (
-                <Route
-                  key={idx}
-                  path={route.path}
-                  exact={route.exact}
-                  render={(props) => <route.component {...props} />}
-                />
-              );
-            }
+            return (
+              <Route
+                key={idx}
+                path={route.path}
+                exact={route.exact}
+                render={(props) => <route.component {...props} />}
+              />
+            );
           })}
           <Redirect to={RoutePaths.Home} />
         </Switch>

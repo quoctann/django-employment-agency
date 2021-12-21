@@ -45,7 +45,7 @@ export default function ({ classes, open, setOpen, mainRef }) {
         cookies.remove("access_token");
         signOut();
         history.push('/');
-        // window.location.reload();
+        window.location.reload();
     };
 
     // chuyển trang khi chọn đăng nhập

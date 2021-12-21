@@ -12,11 +12,11 @@ export const useStyles = makeStyles((theme) => ({
   },
   search: {
     fontSize: '22px',
-    marginLeft: '8px',
+    // marginLeft: '8px',
     marginBottom: '20px',
   },
   card: {
-    marginLeft: '13px',
+    // marginLeft: '8px',
     width: '100%',
   },
   root: {

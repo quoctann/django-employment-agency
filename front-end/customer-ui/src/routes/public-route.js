@@ -77,6 +77,21 @@ export const PublicRoutes = {
         component: RegisterPage,
         icon: LoginIcon
     },
+    InfoPost: {
+        exact: true,
+        id: PublicRouteNames.InfoPost,
+        label: "Profile can label",
+        path: RoutePaths.InfoPost,
+        component: InfoPostPage,
+        icon: LoginIcon
+    },
+    RecruInfo: {
+        exact: true,
+        id: PublicRouteNames.RecruInfo,
+        label: "Profile can label",
+        path: RoutePaths.RecruInfo,
+        component: RecruInfoPage,
+    },
 }
 
 export const CandidateRoutes = {

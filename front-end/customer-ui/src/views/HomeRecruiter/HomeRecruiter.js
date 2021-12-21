@@ -244,10 +244,8 @@ export default function Profile() {
                     <Typography variant="h3" className={classes.titleInfo}>Thông tin nhà tuyển dụng</Typography>
                     <form className={classes.form}>
                         <Grid container spacing={4} xs={12}>
-                            {/* thông tin người dùng */}
                             <Grid item xs={6}>
                                 <Grid container spacing={2}>
-                                    {/* Thông tin người dùng */}
                                     <Grid item xs={INFO.ten_cong_ty.xs}>
                                         <TextField
                                             autoComplete="off"
@@ -439,7 +437,7 @@ export default function Profile() {
                         </Grid>
 
                     </Grid>
-                    <Grid container spacing={3} xs={12}>
+                    <Grid container spacing={1} xs={12}>
                         {ketQua.results.length > 0 ? ketQua.results.map((uv, idx) => (
                             <Grid item xs={12}>
                                 <Card className={classes.card} onClick={() => handleCandidae(uv)}>

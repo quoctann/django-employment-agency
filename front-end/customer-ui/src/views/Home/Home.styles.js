@@ -1,27 +1,37 @@
 import { makeStyles } from "@material-ui/core/styles";
 
 export const useStyles = makeStyles((theme) => ({
-    root: {
+    block: {
+        padding: '20px',
+    },
+    titleInfo: {
+        padding: '15px',
+        marginTop: '15px',
+        textAlign: 'center'
+    },
+    search: {
+        height: '56px',
+        width: '56px'
+    },
+    search2: {
+        height: '45px',
+        marginBottom: '20px'
+    },
+    icon: {
+        fontSize: '36px'
+    },
+    card: {
+        // padding: '15px',
         width: '100%',
-        backgroundColor: '#d9e0e6',
-    },
-    media: {
-        height: 280,
-    },
-    mediaContent: {
-        marginTop: 10,
-        height: 50,
-    },
-    action: {
-        marginLeft: 100,
-        marginBottom: 20,
     },
     pagination: {
         float: 'right',
-        margin: 7,
+        marginTop: '9px',
     },
-    search: {
-        height: 55,
-        width: 55,
+    text: {
+        marginTop: '10px'
+    },
+    text2: {
+        marginBottom: '10px'
     },
 }));
