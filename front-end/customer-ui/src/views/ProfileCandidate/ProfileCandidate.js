@@ -9,8 +9,7 @@ import {
     Card,
     CardActionArea,
     CardContent,
-    CardActions,
-    Divider,
+    Link,
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import {
@@ -24,9 +23,9 @@ import { useStyles } from './ProfileCandidate.styles';
 import cookies from 'react-cookies';
 import { useHistory } from 'react-router';
 import { RoutePaths } from '../../routes/public-route';
-import AppTable from '../../components/AppTable';
 import AppSelect from '../../components/AppSelect';
 import moment from "moment";
+import _ from "lodash";
 
 export default function Profile() {
     const classes = useStyles();
@@ -44,9 +43,9 @@ export default function Profile() {
         kinh_nghiem: userCookies.kinh_nghiem.map(item => ({ value: item.id, label: item.ten })),
     });
 
-    const [ngaySinh, setNgaySinh] = useState(new Date(userData.ngay_sinh));
-    const avatar = React.createRef();
-    const cv = React.createRef();
+    const [ngaySinh, setNgaySinh] = useState(userData.ngay_sinh ? new Date(userData.ngay_sinh) : null);
+    const avatar = createRef();
+    const cv = createRef();
 
     // Onchange thông tin thuộc bảng ứng viên
     const thongTinUngVien = (event) => {
@@ -106,40 +105,42 @@ export default function Profile() {
                 formData.append(u, userData[u]);
         }
 
-        // if (avatar.current.files[0])
-        //     formData.append("anh_dai_dien", avatar.current.files[0]);
+        if (avatar.current.files[0])
+            formData.append("anh_dai_dien", avatar.current.files[0]);
 
-        // if (cv.current.files[0])
-        //     formData.append("cv", cv.current.files[0]);
+        if (cv.current.files[0])
+            formData.append("cv", cv.current.files[0]);
 
         // for (var key of formData.keys()) {
         //     console.log(key, formData.get(key));
         // }
 
-        const capNhat = await API.put(endpoints["ung-vien-cap-nhat"], formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
+        try {
+            const capNhat = await API.put(endpoints["ung-vien-cap-nhat"], formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                }
+            })
+
+            if (capNhat.status === 200) {
+                console.log(capNhat.status)
+                cookies.save("user", capNhat.data)
+                alert("Cập nhật thông tin thành công!")
+                window.location.reload()
+            } else if (capNhat.status === 400) {
+                alert("Thông tin không hợp lệ!")
             }
-        })
-
-        // console.info('capNhat', capNhat)
-
-        if (capNhat.status === 200) {
-            console.log(capNhat.status)
-            cookies.save("user", capNhat.data)
-            alert("Cập nhật thông tin thành công!")
-            window.location.reload()
-        } else if (capNhat.status === 400) {
-            alert("Thông tin không hợp lệ!")
+        } catch (error) {
+            alert("Bạn vui lòng điển đủ thông tin còn thiếu \nLưu ý file CV hoặc ảnh không quá lớn")
         }
     }
 
     const onSubmit = async () => {
-        setLoading(true);
-        setTimeout(() => {
-            capNhatThongTin();
-            setLoading(false);
-        }, 1000);
+        // setLoading(true);
+        // setTimeout(() => {
+        capNhatThongTin();
+        // setLoading(false);
+        // }, 1000);
     }
 
     //  hiểu đơn giản là load trang
@@ -164,7 +165,6 @@ export default function Profile() {
     const getOffer = async () => {
         const res = await API.get(endpoints["de-xuat-viec-lam"](userData.nguoi_dung.id))
         setOffer(res.data)
-        console.info('off', res.data)
     }
 
     // Bấm nút xem chi tiết công việc để đến trang chi tiết việc làm
@@ -180,16 +180,13 @@ export default function Profile() {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number)
     }
 
-    // chuyển về trang đăng tin tức tour đã booking
-    const handleChooseBooking = (tourId, employeeId) => {
-        // const _pathAPI = endpoints['news-tour'] + endpoints['have-tour'] + `?tour=${tourId}&employee=${employeeId}`;
-        // API.get(_pathAPI).then(res => {
-        //     const _pathPage = PublicRoutes.NewsTourDetail.path.replace(":id", res.data[0].id)
-        //     history.push(_pathPage, {
-        //         newstour: res.data[0],
-        //     })
-        //     // console.info('res', res.data[0]);
-        // })
+    const pathCV = () => {
+        if (!_.isNil(userData.cv)) {
+            const path = userData.cv.includes('http://127.0.0.1:8000') ? userData.cv : `http://127.0.0.1:8000${userData.cv}`;
+            return path
+        } else {
+            return ''
+        }
     }
 
     return (
@@ -343,6 +340,43 @@ export default function Profile() {
                                             // defaultValue={user.nguoi_dung.so_dien_thoai}
                                             />
                                         </MuiPickersUtilsProvider>
+                                    </Grid>
+                                    <Grid item xs={7} >
+                                        <input
+                                            accept="image/*"
+                                            className={classes.input}
+                                            id="avatar"
+                                            multiple
+                                            type="file"
+                                            ref={avatar}
+                                        />
+                                        <label htmlFor="avatar">
+                                            <Button variant="contained" color="primary"
+                                                maxWidth component="span">
+                                                Ảnh đại diện
+                                            </Button>
+                                        </label>
+                                    </Grid>
+                                    <Grid item xs={12} >
+                                        <input
+                                            accept="pdf/*"
+                                            className={classes.input}
+                                            id="cv"
+                                            multiple
+                                            type="file"
+                                            ref={cv}
+                                        />
+                                        <label htmlFor="cv">
+                                            <Button variant="contained" color="primary"
+                                                maxWidth component="span">
+                                                CV
+                                            </Button>
+                                        </label>
+                                        {userData.cv ? (
+                                            <Link className={classes.linkCV} href={pathCV()}> Xem CV  </Link>
+                                        ) : (
+                                            <Link className={classes.linkCV}>  CV chưa cập nhập </Link>
+                                        )}
                                     </Grid>
                                     <Grid item xs={TAG.nganh_nghe.xs}>
                                         <AppSelect

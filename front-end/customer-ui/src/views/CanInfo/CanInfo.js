@@ -1,25 +1,24 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Grid,
     Typography,
     Button,
     FormControl,
-    CircularProgress,
+    Link,
     Select,
     InputLabel,
     Container,
     Chip,
     Divider,
+    CardMedia,
+    Card,
 } from '@material-ui/core';
-import Rating from '@material-ui/lab/Rating';
 import API, { endpoints } from '../../helpers/API';
-// import { ACCOUNT, INFO, JOB_TABLE, TAG } from './HomeRecruiter.const';
 import { useStyles } from './CanInfo.styles';
 import cookies from 'react-cookies';
 import { useHistory, useLocation } from 'react-router';
 import { RoutePaths } from '../../routes/public-route';
-import AppSelectSingle from '../../components/AppSelectSingle';
-import moment from "moment";
+import _ from 'lodash'
 
 const CONG_VIEC = {
     id: 'job',
@@ -114,6 +113,19 @@ export default function CanInfoPage() {
         );
     }
 
+    const CVComponent = () => {
+        if (!_.isNil(state.ungvien.cv)) {
+            const path = state.ungvien.cv.includes('http://127.0.0.1:8000') ? state.ungvien.cv : `http://127.0.0.1:8000${state.ungvien.cv}`;
+            return (
+                <Typography className={classes.text} variant="body1" >CV: <Link href={state.ungvien.cv} className={classes.linkCV}>xem file</Link></Typography>
+            )
+        } else {
+            return (
+                <Typography className={classes.text} variant="body1" >CV: <Link className={classes.linkCV}>(người dùng chưa cập nhập)</Link></Typography>
+            )
+        }
+    }
+
     return (
         <Container maxWidth="lg">
             <Grid container spacing={2} xs={12}>
@@ -122,14 +134,21 @@ export default function CanInfoPage() {
                     <Grid container spacing={4} xs={12}>
                         {/* thông tin người dùng */}
                         <Grid item xs={4}>
-                            <div>ảnh</div>
+                            <Card className={classes.avatar}>
+                                <CardMedia
+                                    className={classes.media}
+                                    image={state.ungvien.nguoi_dung.anh_dai_dien}
+                                    title="Ảnh đại diện"
+                                />
+                            </Card>
                         </Grid>
 
                         <Grid item xs={8}>
                             <Typography className={classes.text} variant="body1" >Tên ứng viên: {state.ungvien.nguoi_dung.last_name} {state.ungvien.nguoi_dung.first_name}</Typography>
                             <Typography className={classes.text} variant="body1" >Ngày sinh: {state.ungvien.nguoi_dung.last_name}</Typography>
                             <Typography className={classes.text} variant="body1" >Email: {state.ungvien.nguoi_dung.email}</Typography>
-                            <Typography className={classes.text} variant="body1" >CV: {state.ungvien.cv}</Typography>
+                            <CVComponent />
+                            {/* <Typography className={classes.text} variant="body1" >CV: <Link href={state.ungvien.cv}>xem file</Link></Typography> */}
                             <Typography className={classes.text} variant="body1" >Giới thiệu: {state.ungvien.gioi_thieu}</Typography>
 
                         </Grid>

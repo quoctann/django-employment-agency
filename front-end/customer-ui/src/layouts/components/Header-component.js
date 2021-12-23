@@ -16,7 +16,8 @@ import { useStore } from "react-redux";
 import cookies from 'react-cookies';
 import { clearAuthLS } from '../../helpers/localStorage'
 import { getAuthLS, LS_KEY } from '../../helpers/localStorage';
-
+import imgDef from '../../consts/avatarDefault.jpg'
+import _ from 'lodash'
 const rolePaths = {
     UNG_VIEN: 'UNG VIEN',
     TUYEN_DUNG: 'TUYEN DUNG',
@@ -53,6 +54,32 @@ export default function ({ classes, open, setOpen, mainRef }) {
         history.push(path);
     }
 
+    const pathUser = () => {
+        if (check === rolePaths.UNG_VIEN) {
+            return '/ProfileCan'
+        } else {
+            return '/HomeRecruiter'
+        }
+    }
+
+    const AvatarPath = () => {
+        if (_.isNil(user.nguoi_dung.anh_dai_dien)) {
+            return (
+                <Button onClick={() => handleLogin_click(`${pathUser()}`)}>
+                    {user.nguoi_dung.username}
+                </Button>
+            )
+        } else {
+            const path = user.nguoi_dung.anh_dai_dien.includes('http://127.0.0.1:8000') ? user.nguoi_dung.anh_dai_dien : `http://127.0.0.1:8000${user.nguoi_dung.anh_dai_dien}`;
+            return (
+                <Button >
+                    <Avatar onClick={() => handleLogin_click(`${pathUser()}`)} alt={user.username}
+                        src={path} />
+                </Button>
+            )
+        }
+    }
+
     let userComponet = <>
         <Button onClick={() => handleLogin_click('/Login')} > <Typography variant="subtitle1" style={{ textTransform: 'none' }}>Đăng nhập</Typography> </Button>
         <Button onClick={() => handleLogin_click('/Register')} > <Typography variant="subtitle1" style={{ textTransform: 'none' }}>Đăng Ký</Typography> </Button>
@@ -60,20 +87,7 @@ export default function ({ classes, open, setOpen, mainRef }) {
     if (user != null) {
         if (user.nguoi_dung.username != null)
             userComponet = <>
-                {check === rolePaths.UNG_VIEN ?
-                    (
-                        <Button onClick={() => handleLogin_click('/ProfileCan')}>
-                            {/* <Avatar onClick={() => handleLogin_click('/ProfileCan')} alt={user.username}
-                                src={user.nguoi_dung.anh_dai_dien.includes('http://127.0.0.1:8000') ? user.nguoi_dung.anh_dai_dien : `http://127.0.0.1:8000${user.nguoi_dung.anh_dai_dien}`} /> */}
-                            {user.nguoi_dung.username}
-                        </Button>
-                    ) : (
-                        <Button onClick={() => handleLogin_click('/HomeRecruiter')}>
-                            {/* <Avatar onClick={() => handleLogin_click('/ProfileCan')} alt={user.username}
-                                src={user.avatar.includes('http://127.0.0.1:8000') ? user.avatar : `http://127.0.0.1:8000${user.avatar}`} /> */}
-                            {user.nguoi_dung.username}
-                        </Button>
-                    )}
+                <AvatarPath />
                 <Button onClick={handleLogout_click}> <Typography variant="subtitle1" style={{ textTransform: 'none' }}>Đăng xuất</Typography> </Button>
             </>
     }

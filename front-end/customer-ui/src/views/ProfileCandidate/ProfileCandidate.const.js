@@ -47,7 +47,7 @@ export const INFO = {
     ngay_sinh: {
         id: 'ngay_sinh',
         label: 'Ngày sinh',
-        xs: 5,
+        xs: 12,
         component: FIELD_COMPONENT.DATE,
     },
     dia_chi: {

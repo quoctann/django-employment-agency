@@ -59,4 +59,14 @@ export const useStyles = makeStyles((theme) => ({
     btn: {
         marginTop: '10px'
     },
+    avatar: {
+        width: '100%',
+        backgroundColor: '#d9e0e6',
+    },
+    media: {
+        height: 280,
+    },
+    alert: {
+        marginTop: '22px'
+    },
 }));

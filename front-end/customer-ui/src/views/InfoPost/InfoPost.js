@@ -111,9 +111,10 @@ export default function InfoPostPage() {
     const hanleNameCompany = () => {
         const _path = RoutePaths.RecruInfo.replace(':id', state.post.nha_tuyen_dung.nguoi_dung.id)
         history.push(_path, {
-            tuyendungId: state.post.nha_tuyen_dung.nguoi_dung.id
+            tuyendungId: state.post.nha_tuyen_dung.nguoi_dung.id,
+            tuyendungAvatar: state.post.nha_tuyen_dung.nguoi_dung.anh_dai_dien ? state.post.nha_tuyen_dung.nguoi_dung.anh_dai_dien : null
         });
-        // console.info(state.post.nha_tuyen_dung.nguoi_dung.id)
+        // console.info(state.post.nha_tuyen_dung.nguoi_dung)
     }
 
     return (

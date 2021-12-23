@@ -83,37 +83,42 @@ export default function Profile() {
                 formData.append(u, userData[u]);
         }
 
-        // if (avatar.current.files[0])
-        //     formData.append("anh_dai_dien", avatar.current.files[0]);
+        if (avatar.current.files[0])
+            formData.append("anh_dai_dien", avatar.current.files[0]);
 
-        for (var key of formData.keys()) {
-            console.log(key, formData.get(key));
-        }
+        // for (var key of formData.keys()) {
+        //     console.log(key, formData.get(key));
+        // }
 
-        const capNhat = await API.put(endpoints["nha-tuyen-dung"], formData, {
-            headers: {
-                "Content-Type": "multipart/form-data",
+        try {
+            const capNhat = await API.put(endpoints["nha-tuyen-dung"], formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                }
+            })
+            if (capNhat.status === 200) {
+                console.log(capNhat.status)
+                cookies.save("user", capNhat.data)
+                alert("Cập nhật thông tin thành công!")
+                window.location.reload()
+            } else if (capNhat.status === 400) {
+                alert("Thông tin không hợp lệ!")
             }
-        })
+        } catch (error) {
+            alert("Đã có lỗi, vui lòng thực hiện lại! \nLưu ý file ảnh không quá lớn")
+        }
 
         // console.info('capNhat', capNhat)
 
-        if (capNhat.status === 200) {
-            console.log(capNhat.status)
-            cookies.save("user", capNhat.data)
-            alert("Cập nhật thông tin thành công!")
-            window.location.reload()
-        } else if (capNhat.status === 400) {
-            alert("Thông tin không hợp lệ!")
-        }
+
     }
 
     const onSubmit = async () => {
-        setLoading(true);
-        setTimeout(() => {
-            capNhatThongTin();
-            setLoading(false);
-        }, 1000);
+        // setLoading(true);
+        // setTimeout(() => {
+        capNhatThongTin();
+        // setLoading(false);
+        // }, 1000);
     }
 
     //  hiểu đơn giản là load trang
@@ -177,7 +182,6 @@ export default function Profile() {
     const locUngVien = async (page = 1) => {
         const res = await API.get(endpoints["ung-vien"](filterData.career, filterData.degree, filterData.experience, filterData.skill))
         setKetQua(res.data)
-        console.log('res.data', ketQua)
     }
 
     const handleSelectChange = (event) => {
@@ -332,6 +336,22 @@ export default function Profile() {
                                         // defaultValue={user.nguoi_dung.so_dien_thoai}
                                         />
                                     </Grid>
+                                    <Grid item xs={7} >
+                                        <input
+                                            accept="image/*"
+                                            className={classes.input}
+                                            id="avatar"
+                                            multiple
+                                            type="file"
+                                            ref={avatar}
+                                        />
+                                        <label htmlFor="avatar">
+                                            <Button variant="contained" color="primary"
+                                                maxWidth component="span">
+                                                Ảnh đại diện
+                                            </Button>
+                                        </label>
+                                    </Grid>
                                     <Grid item xs={INFO.diem_danh_gia_tb.xs}>
                                         <Grid container spacing={1}>
                                             <Grid item xs={8}>
@@ -451,9 +471,6 @@ export default function Profile() {
                                             </Typography>
                                         </CardContent>
                                     </CardActionArea>
-                                    {/* <CardActions>
-                                        <Button onClick={() => handleCandidae(uv)} size="medium" color="primary">Xem hồ sơ</Button>
-                                    </CardActions> */}
                                 </Card>
                             </Grid>
                         )) : (<></>)}

@@ -259,11 +259,13 @@ export default function Register() {
                                     multiple
                                     type="file"
                                     ref={avatar}
+                                    // required
+                                    // name='avatar'
                                 />
                                 <label htmlFor="avatar">
                                     <Button variant="contained" color="primary"
                                         maxWidth component="span">
-                                        Chọn ảnh
+                                        Ảnh đại diện
                                     </Button>
                                 </label>
                             </Grid>

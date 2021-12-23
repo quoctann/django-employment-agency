@@ -12,6 +12,7 @@ import {
     FormControl,
     InputLabel,
     Select,
+    CardMedia,
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import Rating from '@material-ui/lab/Rating';
@@ -22,6 +23,7 @@ import { useHistory, useLocation } from 'react-router';
 import { RoutePaths } from '../../routes/public-route';
 import AppTextField from '../../components/AppTextField';
 import { toInteger } from 'lodash';
+import _ from 'lodash';
 
 export default function RecruInfoPage() {
     const classes = useStyles();
@@ -62,8 +64,12 @@ export default function RecruInfoPage() {
 
     // Lấy bài đánh giá của ứng viên đang đăng nhập ở trang công việc hiện tại
     const [danhGiaCuaUngVien, setDanhGiaCuaUngVien] = useState({});
+    // const getUngVienDanhGia = async () => {
+    //     const res = await API.get(endpoints['ung-vien-danh-gia'](nguoidung.nguoi_dung.id, hiringid,))
+    //     setDanhGiaCuaUngVien(res.data);
+    // };
     const getUngVienDanhGia = async () => {
-        const res = await API.get(endpoints['ung-vien-danh-gia'](nguoidung.nguoi_dung.id, hiringid,))
+        const res = await API.get(endpoints['tuyen-dung-xem-danh-gia'](hiringid));
         setDanhGiaCuaUngVien(res.data);
     };
 
@@ -117,7 +123,7 @@ export default function RecruInfoPage() {
             await getCongViecChapNhan()
         }
         init()
-        console.info(state)
+        console.info(danhGiaCuaUngVien)
     }, []);
 
     const denTrangChiTietViecLam = (post) => {
@@ -132,6 +138,25 @@ export default function RecruInfoPage() {
         label: 'Nội dung',
     }
 
+    const AvatarComponent = () => {
+        // if (await !_.isNil(detail.nguoi_dung.anh_dai_dien)) {
+        //     const path = detail.nguoi_dung.anh_dai_dien.includes('http://127.0.0.1:8000') ? detail.nguoi_dung.anh_dai_dien : `http://127.0.0.1:8000${detail.nguoi_dung.anh_dai_dien}`;
+        if (!_.isNil(state.tuyendungAvatar)) {
+            const path = state.tuyendungAvatar.includes('http://127.0.0.1:8000') ? state.tuyendungAvatar : `http://127.0.0.1:8000${state.tuyendungAvatar}`;
+            return (
+                <Card className={classes.avatar}>
+                    <CardMedia
+                        className={classes.media}
+                        image={path}
+                        title="Ảnh đại diện"
+                    />
+                </Card>
+            )
+        } else {
+            return <></>
+        }
+    }
+
     return (
         <Container maxWidth="lg">
             <Grid container spacing={10} xs={12}>
@@ -143,17 +168,6 @@ export default function RecruInfoPage() {
 
                     <Grid container spacing={10} xs={12}>
                         <Grid item xs={12}>
-                            <Typography variant="h5" className={classes.title2}>Đánh giá của bạn</Typography>
-                            {danhGiaCuaUngVien.length > 0 ? danhGiaCuaUngVien.map((item, index) => (
-                                <Card className={classes.cardRate}>
-                                    <Rating value={item.diem_danh_gia} precision={0.5} readOnly size="large" />
-                                    <Typography variant="body2" className={classes.text}>Đã ứng tuyển cho vị trí: {item.viec_lam.tieu_de}</Typography>
-                                    <Typography variant="body1" className={classes.text}>{item.noi_dung}</Typography>
-                                </Card>
-                            )) : (
-                                <Alert severity="info">Bạn chưa viết bài đánh giá nào</Alert>
-                            )}
-
                             {congViecChapNhan.length > 0 ? (
                                 <>
                                     <Typography variant="h5" className={classes.title2}>Viết bài đánh giá</Typography>
@@ -197,7 +211,19 @@ export default function RecruInfoPage() {
                                     </Card>
                                 </>
                             ) : (
-                                <Alert severity="info">Bạn chưa có công việc nào chấp nhận/được chấp nhận với nhà tuyển dụng này</Alert>
+                                <Alert className={classes.alert} severity="info">Bạn chưa có công việc nào chấp nhận/được chấp nhận với nhà tuyển dụng này</Alert>
+                            )}
+
+                            <Typography variant="h5" className={classes.title2}>Đánh giá từ người dùng</Typography>
+                            {danhGiaCuaUngVien.length > 0 ? danhGiaCuaUngVien.map((item, index) => (
+                                <Card className={classes.cardRate}>
+                                    <Rating value={item.diem_danh_gia} precision={0.5} readOnly size="large" />
+                                    <Typography variant="body2" className={classes.text}>{item.ung_vien.nguoi_dung.first_name} ứng tuyển cho vị trí: {item.viec_lam.tieu_de}</Typography>
+                                    <Divider />
+                                    <Typography variant="body1" className={classes.text}>{item.noi_dung}</Typography>
+                                </Card>
+                            )) : (
+                                <Alert className={classes.alert} severity="info">Chưa có bài đánh giá nào</Alert>
                             )}
                         </Grid>
                     </Grid>
@@ -205,6 +231,7 @@ export default function RecruInfoPage() {
 
                 <Grid item xs={4}>
                     <Box className={classes.boxRight}>
+                        <AvatarComponent />
                         <Typography className={classes.text} variant="body1" >Địa chỉ: {detail.dia_chi}</Typography>
                         <Typography className={classes.text2} variant="body1" >Quy mô: {detail.quy_mo} nhân viên</Typography>
                         <Typography className={classes.text} variant="body1" component='span'>Đánh giá:</Typography>

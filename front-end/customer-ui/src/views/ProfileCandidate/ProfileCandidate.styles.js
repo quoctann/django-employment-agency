@@ -37,6 +37,10 @@ export const useStyles = makeStyles((theme) => ({
     width: '100%',
     marginBottom: '5px'
   },
+  linkCV: {
+    fontSize: '22px',
+    marginLeft: '15px',
+  },
 }));
 
 
