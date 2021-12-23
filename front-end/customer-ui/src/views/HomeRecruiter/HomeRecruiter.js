@@ -195,14 +195,19 @@ export default function Profile() {
         const _path = RoutePaths.CanInfo.replace(':id', uv.nguoi_dung.first_name)
         history.push(_path, {
             ungvien: uv,
-            nguoidungId: userData.nguoi_dung.id
+            nguoidungId: userData.nguoi_dung.id,
+            trang_thai_nha_tuyen_dung: userData.doi_xet_duyet,
         });
     }
 
     const taoBaiViet = () => {
-        history.push(RoutePaths.NewPost, {
-            nguoidungId: userData.nguoi_dung.id,
-        })
+        if (userData.doi_xet_duyet) {
+            alert("Tài khoản của bạn đang đợi xét duyệt, vui lòng chờ!")
+        } else {
+            history.push(RoutePaths.NewPost, {
+                nguoidungId: userData.nguoi_dung.id,
+            })
+        }
     }
 
     // Thông tin các ứng viên đang đợi duyệt nhận đơn ứng tuyển (lưu trữ)

@@ -40,11 +40,14 @@ export const useStyles = makeStyles((theme) => ({
     },
     card: {
         width: '100%',
-        marginBottom: '5px'
+        marginBottom: '5px',
+        backgroundColor: '#e0f7d1'
     },
     cardRate: {
         width: '100%',
-        padding: '15px'
+        padding: '15px',
+        marginBottom: '15px',
+        backgroundColor: '#e5f5c6'
     },
     rate: {
         padding: '15px'

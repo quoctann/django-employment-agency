@@ -316,7 +316,6 @@ export default function Profile() {
                                             : 'Cập nhập'
                                             }</Button>
                                     </Grid>
-
                                 </Grid>
                             </Grid>
 
@@ -415,6 +414,7 @@ export default function Profile() {
                     </form>
                 </Grid>
 
+                {/* gợi ý việc làm */}
                 <Grid item xs={4}>
                     <Typography variant="h4" className={classes.titleInfo2}>Gợi ý công việc</Typography>
                     {suggestion.length > 0 ? suggestion.map((item, index) => (
@@ -434,13 +434,13 @@ export default function Profile() {
                     )) : <Alert variant="secondary">Không có gợi ý phù hợp</Alert>}
                 </Grid>
 
-                {/* gợi ý việc làm */}
+                {/* gợi ý việc làm đề xuất */}
                 <Grid item xs={8}>
                     <Typography variant="h4" className={classes.titleInfo}>Việc làm đề xuất</Typography>
                     {offer.length > 0 ? offer.map((item, index) => (
                         <>
                             <Grid item xs={12}>
-                                <Card className={classes.card} onClick={() => denTrangChiTietViecLam(item.viec_lam.id)}>
+                                <Card className={classes.card} onClick={() => denTrangChiTietViecLam(item.viec_lam)}>
                                     <CardActionArea>
                                         <CardContent>
                                             <Typography gutterBottom variant="h5" component="h2">{item.viec_lam.tieu_de}</Typography>

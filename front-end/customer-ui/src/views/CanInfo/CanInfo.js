@@ -56,7 +56,9 @@ export default function CanInfoPage() {
 
     // Gọi khi nút chấp nhận hồ sơ hoặc gửi đề nghị việc làm được nhấn, ghi dữ liệu vào bảng ứng tuyển
     const ungTuyen = async (trangThaiHoSo = TRANG_THAI_UNG_TUYEN.DUOC_CHAP_NHAN, viecLamId = vieclamId, ungVienNopDon = true) => {
-        try {
+        if (state.trang_thai_nha_tuyen_dung) {
+            alert("Tài khoản của bạn đang đợi xét duyệt, \nHiện chưa đủ điều kiện để thực hiện chức năng này!")
+        } else {
             // Nếu như nhà tuyển dụng đang xem từ bộ lọc (không phải từ thông báo)
             if (viecLamId === 0) {
                 viecLamId = selectGuiViecLam;
@@ -64,28 +66,34 @@ export default function CanInfoPage() {
                 ungVienNopDon = false;
             }
 
-            // Tiến hàng gọi server ghi dữ liệu
-            const create = await API.post(endpoints["ung-tuyen"], {
-                viec_lam: viecLamId,
-                ung_vien: state.ungvien.nguoi_dung.id,
-                trang_thai_ho_so: trangThaiHoSo,
-                ung_vien_nop_don: ungVienNopDon,
-                nguoi_yeu_cau: VAI_TRO.TUYEN_DUNG
-            })
+            try {
+                // Tiến hàng gọi server ghi dữ liệu
+                const create = await API.post(endpoints["ung-tuyen"], {
+                    viec_lam: viecLamId,
+                    ung_vien: state.ungvien.nguoi_dung.id,
+                    trang_thai_ho_so: trangThaiHoSo,
+                    ung_vien_nop_don: ungVienNopDon,
+                    nguoi_yeu_cau: VAI_TRO.TUYEN_DUNG
+                })
 
-            // Nếu cập nhật bản ghi dưới csdl thành công
-            if (create.status === 200) {
-                alert("Cập nhật trạng thái thành công!");
-                history.push(RoutePaths.HomeRecruiter)
-            } else if (create.status === 201) {
-                alert("Gửi đề nghị việc làm thành công!")
-            } else if (create.status === 409)
-                alert("Ứng viên đã ứng tuyển công việc này rồi, xem thông báo để cập nhật hồ sơ")
+                // Nếu cập nhật bản ghi dưới csdl thành công
+                if (create.status === 200) {
+                    alert("Cập nhật trạng thái thành công!");
+                    history.push(RoutePaths.HomeRecruiter)
+                } else if (create.status === 201) {
+                    alert("Gửi đề nghị việc làm thành công!")
+                } else if (create.status === 409) {
+                    alert("Ứng viên đã ứng tuyển công việc này rồi, xem thông báo để cập nhật hồ sơ")
+                } else if (create.status === 500) {
+                    alert("Bạn chưa chọn công việc đề xuất")
+                }
 
-        } catch (ex) {
-            // console.log(ex.response.status)
-            if (ex.response.status === 409)
-                alert("Ứng viên đã ứng tuyển công việc này rồi, xem thông báo để cập nhật hồ sơ")
+                console.info(create.status)
+
+            } catch (ex) {
+                alert("Bạn chưa chọn công việc đề xuất")
+                // alert("Ứng viên đã ứng tuyển công việc này rồi, xem thông báo để cập nhật hồ sơ")
+            }
         }
     }
 
@@ -95,7 +103,6 @@ export default function CanInfoPage() {
             await getViecLam()
         }
         init()
-        console.info('state', state)
     }, [])
 
     // Render icon ngành nghề này kia gọn hơn

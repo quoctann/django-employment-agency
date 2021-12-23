@@ -35,7 +35,8 @@ export const useStyles = makeStyles((theme) => ({
   card: {
     marginLeft: '13px',
     width: '100%',
-    marginBottom: '5px'
+    marginBottom: '5px',
+    backgroundColor: '#e0f7d1'
   },
   linkCV: {
     fontSize: '22px',

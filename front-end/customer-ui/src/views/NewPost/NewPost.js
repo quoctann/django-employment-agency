@@ -55,8 +55,9 @@ export default function Profile() {
             const tagnganh_nghe = res.data.nganh_nghe.map(item => ({ value: item.id, label: item.ten }))
             const tagphuc_loi = res.data.phuc_loi.map(item => ({ value: item.id, label: item.ten }))
             const tagbang_cap = res.data.bang_cap.map(item => ({ value: item.id, label: item.ten }))
-            console.info('ret id', res)
+            // console.info('ret id', res)
             setTinTuyenDung({
+                id: res.data.id,
                 tieu_de: res.data.tieu_de,
                 luong: res.data.luong,
                 noi_dung: res.data.noi_dung,
@@ -67,7 +68,7 @@ export default function Profile() {
                 nganh_nghe: tagnganh_nghe,
                 phuc_loi: tagphuc_loi,
             })
-
+            setNgayHetHan(res.data.ngay_het_han)
         }
     }
 
@@ -91,23 +92,33 @@ export default function Profile() {
     }
 
     const capNhapBaiViet = async () => {
-        // const dataForm = {
-        //     ...tinTuyenDung,
-        //     bang_cap: tinTuyenDung.bang_cap.map(item => ({ id: item.value, ten: item.label })),
-        //     ky_nang: tinTuyenDung.ky_nang.map(item => ({ id: item.value, ten: item.label })),
-        //     kinh_nghiem: tinTuyenDung.kinh_nghiem.map(item => ({ id: item.value, ten: item.label })),
-        //     nganh_nghe: tinTuyenDung.nganh_nghe.map(item => ({ id: item.value, ten: item.label })),
-        //     phuc_loi: tinTuyenDung.phuc_loi.map(item => ({ id: item.value, ten: item.label })),
-        // }
+        const dataForm = {
+            ...tinTuyenDung,
+            // bang_cap: tinTuyenDung.bang_cap.map(item => ({ id: item.value, ten: item.label })),
+            // ky_nang: tinTuyenDung.ky_nang.map(item => ({ id: item.value, ten: item.label })),
+            // kinh_nghiem: tinTuyenDung.kinh_nghiem.map(item => ({ id: item.value, ten: item.label })),
+            // nganh_nghe: tinTuyenDung.nganh_nghe.map(item => ({ id: item.value, ten: item.label })),
+            // phuc_loi: tinTuyenDung.phuc_loi.map(item => ({ id: item.value, ten: item.label })),
 
-        // const res = await API.patch(endpoints["viec-lam-chi-tiet"](state.baivietId), tinTuyenDung)
-        // if (res.data === 201) {
-        //     alert("Cập nhập thành công!")
-        //     history.push(RoutePaths.HomeRecruiter);
-        // } else if (res.data === 400) {
-        //     alert("Hệ thống đang lỗi vui lòng thử lại sau!")
-        // }
-        alert("Đang xây dựng api!")
+            bang_cap: tinTuyenDung.bang_cap,
+            ky_nang: tinTuyenDung.ky_nang,
+            kinh_nghiem: tinTuyenDung.kinh_nghiem,
+            nganh_nghe: tinTuyenDung.nganh_nghe,
+            phuc_loi: tinTuyenDung.phuc_loi,
+        }
+
+        try {
+            const res = await API.put(endpoints["viec-lam"], dataForm)
+            // console.info(res)
+            if (res.status === 200) {
+                alert("Cập nhập thành công!")
+                history.push(RoutePaths.HomeRecruiter);
+            } else if (res.status === 400) {
+                alert("Hệ thống đang lỗi vui lòng thử lại sau!")
+            }
+        } catch (error) {
+            alert("Hệ thống đang lỗi vui lòng thử lại sau!")
+        }
     }
 
     const onSubmit2 = async () => {

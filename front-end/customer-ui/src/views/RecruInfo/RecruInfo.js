@@ -123,7 +123,7 @@ export default function RecruInfoPage() {
             await getCongViecChapNhan()
         }
         init()
-        console.info(danhGiaCuaUngVien)
+        console.info(detail)
     }, []);
 
     const denTrangChiTietViecLam = (post) => {
@@ -235,7 +235,7 @@ export default function RecruInfoPage() {
                         <Typography className={classes.text} variant="body1" >Địa chỉ: {detail.dia_chi}</Typography>
                         <Typography className={classes.text2} variant="body1" >Quy mô: {detail.quy_mo} nhân viên</Typography>
                         <Typography className={classes.text} variant="body1" component='span'>Đánh giá:</Typography>
-                        <Rating value={toInteger(detail.diem_danh_gia_tb)} precision={0.5} readOnly size="large" />
+                        <Rating value={parseFloat(detail.diem_danh_gia_tb)} precision={0.5} readOnly size="large" />
                     </Box>
 
                     <Box className={classes.boxRight}>

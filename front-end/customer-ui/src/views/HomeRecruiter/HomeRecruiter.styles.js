@@ -18,6 +18,7 @@ export const useStyles = makeStyles((theme) => ({
   card: {
     // marginLeft: '8px',
     width: '100%',
+    backgroundColor: '#e0f7d1'
   },
   root: {
     '& > *': {
@@ -42,7 +43,9 @@ export const useStyles = makeStyles((theme) => ({
   },
   cardRate: {
     width: '100%',
-    padding: '15px'
+    padding: '15px',
+    marginBottom: '7px',
+    backgroundColor: '#e5f5c6'
   },
   text: {
     marginTop: '10px'
