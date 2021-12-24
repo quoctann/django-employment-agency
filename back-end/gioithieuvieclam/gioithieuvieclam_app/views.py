@@ -115,7 +115,7 @@ class BangCapViewSet(viewsets.ViewSet, generics.ListAPIView):
 
 
 class ViecLamPagination(PageNumberPagination):
-    page_size = 6
+    page_size = 2
 
 
 class ViecLamViewSet(viewsets.ViewSet, generics.ListAPIView, generics.UpdateAPIView):
@@ -289,7 +289,6 @@ class ViecLamViewSet(viewsets.ViewSet, generics.ListAPIView, generics.UpdateAPIV
 
 class NhaTuyenPagination(PageNumberPagination):
     page_size = 2
-
 
 class NhaTuyenDungViewSet(viewsets.ViewSet, generics.ListAPIView,
                           generics.RetrieveAPIView, generics.UpdateAPIView):

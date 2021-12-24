@@ -6,7 +6,7 @@
 *.log
 *.pot
 *.pyc
-__pycache__/
+**/__pycache__/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
@@ -160,6 +160,11 @@ cython_debug/
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+
+# For this project
+.idea/employment-agency.iml
+.idea/misc.xml
+
 
 # AWS User-specific
 .idea/**/aws.xml

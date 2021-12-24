@@ -23,10 +23,12 @@ export const useStyles = makeStyles((theme) => ({
     card: {
         // padding: '15px',
         width: '100%',
+        height: '250px',
+        backgroundColor: '#f5f5df'
     },
     pagination: {
         float: 'right',
-        marginTop: '9px',
+        margin: 'auto',
     },
     text: {
         marginTop: '10px'

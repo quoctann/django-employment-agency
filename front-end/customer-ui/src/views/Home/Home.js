@@ -26,6 +26,7 @@ import cookies from 'react-cookies';
 import AppSelectSingle from '../../components/AppSelectSingle';
 import { TAG } from '../HomeRecruiter/HomeRecruiter.const';
 import { RoutePaths } from '../../routes/public-route';
+import _ from 'lodash';
 
 export default function HomePage() {
     const classes = useStyles();
@@ -103,13 +104,16 @@ export default function HomePage() {
     const handleFilter = async (page = 1) => {
         const res = await API.get(endpoints["viec-lam-loc"](
             filterData.career, filterData.degree, filterData.experience, filterData.skill) + `&page=${page}`);
-        console.log(res.data)
+        // console.log(res.data)
         setFilterResult({ ...filterResult, ...res.data });
         setIsFirstLoad(false);
+        setCountF(res.data.count)
     }
 
     useEffect(() => {
         getFilterCategory();
+        fetchJobs();
+        // console.info(_.isUndefined((filterResult.count)))
     }, []);
 
     const currency = (number) => {
@@ -130,6 +134,29 @@ export default function HomePage() {
             tuyendungId: recruId
         });
     }
+
+    const [jobs, setJobs] = useState([]);
+    const [countJ, setCountJ] = useState(0)
+    const fetchJobs = async (value) => {
+        const _path = endpoints["viec-lam"] + (value ? `?page=${value}` : `?page=1`)
+        API.get(_path).then(res => {
+            setJobs(res.data.results)
+            setCountJ(res.data.count)
+        })
+    }
+
+    const [pageJ, setPageJ] = useState(1);
+    // chuyển trang
+    const handleChangePageJ = (event, value) => {
+        setPageJ(value);
+        fetchJobs(value);
+    };
+
+    const [countF, setCountF] = useState(0)
+    const handleChangePageFilter = (event, value) => {
+        setPageJ(value);
+        handleFilter(value);
+    };
 
     return (
         <Container maxWidth='lg' >
@@ -262,8 +289,49 @@ export default function HomePage() {
                             ))
                         )
                     }
+
+                    {filterResult.count > 0 ? (
+                        <Grid item xs={12} >
+                            <Pagination count={Math.ceil(countF / 2)} page={pageJ} onChange={handleChangePageFilter} className={classes.pagination} size='large' />
+                        </Grid>
+                    ) : (
+                        <></>
+                    )}
                 </Grid>
             </Box>
+
+            {_.isUndefined(filterResult.count) ? (
+                <Box className={classes.block}>
+                    <Typography variant="h4" className={classes.titleInfo}>Danh sách việc làm</Typography>
+                    <Grid container spacing={4} xs={12}>
+                        {jobs.map((post, index) => {
+                            return (
+                                <Grid item xs={6}>
+                                    <Card className={classes.card} onClick={() => denTrangChiTietViecLam(post)}>
+                                        <CardActionArea>
+                                            <CardContent>
+                                                <Typography variant="h6" className={classes.text2}>{post.tieu_de}</Typography>
+                                                <Divider />
+                                                <Typography variant="body1" className={classes.text}>{post.nha_tuyen_dung.ten_cong_ty}</Typography>
+                                                <Typography variant="body1" className={classes.text}>Mức lương{" "}
+                                                    {post.luong === 0 ? "Thương lượng" : currency(post.luong)}
+                                                </Typography>
+                                                <Divider />
+                                                <Typography variant="body1" className={classes.text}>{post.noi_dung.substr(0, 150)}...</Typography>
+                                            </CardContent>
+                                        </CardActionArea>
+                                    </Card>
+                                </Grid>
+                            )
+                        })}
+                        <Grid item xs={12} >
+                            <Pagination count={Math.ceil(countJ / 2)} page={pageJ} onChange={handleChangePageJ} className={classes.pagination} size='large' />
+                        </Grid>
+                    </Grid>
+                </Box>
+            ) : (
+                <></>
+            )}
         </Container>
     );
 }
