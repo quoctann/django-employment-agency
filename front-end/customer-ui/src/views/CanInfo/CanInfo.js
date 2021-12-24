@@ -12,6 +12,7 @@ import {
     Divider,
     CardMedia,
     Card,
+    TextField,
 } from '@material-ui/core';
 import API, { endpoints } from '../../helpers/API';
 import { useStyles } from './CanInfo.styles';
@@ -156,8 +157,15 @@ export default function CanInfoPage() {
                             <Typography className={classes.text} variant="body1" >Email: {state.ungvien.nguoi_dung.email}</Typography>
                             <CVComponent />
                             {/* <Typography className={classes.text} variant="body1" >CV: <Link href={state.ungvien.cv}>xem file</Link></Typography> */}
-                            <Typography className={classes.text} variant="body1" >Giới thiệu: {state.ungvien.gioi_thieu}</Typography>
-
+                            {/* <Typography className={classes.text} variant="body1" >Giới thiệu: {state.ungvien.gioi_thieu}</Typography> */}
+                            <TextField
+                                // variant="outlined"
+                                fullWidth
+                                // label='Giới thiệu'
+                                multiline
+                                rows={17}
+                                value={state.ungvien.gioi_thieu}
+                            />
                         </Grid>
                         <Grid item xs={6}>
                             <Divider />

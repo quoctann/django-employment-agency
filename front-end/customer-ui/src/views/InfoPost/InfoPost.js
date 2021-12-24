@@ -7,6 +7,7 @@ import {
     Container,
     Chip,
     Divider,
+    TextField,
 } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
 import API, { endpoints } from '../../helpers/API';
@@ -123,8 +124,17 @@ export default function InfoPostPage() {
                 <Grid item xs={8}>
                     <Typography variant="h3" className={classes.title}>{state.post.tieu_de}</Typography>
                     <Typography className={classes.text} variant="h6" >Lương: {state.post.luong === 0 ? 'Thỏa thuận' : currency(state.post.luong)}</Typography>
-                    <Typography className={classes.text} variant="body1" >{state.post.noi_dung}</Typography>
-                    <Grid container spacing={2} xs={12}>
+                    {/* <Typography className={classes.text} variant="body1" >{state.post.noi_dung}</Typography> */}
+                    <TextField
+                        // variant="outlined"
+                        fullWidth
+                        // label='Giới thiệu'
+                        readOnly
+                        multiline
+                        rows={25}
+                        value={state.post.noi_dung}
+                    />
+                    <Grid container spacing={0} xs={12}>
                         {/* <Grid item xs={4}>
                             <Button onClick={() => back()}
                                 fullWidth

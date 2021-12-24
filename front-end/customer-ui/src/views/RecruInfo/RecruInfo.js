@@ -13,6 +13,7 @@ import {
     InputLabel,
     Select,
     CardMedia,
+    TextField,
 } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import Rating from '@material-ui/lab/Rating';
@@ -163,8 +164,16 @@ export default function RecruInfoPage() {
                 <Grid item xs={8}>
                     <Typography variant="h3" className={classes.title}>{detail.ten_cong_ty}</Typography>
                     <Divider />
-                    <Typography className={classes.content} variant="body1" >{detail.gioi_thieu}</Typography>
-                    <Divider />
+                    {/* <Typography className={classes.content} variant="body1" >{detail.gioi_thieu}</Typography>
+                    <Divider /> */}
+                    <TextField
+                        // variant="outlined"
+                        fullWidth
+                        className={classes.content}
+                        multiline
+                        rows={17}
+                        value={detail.gioi_thieu}
+                    />
 
                     <Grid container spacing={10} xs={12}>
                         <Grid item xs={12}>
