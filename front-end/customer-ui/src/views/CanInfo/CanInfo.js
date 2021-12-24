@@ -20,6 +20,7 @@ import cookies from 'react-cookies';
 import { useHistory, useLocation } from 'react-router';
 import { RoutePaths } from '../../routes/public-route';
 import _ from 'lodash'
+import { Redirect } from 'react-router-dom';
 
 const CONG_VIEC = {
     id: 'job',
@@ -42,13 +43,27 @@ export default function CanInfoPage() {
     const history = useHistory();
 
     const { state } = useLocation();
-    const vieclamId = state.vieclamId ? state.vieclamId : 0;
-    const tenViecLam = state.tenViecLam;
+
+
+    let vieclamId = 0;
+    let tenViecLam = '';
+    let nguoidungId = 0;
+    if (_.isUndefined(state)) {
+        vieclamId = 0;
+        tenViecLam = '';
+        nguoidungId = 0;
+    } else {
+        vieclamId = state.vieclamId;
+        tenViecLam = state.tenViecLam;
+        nguoidungId = state.nguoidungId;
+    }
+    // const vieclamId = state.vieclamId ? state.vieclamId : 0;
+    // const tenViecLam = state.tenViecLam;
 
     // Lấy thông tin việc làm của nhà tuyển dụng hiện tại (gửi yêu cầu công việc cho ứng viên)
     const [danhSachViecLam, setDanhSachViecLam] = useState([])
     const getViecLam = async () => {
-        const res = await API.get(endpoints["nha-tuyen-dung-viec-lam"](state.nguoidungId))
+        const res = await API.get(endpoints["nha-tuyen-dung-viec-lam"](nguoidungId))
         setDanhSachViecLam(res.data)
     }
 
@@ -134,113 +149,116 @@ export default function CanInfoPage() {
         }
     }
 
-    return (
-        <Container maxWidth="lg">
-            <Grid container spacing={2} xs={12}>
-                <Grid item xs={8}>
-                    <Typography variant="h3" className={classes.title}>Thông tin ứng viên {state.ungvien.nguoi_dung.first_name}</Typography>
-                    <Grid container spacing={4} xs={12}>
-                        {/* thông tin người dùng */}
-                        <Grid item xs={4}>
-                            <Card className={classes.avatar}>
-                                <CardMedia
-                                    className={classes.media}
-                                    image={state.ungvien.nguoi_dung.anh_dai_dien}
-                                    title="Ảnh đại diện"
-                                />
-                            </Card>
-                        </Grid>
+    if (_.isUndefined(state)) {
+        return <Redirect to='/' />
+    } else
+        return (
+            <Container maxWidth="lg">
+                <Grid container spacing={2} xs={12}>
+                    <Grid item xs={8}>
+                        <Typography variant="h3" className={classes.title}>Thông tin ứng viên {state.ungvien.nguoi_dung.first_name}</Typography>
+                        <Grid container spacing={4} xs={12}>
+                            {/* thông tin người dùng */}
+                            <Grid item xs={4}>
+                                <Card className={classes.avatar}>
+                                    <CardMedia
+                                        className={classes.media}
+                                        image={state.ungvien.nguoi_dung.anh_dai_dien}
+                                        title="Ảnh đại diện"
+                                    />
+                                </Card>
+                            </Grid>
 
-                        <Grid item xs={8}>
-                            <Typography className={classes.text} variant="body1" >Tên ứng viên: {state.ungvien.nguoi_dung.last_name} {state.ungvien.nguoi_dung.first_name}</Typography>
-                            <Typography className={classes.text} variant="body1" >Ngày sinh: {state.ungvien.nguoi_dung.last_name}</Typography>
-                            <Typography className={classes.text} variant="body1" >Email: {state.ungvien.nguoi_dung.email}</Typography>
-                            <CVComponent />
-                            {/* <Typography className={classes.text} variant="body1" >CV: <Link href={state.ungvien.cv}>xem file</Link></Typography> */}
-                            {/* <Typography className={classes.text} variant="body1" >Giới thiệu: {state.ungvien.gioi_thieu}</Typography> */}
-                            <TextField
-                                // variant="outlined"
-                                fullWidth
-                                // label='Giới thiệu'
-                                multiline
-                                rows={17}
-                                value={state.ungvien.gioi_thieu}
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Divider />
-                            {infoDetail({ title: 'Bằng cấp', arr: state.ungvien.bang_cap })}
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Divider />
-                            {infoDetail({ title: 'Ngành nghề', arr: state.ungvien.nganh_nghe })}
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Divider />
-                            {infoDetail({ title: 'Kinh nghiệm', arr: state.ungvien.kinh_nghiem })}
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Divider />
-                            {infoDetail({ title: 'Kỹ năng', arr: state.ungvien.ky_nang })}
+                            <Grid item xs={8}>
+                                <Typography className={classes.text} variant="body1" >Tên ứng viên: {state.ungvien.nguoi_dung.last_name} {state.ungvien.nguoi_dung.first_name}</Typography>
+                                <Typography className={classes.text} variant="body1" >Ngày sinh: {state.ungvien.nguoi_dung.last_name}</Typography>
+                                <Typography className={classes.text} variant="body1" >Email: {state.ungvien.nguoi_dung.email}</Typography>
+                                <CVComponent />
+                                {/* <Typography className={classes.text} variant="body1" >CV: <Link href={state.ungvien.cv}>xem file</Link></Typography> */}
+                                {/* <Typography className={classes.text} variant="body1" >Giới thiệu: {state.ungvien.gioi_thieu}</Typography> */}
+                                <TextField
+                                    // variant="outlined"
+                                    fullWidth
+                                    // label='Giới thiệu'
+                                    multiline
+                                    rows={17}
+                                    value={state.ungvien.gioi_thieu}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Divider />
+                                {infoDetail({ title: 'Bằng cấp', arr: state.ungvien.bang_cap })}
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Divider />
+                                {infoDetail({ title: 'Ngành nghề', arr: state.ungvien.nganh_nghe })}
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Divider />
+                                {infoDetail({ title: 'Kinh nghiệm', arr: state.ungvien.kinh_nghiem })}
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Divider />
+                                {infoDetail({ title: 'Kỹ năng', arr: state.ungvien.ky_nang })}
+                            </Grid>
                         </Grid>
                     </Grid>
-                </Grid>
 
-                <Grid item xs={4}>
-                    <Typography variant="h5" className={classes.tool}>Bảng điều khiển</Typography>
-                    {vieclamId === 0 ? (
-                        <>
-                            <Typography className={classes.toolText} variant="body1" >Gửi đề nghị công việc cho ứng viên này</Typography>
-                            <div>
-                                <FormControl variant="outlined" className={classes.formControl}>
-                                    <InputLabel htmlFor={`outlined-job-native-simple`}>Công việc</InputLabel>
-                                    <Select
-                                        native
-                                        onChange={(event) => setSelectGuiViecLam(event.target.value)}
-                                        label='Công việc'
-                                        inputProps={{
-                                            name: 'job',
-                                            id: `outlined-job-native-simple`,
-                                        }}
-                                    >
-                                        <option aria-label="None" value="" />
-                                        {danhSachViecLam.map((t, idx) => {
-                                            return (
-                                                <option key={idx + t.id} value={t.id}>{t.tieu_de}</option>
-                                            );
-                                        })}
-                                    </Select>
-                                </FormControl>
-                            </div>
-                            <Button
-                                fullWidth
-                                className={classes.submit}
-                                color='primary'
-                                variant="contained"
-                                onClick={() => ungTuyen()}
-                            >Gửi đề nghị việc làm</Button>
-                        </>
-                    ) : (
-                        <>
-                            <Typography className={classes.toolText} variant="h6">Ứng viên đã ứng tuyển: {tenViecLam}</Typography>
-                            <Button
-                                fullWidth
-                                className={classes.submit}
-                                color='primary'
-                                variant="contained"
-                                onClick={() => ungTuyen()}
-                            >Chấp nhận hồ sơ</Button>
-                            <Button
-                                fullWidth
-                                className={classes.submit}
-                                color='primary'
-                                variant="contained"
-                                onClick={() => ungTuyen(TRANG_THAI_UNG_TUYEN.BI_TU_CHOI)}
-                            >Từ chối hồ sơ</Button>
-                        </>
-                    )}
+                    <Grid item xs={4}>
+                        <Typography variant="h5" className={classes.tool}>Bảng điều khiển</Typography>
+                        {vieclamId === 0 ? (
+                            <>
+                                <Typography className={classes.toolText} variant="body1" >Gửi đề nghị công việc cho ứng viên này</Typography>
+                                <div>
+                                    <FormControl variant="outlined" className={classes.formControl}>
+                                        <InputLabel htmlFor={`outlined-job-native-simple`}>Công việc</InputLabel>
+                                        <Select
+                                            native
+                                            onChange={(event) => setSelectGuiViecLam(event.target.value)}
+                                            label='Công việc'
+                                            inputProps={{
+                                                name: 'job',
+                                                id: `outlined-job-native-simple`,
+                                            }}
+                                        >
+                                            <option aria-label="None" value="" />
+                                            {danhSachViecLam.map((t, idx) => {
+                                                return (
+                                                    <option key={idx + t.id} value={t.id}>{t.tieu_de}</option>
+                                                );
+                                            })}
+                                        </Select>
+                                    </FormControl>
+                                </div>
+                                <Button
+                                    fullWidth
+                                    className={classes.submit}
+                                    color='primary'
+                                    variant="contained"
+                                    onClick={() => ungTuyen()}
+                                >Gửi đề nghị việc làm</Button>
+                            </>
+                        ) : (
+                            <>
+                                <Typography className={classes.toolText} variant="h6">Ứng viên đã ứng tuyển: {tenViecLam}</Typography>
+                                <Button
+                                    fullWidth
+                                    className={classes.submit}
+                                    color='primary'
+                                    variant="contained"
+                                    onClick={() => ungTuyen()}
+                                >Chấp nhận hồ sơ</Button>
+                                <Button
+                                    fullWidth
+                                    className={classes.submit}
+                                    color='primary'
+                                    variant="contained"
+                                    onClick={() => ungTuyen(TRANG_THAI_UNG_TUYEN.BI_TU_CHOI)}
+                                >Từ chối hồ sơ</Button>
+                            </>
+                        )}
+                    </Grid>
                 </Grid>
-            </Grid>
-        </Container>
-    )
+            </Container>
+        )
 }

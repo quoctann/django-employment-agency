@@ -173,10 +173,10 @@ export default function Profile() {
     };
 
     const [filterData, setFilterData] = useState({
-        "career": "",
-        "degree": "",
-        "experience": "",
-        "skill": "",
+        "career": "1",
+        "degree": "1",
+        "experience": "1",
+        "skill": "1",
     })
 
     const locUngVien = async (page = 1) => {
@@ -478,7 +478,7 @@ export default function Profile() {
                                     </CardActionArea>
                                 </Card>
                             </Grid>
-                        )) : (<></>)}
+                        )) : (<><Typography gutterBottom variant="body1">Không thấy kết quả tìm kiếm</Typography></>)}
                     </Grid>
                 </Grid>
 

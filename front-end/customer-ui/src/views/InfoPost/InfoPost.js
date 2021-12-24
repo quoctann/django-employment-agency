@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Grid,
     Typography,
@@ -16,6 +16,8 @@ import cookies from 'react-cookies';
 import { useHistory, useLocation } from 'react-router';
 import { RoutePaths } from '../../routes/public-route';
 import moment from "moment";
+import { Redirect } from 'react-router-dom';
+import _ from 'lodash';
 
 const CONG_VIEC = {
     id: 'job',
@@ -118,24 +120,31 @@ export default function InfoPostPage() {
         // console.info(state.post.nha_tuyen_dung.nguoi_dung)
     }
 
-    return (
-        <Container maxWidth="lg">
-            <Grid container spacing={10} xs={12}>
-                <Grid item xs={8}>
-                    <Typography variant="h3" className={classes.title}>{state.post.tieu_de}</Typography>
-                    <Typography className={classes.text} variant="h6" >Lương: {state.post.luong === 0 ? 'Thỏa thuận' : currency(state.post.luong)}</Typography>
-                    {/* <Typography className={classes.text} variant="body1" >{state.post.noi_dung}</Typography> */}
-                    <TextField
-                        // variant="outlined"
-                        fullWidth
-                        // label='Giới thiệu'
-                        readOnly
-                        multiline
-                        rows={25}
-                        value={state.post.noi_dung}
-                    />
-                    <Grid container spacing={0} xs={12}>
-                        {/* <Grid item xs={4}>
+    // useEffect(() => {
+    //     console.info(_.isUndefined(state))
+    // }, []);
+
+    if (_.isUndefined(state)) {
+        return <Redirect to='/' />
+    } else
+        return (
+            <Container maxWidth="lg">
+                <Grid container spacing={10} xs={12}>
+                    <Grid item xs={8}>
+                        <Typography variant="h3" className={classes.title}>{state.post.tieu_de}</Typography>
+                        <Typography className={classes.text} variant="h6" >Lương: {state.post.luong === 0 ? 'Thỏa thuận' : currency(state.post.luong)}</Typography>
+                        {/* <Typography className={classes.text} variant="body1" >{state.post.noi_dung}</Typography> */}
+                        <TextField
+                            // variant="outlined"
+                            fullWidth
+                            // label='Giới thiệu'
+                            readOnly
+                            multiline
+                            rows={25}
+                            value={state.post.noi_dung}
+                        />
+                        <Grid container spacing={0} xs={12}>
+                            {/* <Grid item xs={4}>
                             <Button onClick={() => back()}
                                 fullWidth
                                 className={classes.submit}
@@ -144,55 +153,55 @@ export default function InfoPostPage() {
                                 Quay về
                             </Button>
                         </Grid> */}
-                        <Grid item xs={12}>
-                            <Button onClick={() => applyOffer()}
-                                fullWidth
-                                className={classes.submit}
-                                color='primary'
-                                variant="contained">
-                                Nộp đơn ứng tuyển
-                            </Button>
+                            <Grid item xs={12}>
+                                <Button onClick={() => applyOffer()}
+                                    fullWidth
+                                    className={classes.submit}
+                                    color='primary'
+                                    variant="contained">
+                                    Nộp đơn ứng tuyển
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Grid>
-                </Grid>
 
-                <Grid item xs={4}>
-                    <Typography className={classes.text} variant="body1" > Đăng ngày: {moment(state.post.ngay_tao).format("DD-MM-YYYY").toString()}</Typography>
-                    {user.nguoi_dung ? (
-                    <Typography className={classes.text} variant="h5" onClick={() => hanleNameCompany()}><Link>{state.post.nha_tuyen_dung.ten_cong_ty}</Link></Typography>
-                    ): (
-                        <Typography className={classes.text} variant="h5">{state.post.nha_tuyen_dung.ten_cong_ty}</Typography>
-                    )}
-                    <Typography className={classes.text} variant="body1" >Email: {state.post.nha_tuyen_dung.nguoi_dung.email}</Typography>
-                    <Typography className={classes.text} variant="body1" >Số điện thoại: {state.post.nha_tuyen_dung.nguoi_dung.so_dien_thoai}</Typography>
-                    <Typography className={classes.text} variant="body1" >Địa chỉ: {state.post.nha_tuyen_dung.dia_chi}</Typography>
-                    <Typography className={classes.text} variant="body1" >Đánh giá: {'   '}
-                        <Rating value={state.post.nha_tuyen_dung.diem_danh_gia_tb} precision={0.5} readOnly size="large" />
-                    </Typography>
-                    <Grid container spacing={4} xs={12}>
-                        <Grid item xs={12}>
-                            <Divider />
-                            {infoDetail({ title: 'Bằng cấp', arr: state.post.bang_cap })}
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Divider />
-                            {infoDetail({ title: 'Ngành nghề', arr: state.post.nganh_nghe })}
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Divider />
-                            {infoDetail({ title: 'Kinh nghiệm', arr: state.post.kinh_nghiem })}
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Divider />
-                            {infoDetail({ title: 'Kỹ năng', arr: state.post.ky_nang })}
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Divider />
-                            {infoDetail({ title: 'Phúc lợi', arr: state.post.phuc_loi })}
+                    <Grid item xs={4}>
+                        <Typography className={classes.text} variant="body1" > Đăng ngày: {moment(state.post.ngay_tao).format("DD-MM-YYYY").toString()}</Typography>
+                        {user.nguoi_dung ? (
+                            <Typography className={classes.text} variant="h5" onClick={() => hanleNameCompany()}><Link>{state.post.nha_tuyen_dung.ten_cong_ty}</Link></Typography>
+                        ) : (
+                            <Typography className={classes.text} variant="h5">{state.post.nha_tuyen_dung.ten_cong_ty}</Typography>
+                        )}
+                        <Typography className={classes.text} variant="body1" >Email: {state.post.nha_tuyen_dung.nguoi_dung.email}</Typography>
+                        <Typography className={classes.text} variant="body1" >Số điện thoại: {state.post.nha_tuyen_dung.nguoi_dung.so_dien_thoai}</Typography>
+                        <Typography className={classes.text} variant="body1" >Địa chỉ: {state.post.nha_tuyen_dung.dia_chi}</Typography>
+                        <Typography className={classes.text} variant="body1" >Đánh giá: {'   '}
+                            <Rating value={state.post.nha_tuyen_dung.diem_danh_gia_tb} precision={0.5} readOnly size="large" />
+                        </Typography>
+                        <Grid container spacing={4} xs={12}>
+                            <Grid item xs={12}>
+                                <Divider />
+                                {infoDetail({ title: 'Bằng cấp', arr: state.post.bang_cap })}
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Divider />
+                                {infoDetail({ title: 'Ngành nghề', arr: state.post.nganh_nghe })}
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Divider />
+                                {infoDetail({ title: 'Kinh nghiệm', arr: state.post.kinh_nghiem })}
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Divider />
+                                {infoDetail({ title: 'Kỹ năng', arr: state.post.ky_nang })}
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Divider />
+                                {infoDetail({ title: 'Phúc lợi', arr: state.post.phuc_loi })}
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
-        </Container>
-    )
+            </Container>
+        )
 }

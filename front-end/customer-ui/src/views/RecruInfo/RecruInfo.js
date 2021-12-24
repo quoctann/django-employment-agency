@@ -23,8 +23,8 @@ import cookies from 'react-cookies';
 import { useHistory, useLocation } from 'react-router';
 import { RoutePaths } from '../../routes/public-route';
 import AppTextField from '../../components/AppTextField';
-import { toInteger } from 'lodash';
 import _ from 'lodash';
+import { Redirect } from 'react-router-dom';
 
 export default function RecruInfoPage() {
     const classes = useStyles();
@@ -39,7 +39,13 @@ export default function RecruInfoPage() {
     // Các bài đánh giá của nhà tuyển dụng
     const [ratings, setRatings] = useState([]);
     // Id của trang nhà tuyển dụng đang xem
-    const hiringid = state.tuyendungId;
+    let hiringid = 0;
+    if (_.isUndefined(state)) {
+        hiringid = 0
+    } else {
+        hiringid = state.tuyendungId
+    }
+
     // const hiringid = state.tuyendungId.id ? state.tuyendungId.id : state.RecruInfo.id;
     // const hiringid = state.RecruInfo.id;
     // const hiringid = 17;
@@ -124,7 +130,7 @@ export default function RecruInfoPage() {
             await getCongViecChapNhan()
         }
         init()
-        console.info(detail)
+        console.info(state)
     }, []);
 
     const denTrangChiTietViecLam = (post) => {
@@ -158,118 +164,121 @@ export default function RecruInfoPage() {
         }
     }
 
-    return (
-        <Container maxWidth="lg">
-            <Grid container spacing={10} xs={12}>
-                <Grid item xs={8}>
-                    <Typography variant="h3" className={classes.title}>{detail.ten_cong_ty}</Typography>
-                    <Divider />
-                    {/* <Typography className={classes.content} variant="body1" >{detail.gioi_thieu}</Typography>
+    if (_.isUndefined(state)) {
+        return <Redirect to='/' />
+    } else
+        return (
+            <Container maxWidth="lg">
+                <Grid container spacing={10} xs={12}>
+                    <Grid item xs={8}>
+                        <Typography variant="h3" className={classes.title}>{detail.ten_cong_ty}</Typography>
+                        <Divider />
+                        {/* <Typography className={classes.content} variant="body1" >{detail.gioi_thieu}</Typography>
                     <Divider /> */}
-                    <TextField
-                        // variant="outlined"
-                        fullWidth
-                        className={classes.content}
-                        multiline
-                        rows={17}
-                        value={detail.gioi_thieu}
-                    />
+                        <TextField
+                            // variant="outlined"
+                            fullWidth
+                            className={classes.content}
+                            multiline
+                            rows={17}
+                            value={detail.gioi_thieu}
+                        />
 
-                    <Grid container spacing={10} xs={12}>
-                        <Grid item xs={12}>
-                            {congViecChapNhan.length > 0 ? (
-                                <>
-                                    <Typography variant="h5" className={classes.title2}>Viết bài đánh giá</Typography>
+                        <Grid container spacing={10} xs={12}>
+                            <Grid item xs={12}>
+                                {congViecChapNhan.length > 0 ? (
+                                    <>
+                                        <Typography variant="h5" className={classes.title2}>Viết bài đánh giá</Typography>
+                                        <Card className={classes.cardRate}>
+                                            <FormControl variant="outlined" className={classes.formControl}>
+                                                <InputLabel htmlFor={`outlined-congViecChapNhan-native-simple`}>Công việc được chấp nhận bởi nhà tuyển dụng này</InputLabel>
+                                                <Select
+                                                    native
+                                                    onChange={(event) => {
+                                                        setViecLamId(event.target.value);
+                                                        console.log(event.target.value);
+                                                    }}
+                                                    label='Công việc được chấp nhận bởi nhà tuyển dụng này'
+                                                    inputProps={{
+                                                        name: 'congViecChapNhan',
+                                                        id: `outlined-congViecChapNhan-native-simple`,
+                                                    }}
+                                                >
+                                                    {congViecChapNhan.map((item, idx) => {
+                                                        return (
+                                                            <option value={item.viec_lam.id}>{item.viec_lam.tieu_de}</option>
+                                                        );
+                                                    })}
+                                                </Select>
+                                            </FormControl>
+
+                                            <Rating value={diemDanhGia} size="large" name="diemDanhGia" className={classes.rate}
+                                                onChange={(event, newValue) => {
+                                                    setDiemDanhGia(newValue);
+                                                }} />
+
+                                            <AppTextField field={noidung} value={noiDungDanhGia} multiline={true} rows={3}
+                                                onChange={(e) => setNoiDungDanhGia(e.target.value)} />
+                                            <Button
+                                                fullWidth
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={danhGia}
+                                                className={classes.btn}
+                                            >Đăng/Cập nhật đánh giá</Button>
+                                        </Card>
+                                    </>
+                                ) : (
+                                    <Alert className={classes.alert} severity="info">Bạn chưa có công việc nào chấp nhận/được chấp nhận với nhà tuyển dụng này</Alert>
+                                )}
+
+                                <Typography variant="h5" className={classes.title2}>Đánh giá từ người dùng</Typography>
+                                {danhGiaCuaUngVien.length > 0 ? danhGiaCuaUngVien.map((item, index) => (
                                     <Card className={classes.cardRate}>
-                                        <FormControl variant="outlined" className={classes.formControl}>
-                                            <InputLabel htmlFor={`outlined-congViecChapNhan-native-simple`}>Công việc được chấp nhận bởi nhà tuyển dụng này</InputLabel>
-                                            <Select
-                                                native
-                                                onChange={(event) => {
-                                                    setViecLamId(event.target.value);
-                                                    console.log(event.target.value);
-                                                }}
-                                                label='Công việc được chấp nhận bởi nhà tuyển dụng này'
-                                                inputProps={{
-                                                    name: 'congViecChapNhan',
-                                                    id: `outlined-congViecChapNhan-native-simple`,
-                                                }}
-                                            >
-                                                {congViecChapNhan.map((item, idx) => {
-                                                    return (
-                                                        <option value={item.viec_lam.id}>{item.viec_lam.tieu_de}</option>
-                                                    );
-                                                })}
-                                            </Select>
-                                        </FormControl>
-
-                                        <Rating value={diemDanhGia} size="large" name="diemDanhGia" className={classes.rate}
-                                            onChange={(event, newValue) => {
-                                                setDiemDanhGia(newValue);
-                                            }} />
-
-                                        <AppTextField field={noidung} value={noiDungDanhGia} multiline={true} rows={3}
-                                            onChange={(e) => setNoiDungDanhGia(e.target.value)} />
-                                        <Button
-                                            fullWidth
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={danhGia}
-                                            className={classes.btn}
-                                        >Đăng/Cập nhật đánh giá</Button>
+                                        <Rating value={item.diem_danh_gia} precision={0.5} readOnly size="large" />
+                                        <Typography variant="body2" className={classes.text}>{item.ung_vien.nguoi_dung.first_name} ứng tuyển cho vị trí: {item.viec_lam.tieu_de}</Typography>
+                                        <Divider />
+                                        <Typography variant="body1" className={classes.text}>{item.noi_dung}</Typography>
                                     </Card>
-                                </>
-                            ) : (
-                                <Alert className={classes.alert} severity="info">Bạn chưa có công việc nào chấp nhận/được chấp nhận với nhà tuyển dụng này</Alert>
-                            )}
-
-                            <Typography variant="h5" className={classes.title2}>Đánh giá từ người dùng</Typography>
-                            {danhGiaCuaUngVien.length > 0 ? danhGiaCuaUngVien.map((item, index) => (
-                                <Card className={classes.cardRate}>
-                                    <Rating value={item.diem_danh_gia} precision={0.5} readOnly size="large" />
-                                    <Typography variant="body2" className={classes.text}>{item.ung_vien.nguoi_dung.first_name} ứng tuyển cho vị trí: {item.viec_lam.tieu_de}</Typography>
-                                    <Divider />
-                                    <Typography variant="body1" className={classes.text}>{item.noi_dung}</Typography>
-                                </Card>
-                            )) : (
-                                <Alert className={classes.alert} severity="info">Chưa có bài đánh giá nào</Alert>
-                            )}
+                                )) : (
+                                    <Alert className={classes.alert} severity="info">Chưa có bài đánh giá nào</Alert>
+                                )}
+                            </Grid>
                         </Grid>
                     </Grid>
-                </Grid>
 
-                <Grid item xs={4}>
-                    <Box className={classes.boxRight}>
-                        <AvatarComponent />
-                        <Typography className={classes.text} variant="body1" >Địa chỉ: {detail.dia_chi}</Typography>
-                        <Typography className={classes.text2} variant="body1" >Quy mô: {detail.quy_mo} nhân viên</Typography>
-                        <Typography className={classes.text} variant="body1" component='span'>Đánh giá:</Typography>
-                        <Rating value={parseFloat(detail.diem_danh_gia_tb)} precision={0.5} readOnly size="large" />
-                    </Box>
+                    <Grid item xs={4}>
+                        <Box className={classes.boxRight}>
+                            <AvatarComponent />
+                            <Typography className={classes.text} variant="body1" >Địa chỉ: {detail.dia_chi}</Typography>
+                            <Typography className={classes.text2} variant="body1" >Quy mô: {detail.quy_mo} nhân viên</Typography>
+                            <Typography className={classes.text} variant="body1" component='span'>Đánh giá:</Typography>
+                            <Rating value={parseFloat(detail.diem_danh_gia_tb)} precision={0.5} readOnly size="large" />
+                        </Box>
 
-                    <Box className={classes.boxRight}>
-                        <Typography className={classes.title} variant="h4" >Việc làm từ công ty</Typography>
-                        {goiYViecLam.length > 0 ? goiYViecLam.map((vieclam, index) => (
-                            <>
-                                <Card className={classes.card} onClick={() => denTrangChiTietViecLam(vieclam)}>
-                                    <CardActionArea>
-                                        <CardContent>
-                                            <Typography gutterBottom variant="h6">{goiYViecLam[index].tieu_de}</Typography>
-                                            <Typography gutterBottom variant="body1">
-                                                Lương:{" "}
-                                                {goiYViecLam[index].luong === 0 ? "Thương lượng" : currency(goiYViecLam[index].luong)}
-                                            </Typography>
-                                            <Typography gutterBottom variant="body1">{goiYViecLam[index].noi_dung.substr(0, 80)}. . . </Typography>
-                                        </CardContent>
-                                    </CardActionArea>
-                                </Card>
-                            </>
-                        )) : (
-                            <Alert severity="info">Không có bản ghi</Alert>
-                        )}
-                    </Box>
+                        <Box className={classes.boxRight}>
+                            <Typography className={classes.title} variant="h4" >Việc làm từ công ty</Typography>
+                            {goiYViecLam.length > 0 ? goiYViecLam.map((vieclam, index) => (
+                                <>
+                                    <Card className={classes.card} onClick={() => denTrangChiTietViecLam(vieclam)}>
+                                        <CardActionArea>
+                                            <CardContent>
+                                                <Typography gutterBottom variant="h6">{goiYViecLam[index].tieu_de}</Typography>
+                                                <Typography gutterBottom variant="body1">
+                                                    Lương:{" "}
+                                                    {goiYViecLam[index].luong === 0 ? "Thương lượng" : currency(goiYViecLam[index].luong)}
+                                                </Typography>
+                                                <Typography gutterBottom variant="body1">{goiYViecLam[index].noi_dung.substr(0, 80)}. . . </Typography>
+                                            </CardContent>
+                                        </CardActionArea>
+                                    </Card>
+                                </>
+                            )) : (
+                                <Alert severity="info">Không có bản ghi</Alert>
+                            )}
+                        </Box>
+                    </Grid>
                 </Grid>
-            </Grid>
-        </Container>
-    )
+            </Container>
+        )
 }

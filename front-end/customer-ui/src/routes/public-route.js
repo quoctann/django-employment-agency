@@ -85,13 +85,13 @@ export const PublicRoutes = {
         component: InfoPostPage,
         icon: LoginIcon
     },
-    RecruInfo: {
-        exact: true,
-        id: PublicRouteNames.RecruInfo,
-        label: "Profile can label",
-        path: RoutePaths.RecruInfo,
-        component: RecruInfoPage,
-    },
+    // RecruInfo: {
+    //     exact: true,
+    //     id: PublicRouteNames.RecruInfo,
+    //     label: "Profile can label",
+    //     path: RoutePaths.RecruInfo,
+    //     component: RecruInfoPage,
+    // },
 }
 
 export const CandidateRoutes = {
@@ -103,22 +103,22 @@ export const CandidateRoutes = {
         component: HomePage,
         icon: HomeIcon
     },
-    Login: {
-        exact: true,
-        id: PublicRouteNames.Login,
-        label: "Login label",
-        path: RoutePaths.Login,
-        component: LoginPage,
-        icon: LoginIcon
-    },
-    Register: {
-        exact: true,
-        id: PublicRouteNames.Register,
-        label: "Register label",
-        path: RoutePaths.Register,
-        component: RegisterPage,
-        icon: LoginIcon
-    },
+    // Login: {
+    //     exact: true,
+    //     id: PublicRouteNames.Login,
+    //     label: "Login label",
+    //     path: RoutePaths.Login,
+    //     component: LoginPage,
+    //     icon: LoginIcon
+    // },
+    // Register: {
+    //     exact: true,
+    //     id: PublicRouteNames.Register,
+    //     label: "Register label",
+    //     path: RoutePaths.Register,
+    //     component: RegisterPage,
+    //     icon: LoginIcon
+    // },
     ProfileCanPage: {
         exact: true,
         id: PublicRouteNames.ProfileCan,
@@ -153,22 +153,22 @@ export const RecruiterRoutes = {
         component: HomePage,
         icon: HomeIcon
     },
-    Login: {
-        exact: true,
-        id: PublicRouteNames.Login,
-        label: "Login label",
-        path: RoutePaths.Login,
-        component: LoginPage,
-        icon: LoginIcon
-    },
-    Register: {
-        exact: true,
-        id: PublicRouteNames.Register,
-        label: "Register label",
-        path: RoutePaths.Register,
-        component: RegisterPage,
-        icon: LoginIcon
-    },
+    // Login: {
+    //     exact: true,
+    //     id: PublicRouteNames.Login,
+    //     label: "Login label",
+    //     path: RoutePaths.Login,
+    //     component: LoginPage,
+    //     icon: LoginIcon
+    // },
+    // Register: {
+    //     exact: true,
+    //     id: PublicRouteNames.Register,
+    //     label: "Register label",
+    //     path: RoutePaths.Register,
+    //     component: RegisterPage,
+    //     icon: LoginIcon
+    // },
     HomeRecruiter: {
         exact: true,
         id: PublicRouteNames.HomeRecruiter,
@@ -200,5 +200,20 @@ export const RecruiterRoutes = {
         path: RoutePaths.PostDetail,
         component: NewPostPage,
         icon: LoginIcon
+    },
+    InfoPost: {
+        exact: true,
+        id: PublicRouteNames.InfoPost,
+        label: "Profile can label",
+        path: RoutePaths.InfoPost,
+        component: InfoPostPage,
+        icon: LoginIcon
+    },
+    RecruInfo: {
+        exact: true,
+        id: PublicRouteNames.RecruInfo,
+        label: "Profile can label",
+        path: RoutePaths.RecruInfo,
+        component: RecruInfoPage,
     },
 }
