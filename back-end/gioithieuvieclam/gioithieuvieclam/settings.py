@@ -107,9 +107,9 @@ WSGI_APPLICATION = 'gioithieuvieclam.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'gioithieuvieclam',
-        'USER': 'root',
-        'PASSWORD': 'Abc1234%^&',
+        'NAME': 'jobdb',
+        'USER': 'dev',
+        'PASSWORD': 'P@ssw0rd',
         'HOST': ''
     }
 }

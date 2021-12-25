@@ -290,6 +290,7 @@ class ViecLamViewSet(viewsets.ViewSet, generics.ListAPIView, generics.UpdateAPIV
 class NhaTuyenPagination(PageNumberPagination):
     page_size = 2
 
+
 class NhaTuyenDungViewSet(viewsets.ViewSet, generics.ListAPIView,
                           generics.RetrieveAPIView, generics.UpdateAPIView):
     serializer_class = NhaTuyenDungSerializer

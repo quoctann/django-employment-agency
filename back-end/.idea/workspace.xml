@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="71bedb9f-0113-408f-ba50-5f0755855eb7" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gioithieuvieclam.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gioithieuvieclam/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gioithieuvieclam/.idea/gioithieuvieclam.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gioithieuvieclam/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gioithieuvieclam/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gioithieuvieclam/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gioithieuvieclam/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gioithieuvieclam/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gioithieuvieclam/gioithieuvieclam/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/gioithieuvieclam/gioithieuvieclam/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gioithieuvieclam/gioithieuvieclam_app/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/gioithieuvieclam/gioithieuvieclam_app/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gioithieuvieclam/gioithieuvieclam_app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/gioithieuvieclam/gioithieuvieclam_app/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/customer-ui/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/customer-ui/package.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="22lLz3Y9ES3a7hI4AVo3Y1C2nVc" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/gioithieuvieclam/manage.py" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.django.DjangoModulesConfigurable" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="71bedb9f-0113-408f-ba50-5f0755855eb7" name="Changes" comment="" />
+      <created>1640407485729</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1640407485729</updated>
+      <workItem from="1640407487109" duration="4422000" />
+      <workItem from="1640412924986" duration="3026000" />
+      <workItem from="1640416307553" duration="621000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
