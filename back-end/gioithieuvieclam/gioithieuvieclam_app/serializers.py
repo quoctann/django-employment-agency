@@ -10,33 +10,6 @@ from .models import *
 
 # Tạo người dùng cơ bản
 class NguoiDungSerializer(ModelSerializer):
-    # anh_dai_dien = SerializerMethodField()
-    #
-    # # Xử lý đường dẫn ảnh trả về cho client
-    # def get_anh_dai_dien(self, nguoidung):
-    #     request = self.context.get('request')
-    #     name = nguoidung.anh_dai_dien.name
-    #     if name.startswith("static/"):
-    #         path = '/%s' % name
-    #     else:
-    #         path = '/static/%s' % name
-    #     if request is not None:
-    #         return request.build_absolute_uri(path)
-    #     return path
-    anh_dai_dien = SerializerMethodField()
-
-    # Xử lý đường dẫn ảnh trả về cho client
-    def get_anh_dai_dien(self, nguoidung):
-        request = self.context.get('request')
-        name = nguoidung.anh_dai_dien.name
-        if name.startswith("static/"):
-            path = '/%s' % name
-        else:
-            path = '/static/%s' % name
-        if request is not None:
-            return request.build_absolute_uri(path)
-        return path
-
     class Meta:
         model = NguoiDung
         fields = ['id', 'username', 'password', 'email', 'first_name', 'last_name',

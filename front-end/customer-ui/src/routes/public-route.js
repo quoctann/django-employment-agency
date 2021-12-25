@@ -11,6 +11,7 @@ import CanInfoPage from '../views/CanInfo';
 import NewPostPage from '../views/NewPost';
 import InfoPostPage from '../views/InfoPost';
 import RecruInfoPage from '../views/RecruInfo';
+import DashBoardPage from '../views/DashBoard';
 
 const NEDRoutes = {
     New: "new",
@@ -30,6 +31,8 @@ export const PublicRouteNames = {
     ProfileCan: 'ProfileCan',
     InfoPost: 'InfoPost',
     RecruInfo: 'RecruInfo',
+
+    DashBoard: 'DashBoard',
 }
 
 export const AllRouteNames = {
@@ -50,13 +53,13 @@ export const RoutePaths = {
     InfoPost: ['', PublicRouteNames.InfoPost, NEDRoutes.Detail].join('/'),
     RecruInfo: ['', PublicRouteNames.RecruInfo, NEDRoutes.Detail].join('/'),
 
+    DashBoard: ['', PublicRouteNames.DashBoard].join('/'),
 }
 
 export const PublicRoutes = {
     Home: {
         exact: true,
         id: PublicRouteNames.Home,
-        label: "Home",
         path: RoutePaths.Home,
         component: HomePage,
         icon: HomeIcon
@@ -72,7 +75,6 @@ export const PublicRoutes = {
     Register: {
         exact: true,
         id: PublicRouteNames.Register,
-        label: "Register label",
         path: RoutePaths.Register,
         component: RegisterPage,
         icon: LoginIcon
@@ -80,17 +82,15 @@ export const PublicRoutes = {
     InfoPost: {
         exact: true,
         id: PublicRouteNames.InfoPost,
-        label: "Profile can label",
         path: RoutePaths.InfoPost,
         component: InfoPostPage,
         icon: LoginIcon
     },
-    // RecruInfo: {
+    // DashBoard: {
     //     exact: true,
-    //     id: PublicRouteNames.RecruInfo,
-    //     label: "Profile can label",
-    //     path: RoutePaths.RecruInfo,
-    //     component: RecruInfoPage,
+    //     id: PublicRouteNames.DashBoard,
+    //     path: RoutePaths.DashBoard,
+    //     component: DashBoardPage,
     // },
 }
 
@@ -215,5 +215,35 @@ export const RecruiterRoutes = {
         label: "Profile can label",
         path: RoutePaths.RecruInfo,
         component: RecruInfoPage,
+    },
+}
+
+export const AdminRoutes = {
+    RecruInfo: {
+        exact: true,
+        id: PublicRouteNames.RecruInfo,
+        label: "Profile can label",
+        path: RoutePaths.RecruInfo,
+        component: RecruInfoPage,
+    },
+    Home: {
+        exact: true,
+        id: PublicRouteNames.Home,
+        path: RoutePaths.Home,
+        component: HomePage,
+        icon: HomeIcon
+    },
+    InfoPost: {
+        exact: true,
+        id: PublicRouteNames.InfoPost,
+        path: RoutePaths.InfoPost,
+        component: InfoPostPage,
+        icon: LoginIcon
+    },
+    DashBoard: {
+        exact: true,
+        id: PublicRouteNames.DashBoard,
+        path: RoutePaths.DashBoard,
+        component: DashBoardPage,
     },
 }

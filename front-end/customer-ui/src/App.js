@@ -6,7 +6,10 @@ import {
   Redirect,
 } from "react-router-dom";
 import Layout from "./layouts";
-import { PublicRoutes, RoutePaths, PublicRouteNames, CandidateRoutes, RecruiterRoutes } from "./routes/public-route";
+import {
+  PublicRoutes, RoutePaths, PublicRouteNames,
+  CandidateRoutes, RecruiterRoutes, AdminRoutes
+} from "./routes/public-route";
 import { getAuthLS, LS_KEY, clearAuthLS } from '../src/helpers/localStorage';
 import cookies from 'react-cookies';
 
@@ -81,9 +84,30 @@ function App() {
     );
   }
 
+  function AdminLayout(props) {
+    return (
+      <Layout {...props}>
+        <Switch>
+          {Object.values(AdminRoutes).map((route, idx) => {
+            return (
+              <Route
+                key={idx + route.id}
+                path={route.path}
+                exact={route.exact}
+                render={(props) => <route.component {...props} />}
+              />
+            );
+          })}
+          <Redirect to={RoutePaths.Home} />
+        </Switch>
+      </Layout>
+    );
+  }
+
   const rolePaths = {
     UNG_VIEN: 'UNG VIEN',
     TUYEN_DUNG: 'TUYEN DUNG',
+    QUAN_LY: 'QUAN LY',
   }
 
   function ManageRoute({ role }) {
@@ -91,10 +115,13 @@ function App() {
       return (
         <Route key={1} path="/" render={(props) => <CandidateLayout {...props} />} />
       );
-    }
-    if (role === rolePaths.TUYEN_DUNG) {
+    } else if (role === rolePaths.TUYEN_DUNG) {
       return (
         <Route key={2} path="/" render={(props) => <RecruiterLayout {...props} />} />
+      );
+    } else {
+      return (
+        <Route key={3} path="/" render={(props) => <AdminLayout {...props} />} />
       );
     }
   }

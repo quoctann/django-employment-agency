@@ -56,8 +56,10 @@ export default function ({ classes, open, setOpen, mainRef }) {
     const pathUser = () => {
         if (check === rolePaths.UNG_VIEN) {
             return '/ProfileCan'
-        } else {
+        } else if (check === rolePaths.TUYEN_DUNG) {
             return '/HomeRecruiter'
+        } else {
+            return '/Dashboard'
         }
     }
 
