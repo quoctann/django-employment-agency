@@ -7,12 +7,19 @@ import {
 } from "react-router-dom";
 import Layout from "./layouts";
 import { PublicRoutes, RoutePaths, PublicRouteNames, CandidateRoutes, RecruiterRoutes } from "./routes/public-route";
-import { getAuthLS, LS_KEY } from '../src/helpers/localStorage';
+import { getAuthLS, LS_KEY, clearAuthLS } from '../src/helpers/localStorage';
+import cookies from 'react-cookies';
 
 function App() {
   // const loggedIn = true;
-  const loggedIn = getAuthLS(LS_KEY.AUTH_TOKEN) ? true : false;
+  let loggedIn = getAuthLS(LS_KEY.AUTH_TOKEN) ? true : false;
   const check = getAuthLS(LS_KEY.AUTH_TOKEN)
+  if (cookies.load("user") == null || !loggedIn) {
+    loggedIn = false;
+    clearAuthLS();
+    cookies.remove("user");
+    cookies.remove("access_token");
+  };
 
   function GuestLayout(props) {
     return (

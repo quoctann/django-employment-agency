@@ -30,7 +30,6 @@ class NguoiDung(AbstractUser):
     so_dien_thoai = models.CharField(max_length=15, blank=True, default="")
     anh_dai_dien = models.ImageField(upload_to='static/upload/%Y/%m', null=True,
                                      default='static/upload/avatarDefault.jpg')
-    anh_dai_dien = models.ImageField(upload_to='static/upload/%Y/%m', null=True)
     vai_tro = models.CharField(
         max_length=10,
         choices=VAI_TRO,

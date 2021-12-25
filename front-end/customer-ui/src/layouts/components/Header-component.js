@@ -16,7 +16,6 @@ import { useStore } from "react-redux";
 import cookies from 'react-cookies';
 import { clearAuthLS } from '../../helpers/localStorage'
 import { getAuthLS, LS_KEY } from '../../helpers/localStorage';
-import imgDef from '../../consts/avatarDefault.jpg'
 import _ from 'lodash'
 const rolePaths = {
     UNG_VIEN: 'UNG VIEN',
