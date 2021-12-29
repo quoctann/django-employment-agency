@@ -53,7 +53,9 @@ export default function CanInfoPage() {
         tenViecLam = '';
         nguoidungId = 0;
     } else {
+        if (!_.isUndefined(state.vieclamId)) {
         vieclamId = state.vieclamId;
+        }
         tenViecLam = state.tenViecLam;
         nguoidungId = state.nguoidungId;
     }
@@ -140,7 +142,7 @@ export default function CanInfoPage() {
         if (!_.isNil(state.ungvien.cv)) {
             const path = state.ungvien.cv.includes('http://127.0.0.1:8000') ? state.ungvien.cv : `http://127.0.0.1:8000${state.ungvien.cv}`;
             return (
-                <Typography className={classes.text} variant="body1" >CV: <Link href={state.ungvien.cv} className={classes.linkCV}>xem file</Link></Typography>
+                <Typography className={classes.text} variant="body1" >CV: <Link href={path} className={classes.linkCV}>xem file</Link></Typography>
             )
         } else {
             return (
